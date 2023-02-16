@@ -11,7 +11,7 @@ const setNameArray = [
 //objeto
 const objSets = {
     "Leccion 1": [
-        {"けむり（煙）"	:"humo"},
+        {"けむり（煙）"	:"humo", "knowledge" : ""},
         {"まっしろ（真っ白）「な」":"totalmente blanco"},
         {"なかみ（中身）":	"contenido"},
     ],
@@ -22,13 +22,15 @@ const objSets = {
     ],
     "Leccion 3": [
         {"けむり（煙）"	:"humo"},
-        {"おばさん」":"señora"},
+        {"おばさん":"señora"},
         {"しろ（城）":	"castillo"},
     ],
 };
 
+let termIndex = 0;
+
 const app = document.getElementById('app');
-const setContainer = document.querySelector('.set-container');
+const setContainer = document.querySelector('.sets-container');
 
 CreateHomepageApp(setContainer);
 
@@ -62,7 +64,7 @@ function CreateHomepageApp(container){
     foundDiv.classList.add('foundContainer');
     let foundText = document.createElement('p');
     foundText.classList.add('foundText');
-    foundText.textContent = "0 found.";
+    // foundText.textContent = "0 found.";
     foundDiv.appendChild(foundText);
     app.appendChild(foundDiv);
 
@@ -85,6 +87,217 @@ function CreateHomepageApp(container){
 function FlashSetButton(event){
     let stringKey = event.currentTarget.name; 
     //aqui crear pagina con informacion de set
+    console.log('clicked boton');
+    app.innerHTML = '';
+
+    let lectureTitle = document.createElement('h1');
+    lectureTitle.textContent = stringKey;
+    app.appendChild(lectureTitle);
+    
+    let buttonsContainer = document.createElement('div');
+    buttonsContainer.classList.add('buttons-div');
+    app.appendChild(buttonsContainer);
+
+    let learnButton = document.createElement('button');
+    learnButton.classList.add('learn-button');
+    learnButton.textContent = 'Learn';
+    learnButton.setAttribute('data-lecture', stringKey);
+    learnButton.addEventListener('click', LearnLecture);
+    buttonsContainer.appendChild(learnButton);
+
+    let container = document.createElement('div');
+    container.classList.add('set-container');
+    app.appendChild(container);
+
+    let cardArray = Object.values(objSets[stringKey]);
+
+    //create each card
+    cardArray.forEach(pair => {
+        let [key, value] = Object.entries(pair)[0];
+        CreatePairCard(key, value, container);
+    });
+}
+
+function LearnLecture(event){
+    console.log('click learn lecture');
+    let lectureKey = event.target.dataset.lecture;
+    app.innerHTML = '';
+
+    let titleDiv = CreateElement('div', app);
+    titleDiv.classList.add('title-div');
+
+    let title = CreateElement('h1', titleDiv);
+    title.textContent = lectureKey;
+
+    let middleDiv = CreateElement('div', app);
+    middleDiv.classList.add('middle-div');
+
+    let leftArrow = CreateElement('i', middleDiv);
+    leftArrow.classList.add('fa-solid', 'fa-angle-left', 'fa-xl', 'arrow-btn');
+    leftArrow.setAttribute('data-direction', 'left');
+    leftArrow.addEventListener('click', ClickArrow);
+
+    let bigCard = CreateElement('div', middleDiv);
+    let firstLabel = CreateElement('p', bigCard);
+    let prompt = CreateElement('div', bigCard);
+    let promptText= CreateElement('p', prompt);
+    let separator = CreateElement('div', bigCard);
+    let answerDiv = CreateElement('div', bigCard);
+    let answerPlaceholder = CreateElement('p', answerDiv);
+    let answerText = CreateElement('p', answerDiv);
+    let secondLabel = CreateElement('p', bigCard);
+
+    let rightArrow = CreateElement('i', middleDiv);
+    rightArrow.classList.add('fa-solid', 'fa-angle-right', 'fa-xl', 'arrow-btn');
+    rightArrow.addEventListener('click', ClickArrow);
+    rightArrow.setAttribute('data-direction', 'right');
+
+    bigCard.classList.add('big-card');
+    firstLabel.classList.add('label', 'txt-left');
+    secondLabel.classList.add('label', 'txt-right');
+    prompt.classList.add('prompt');
+    separator.classList.add('separator');
+    answerDiv.classList.add('answer-div');
+    answerDiv.addEventListener('click', ClickAnswer);
+    answerPlaceholder.classList.add('answer-placeholder');
+    answerText.classList.add('answer');
+    answerText.classList.add('hide');
+
+    firstLabel.textContent = "Term";
+    secondLabel.textContent = "Answer";
+
+    //aqui tengo que buscar la 'carta' correspondiente, por ahora
+    //poner la primera nomas
+    let termObject = Object.values(objSets[lectureKey])[0];
+    let [key, value] = Object.entries(termObject)[0];
+    promptText.textContent = key;
+    answerPlaceholder.textContent = "Click to reveal answer";
+    answerText.textContent = value;
+
+    //Knowledge buttons section
+    let knowledgeDiv = CreateElement('div', app);
+    let noKnowledgeButton = CreateElement('button', knowledgeDiv);
+    let knowledgeButton = CreateElement('button', knowledgeDiv);
+
+    knowledgeDiv.classList.add('knowledge-div');
+    noKnowledgeButton.classList.add('learning');
+    knowledgeButton.classList.add('learned');
+
+    noKnowledgeButton.textContent = 'Learning';
+    knowledgeButton.textContent = 'Learned';
+
+    noKnowledgeButton.addEventListener('click', ClickKnowledgeButton);
+    knowledgeButton.addEventListener('click', ClickKnowledgeButton);
+}
+
+function ClickKnowledgeButton(event){
+    //buscar ambos botones y sacarle el checked
+    document.querySelector('.learning').classList.remove('checked');
+    document.querySelector('.learned').classList.remove('checked');
+
+    //ponerle checked al que hice click
+    event.target.classList.add('checked');
+
+    //aqui buscar el termino actual en el set
+    //modificar 'knowledge' basado en el boton apretado
+
+    setTimeout(() => ShowNextTerm(1), 150);
+}
+
+function ShowNextTerm(dir){
+    console.log('changing term');
+    
+    //necesito buscar el siguiente termino y popular la tarjeta
+    let currentLecture = document.querySelector('.title-div').firstChild.textContent;
+    let termsArray = Object.values(objSets[currentLecture]);
+
+    if(termIndex + dir == termsArray.length){
+        termIndex = 0;
+    }else if(termIndex + dir < 0){
+         termIndex = termsArray.length - 1;
+    }else{
+        termIndex += dir;
+    }
+
+    let termObj = termsArray[termIndex];
+
+    let [key, value] = Object.entries(termObj)[0];
+
+    //aqui buscar el termino actual y basado en 'knowledge'
+    //modificar las clases de los botones de abajo
+    let knowledge = Object.values(termObj)[1];
+    console.log(knowledge);
+
+    // console.log(key, value);
+
+    //popular datos
+    let prompt = document.querySelector('.prompt').firstChild;
+    prompt.textContent = key;
+
+    let placeholder = document.querySelector('.answer-placeholder');
+    placeholder.classList.remove('hide');
+
+    let answer = document.querySelector('.answer');
+    answer.classList.add('hide');
+    answer.textContent = value;
+    //reset botones
+    //buscar informacion guardada sobre boton
+    document.querySelector('.learning').classList.remove('checked');
+    document.querySelector('.learned').classList.remove('checked');
+}
+
+function ClickAnswer(){
+    console.log('click en answer');
+    //aqui es cuando cambio de estado los 'p' para mostrar la respuesta
+    let placeholder = document.querySelector('.answer-placeholder');
+    placeholder.classList.toggle('hide');
+
+    let answer = document.querySelector('.answer');
+    answer.classList.toggle('hide');
+}
+
+function ClickArrow(event){
+    let direction = event.target.dataset.direction;
+    // console.log(event.target.dataset.direction);
+
+    if(direction === 'left'){
+        ShowNextTerm(-1);
+    }else{
+        ShowNextTerm(1);
+    }
+}
+
+function CreateElement(elem, parent){
+    let element =document.createElement(`${elem}`);
+    parent.appendChild(element);
+    return element;
+}
+
+function CreatePairCard(key, value, parent){
+    //create container div
+    let container = document.createElement('div');
+    container.classList.add('pair-card-container');
+    parent.appendChild(container);
+
+    //create key div
+    let keyDiv = document.createElement('div');
+    keyDiv.textContent = key;
+    keyDiv.classList.add('keyDiv');
+    container.appendChild(keyDiv);
+
+    //create value div
+    let valueDiv = document.createElement('div');
+    valueDiv.textContent = value;
+    valueDiv.classList.add('valueDiv');
+    container.appendChild(valueDiv);
+
+    //create misc div
+    // <i class="fa-regular fa-star"></i>
+    let miscDiv = document.createElement('div');
+    let star = document.createElement('i');
+    star.classList.add('fa-regular', 'fa-star');
+    miscDiv.appendChild(star);
+    container.appendChild(miscDiv);
 }
 
 function FilterSets(event){
