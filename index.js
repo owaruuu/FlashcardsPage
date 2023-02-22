@@ -1,11 +1,45 @@
 //jshint esversion:9
+const varToString = varObj => Object.keys(varObj)[0];//variable name helper
 
-//const express= require('express');
+//aqui probare el localStorage
+let currentStorageObj;
+
+//creacion de objeto de prueba
+let leccion1Storage = {
+    "けむり（煙）" : 'learned',
+    "まっしろ（真っ白）「な」" : 'learning',
+    "なかみ（中身）" : '',
+};
+
+//esto limpia todo el local storage
+localStorage.clear();
+
+// para poder agregar un item a local storage debo convertirlo a string
+// localStorage.setItem('name', 'josue');
+let objString = JSON.stringify(leccion1Storage);
+localStorage.setItem('Leccion 1', objString);
+// console.log("local storage saved");
+
+console.log("local storage");
+for (let i = 0; i < localStorage.length; i++)   {
+    console.log(localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i)));
+}
+
+//aqui checkeo si el objeto localstorage.leccion1 existe
+// currentStorageObj = JSON.parse(localStorage.leccion1);
+// if(currentStorageObj !== null){
+//     const varName = varToString({currentStorageObj});
+//     console.log(`el valor guardado en ${varName} es: `);
+//     console.log(currentStorageObj);
+// }else{
+//     console.log('no se encontro la variable en localStorage');
+// }
+
+//FIN seccion local storage
 
 const setNameArray = [
     "Leccion 1",
-    "Leccion 2",
-    "Leccion 3",
+    "Leccion 2"
 ];
 
 //objeto
@@ -137,7 +171,8 @@ function LearnLecture(event){
     leftArrow.setAttribute('data-direction', 'left');
     leftArrow.addEventListener('click', ClickArrow);
 
-    let bigCard = CreateElement('div', middleDiv);
+    let bigCardDiv = CreateElement('div', middleDiv);
+    let bigCard = CreateElement('div', bigCardDiv);
     let firstLabel = CreateElement('p', bigCard);
     let prompt = CreateElement('div', bigCard);
     let promptText= CreateElement('p', prompt);
@@ -152,6 +187,7 @@ function LearnLecture(event){
     rightArrow.addEventListener('click', ClickArrow);
     rightArrow.setAttribute('data-direction', 'right');
 
+    bigCardDiv.classList.add('big-card-div');
     bigCard.classList.add('big-card');
     firstLabel.classList.add('label', 'txt-left');
     secondLabel.classList.add('label', 'txt-right');
@@ -174,6 +210,11 @@ function LearnLecture(event){
     answerPlaceholder.textContent = "Click to reveal answer";
     answerText.textContent = value;
 
+    //temp counter section
+    let counterDiv = CreateElement('div', app);
+    counterDiv.classList.add('counter');
+    counterDiv.textContent = '1/3';
+
     //Knowledge buttons section
     let knowledgeDiv = CreateElement('div', app);
     let noKnowledgeButton = CreateElement('button', knowledgeDiv);
@@ -186,26 +227,138 @@ function LearnLecture(event){
     noKnowledgeButton.textContent = 'Learning';
     knowledgeButton.textContent = 'Learned';
 
+    //cuando termino de crear la pagina learn 
+    //checkeo por primera vez si hay algo en local storage
+    CheckLearnStatus();
+
     noKnowledgeButton.addEventListener('click', ClickKnowledgeButton);
     knowledgeButton.addEventListener('click', ClickKnowledgeButton);
 }
 
+function CheckLearnStatus(){
+    let currentString;
+    let currentObject;
+    let currentLecture = document.querySelector('.title-div').firstChild.textContent;
+
+    //reviso todo el localstorage hasta encontrar 
+    //un item con el key igual a la leccion actual
+    for (let i = 0; i < localStorage.length; i++)   {
+        if(localStorage.key(i) === currentLecture){
+            console.log("found");
+            currentString = localStorage.getItem(localStorage.key(i));
+            currentObject = JSON.parse(currentString);
+
+            let prompt = document.querySelector('.prompt').firstChild;
+            console.log(prompt.textContent);
+
+            for(let [key, value] of Object.entries(currentObject)){
+                if(key === prompt.textContent){
+                    console.log("found key," + "its value is :" + value);
+                    switch (value) {
+                        case "learned": console.log("aqui cambio el boton learned");
+                            ChangeKnowledgeButtonString("learned");
+                            break;
+                        case "learning": console.log("aqui cambio el boton learning");
+                            ChangeKnowledgeButtonString("learning");    
+                            break;
+                        case "": console.log("aqui hago nada");
+                            break;
+                        default: console.log("el valor es: " + value);
+                            break;
+                    }
+                }
+            }
+        }else{
+            console.log("No se encontro la leccion en Local Storage");
+        }
+    }  
+}
+
+function ChangeKnowledgeButtonString(btnclass){
+    let leftButton = document.querySelector('.learning');
+    let rightButton = document.querySelector('.learned');
+
+    leftButton.removeAttribute('id');
+    rightButton.removeAttribute('id');
+
+    let buttonToChange = document.querySelector(`.${btnclass}`);
+    buttonToChange.setAttribute('id','checked');    
+}
+
+function ChangeKnowledgeButtonElem(element){
+    let leftButton = document.querySelector('.learning');
+    let rightButton = document.querySelector('.learned');
+
+    leftButton.removeAttribute('id');
+    rightButton.removeAttribute('id');
+
+    element.setAttribute('id','checked');
+
+    //aqui actualizar storage
+    UpdateLocalStorage(element);
+}
+
+function UpdateLocalStorage(btnClicked){
+    console.log("boton clikeado " + btnClicked.className);
+
+    //aqui actualizar local storage
+    //recorro todo el local storage
+    let currentLecture = document.querySelector('.title-div').firstChild.textContent;
+    for (let i = 0; i < localStorage.length; i++)   {
+        if(localStorage.key(i) === currentLecture){
+            //aqui se encontro el objeto en local storage basado en la leccion actual
+            console.log("al hacer click en el boton se encontro un objeto en local storage");
+            currentString = localStorage.getItem(localStorage.key(i));
+            currentObject = JSON.parse(currentString);  
+
+            let prompt = document.querySelector('.prompt').firstChild;
+            
+            //aqui buscar por el objeto por el key basado en el prompt
+            for(let [key, value] of Object.entries(currentObject)){
+                if(key === prompt.textContent){
+                    console.log("se encontro el prompt en la lista con el valor de: " + value);
+                    currentObject[key] = btnClicked.className;
+                    localStorage.setItem(currentLecture, JSON.stringify(currentObject));
+                    console.log("se cambio el valor a: " + btnClicked.className);
+                }
+            }
+        }else{
+            console.log("No se encontro la leccion en Local Storage y deberia crear uno");
+        }
+    } 
+}
+
+//necesito sacarle a los dos las clases y desactivarlos
 function ClickKnowledgeButton(event){
     //buscar ambos botones y sacarle el checked
-    document.querySelector('.learning').classList.remove('checked');
-    document.querySelector('.learned').classList.remove('checked');
+    ChangeKnowledgeButtonElem(event.target);
 
-    //ponerle checked al que hice click
-    event.target.classList.add('checked');
+    DisableKnowledgeButtons();
+    
+    setTimeout(() => ShowNextTerm(1), 450);   
+}
 
-    //aqui buscar el termino actual en el set
-    //modificar 'knowledge' basado en el boton apretado
+function DisableKnowledgeButtons(){
+    let leftButton = document.querySelector('.learning');
+    let rightButton = document.querySelector('.learned');
 
-    setTimeout(() => ShowNextTerm(1), 150);
+    leftButton.setAttribute('disabled' , 'disabled');
+    rightButton.setAttribute('disabled', 'disabled');
+
+    setTimeout(function(){
+        leftButton.removeAttribute('disabled');
+        rightButton.removeAttribute('disabled');
+    }, 500);
 }
 
 function ShowNextTerm(dir){
     console.log('changing term');
+
+    let bigCard = document.querySelector('.big-card');
+    const className = dir === -1 ? "disappear-right" : "disappear-left";
+    bigCard.classList.add(className);
+    //bigCard.classList.add('disappear-right'); //activar despues
+    setTimeout(() => DeleteElement(bigCard), 300);
     
     //necesito buscar el siguiente termino y popular la tarjeta
     let currentLecture = document.querySelector('.title-div').firstChild.textContent;
@@ -223,15 +376,45 @@ function ShowNextTerm(dir){
 
     let [key, value] = Object.entries(termObj)[0];
 
-    //aqui buscar el termino actual y basado en 'knowledge'
+    //FIX aqui buscar el termino actual y basado en 'knowledge'
     //modificar las clases de los botones de abajo
     let knowledge = Object.values(termObj)[1];
-    console.log(knowledge);
+    //console.log(knowledge);
 
-    // console.log(key, value);
+    //creacion de nueva carta
+    let bigCardDiv = document.querySelector('.big-card-div');
 
-    //popular datos
-    let prompt = document.querySelector('.prompt').firstChild;
+    //parentElement.insertBefore(newElement, parentElement.children[2]);
+
+    let newCard = document.createElement('div');
+    bigCardDiv.insertBefore(newCard, bigCardDiv.children[0]);
+    
+    let firstLabel = CreateElement('p', newCard);
+    let prompt = CreateElement('div', newCard);
+    let promptText= CreateElement('p', prompt);
+    let separator = CreateElement('div', newCard);
+    let answerDiv = CreateElement('div', newCard);
+    let answerPlaceholder = CreateElement('p', answerDiv);
+    let answerText = CreateElement('p', answerDiv);
+    let secondLabel = CreateElement('p', newCard);
+
+    newCard.classList.add('big-card');
+    firstLabel.classList.add('label', 'txt-left');
+    secondLabel.classList.add('label', 'txt-right');
+    prompt.classList.add('prompt');
+    separator.classList.add('separator');
+    answerDiv.classList.add('answer-div');
+    answerDiv.addEventListener('click', ClickAnswer);
+    answerPlaceholder.classList.add('answer-placeholder');
+    answerText.classList.add('answer');
+    answerText.classList.add('hide');
+
+    firstLabel.textContent = "Term";
+    secondLabel.textContent = "Answer";
+    answerPlaceholder.textContent = "Click to reveal answer";
+
+    //FIX //popular datos
+    prompt = document.querySelector('.prompt').firstChild;
     prompt.textContent = key;
 
     let placeholder = document.querySelector('.answer-placeholder');
@@ -240,10 +423,26 @@ function ShowNextTerm(dir){
     let answer = document.querySelector('.answer');
     answer.classList.add('hide');
     answer.textContent = value;
+
     //reset botones
     //buscar informacion guardada sobre boton
-    document.querySelector('.learning').classList.remove('checked');
-    document.querySelector('.learned').classList.remove('checked');
+    document.querySelector('.learning').setAttribute('id','');
+    document.querySelector('.learned').setAttribute('id','');
+
+    //temp actualizar counter
+    UpdateCounter();
+
+    //cada vez que cambio de card revisar si existe algo en local storage
+    CheckLearnStatus();
+}
+
+function UpdateCounter(){
+    let counter = document.querySelector('.counter');
+    counter.textContent = `${termIndex+1}/3`;
+}
+
+function DeleteElement(element){
+    element.remove();
 }
 
 function ClickAnswer(){
@@ -455,3 +654,10 @@ function CreateSelectElement(options){
 //         ] 
 //     }
 // ];
+
+//print all local storage
+// console.log("local storage");
+// for (let i = 0; i < localStorage.length; i++)   {
+//     console.log(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
+// }
+

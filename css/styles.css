@@ -28,6 +28,7 @@ h1{
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
 }
 
 .searchContainer{
@@ -99,7 +100,7 @@ h1{
 .middle-div{
     display: flex;
     min-width: 80%;
-    /* min-height: 75vh; */
+    min-height: 65vh;
     align-items: center;
     justify-content: space-around;
 }
@@ -117,14 +118,21 @@ h1{
 
 .big-card{
     background-color: rgb(245, 214, 244);
-    min-width: 80%;
+    min-width: 96%;
     height: 372px;
-    margin: 10px 10px;
+    /* margin: 10px 10px; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px;
+    padding: 2%;
     border-radius: 10px;
+    position: absolute;
+}
+
+.big-card-div{
+    width: 90%;
+    height: 50vh;
+    position: relative;
 }
 
 .separator{
@@ -196,8 +204,18 @@ h1{
     border-width: 2px;
 }
 
-.checked{
+.learning:hover{
+    background-color: #dfa9a9;
+}
+
+.learned:hover{
+    background-color: #9fd1ac;
+}
+
+#checked{
     border-width: 3px;
+    border-style: solid;
+    /* border-color: #db1d1d; */
 }
 
 .hide{
@@ -239,3 +257,55 @@ h1{
 .valueDiv{
 
 }
+
+.disappear-right{
+    animation-name: disappear-right;
+    animation-duration:  2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes disappear-right {
+    10%{
+        opacity: 1;
+    }
+    20%{
+        opacity: 0;
+    }
+    30% {
+        transform: translateX(400px) translateY(-40px) 
+        scale(1.02) rotateZ(5deg) rotateY(50deg)
+        rotateX(20deg);  
+        background-color: rgb(208, 193, 232);;    
+    }
+    100%{
+        transform: translateX(400px) translateY(-40px) scale(1.02);
+
+        opacity: 0;
+    }
+} 
+
+.disappear-left{
+    animation-name: disappear-left;
+    animation-duration:  2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes disappear-left {
+    10%{
+        opacity: 1;
+    }
+    20%{
+        opacity: 0;
+    }
+    30% {
+        transform: translateX(-400px) translateY(-40px) 
+        scale(1.02) rotateZ(-5deg) rotateY(50deg)
+        rotateX(-20deg);    
+        background-color: rgb(208, 193, 232);;    
+    }
+    100%{
+        transform: translateX(400px) translateY(-40px) scale(1.02);
+
+        opacity: 0;
+    }
+} 
