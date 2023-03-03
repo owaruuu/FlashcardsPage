@@ -1,5 +1,10 @@
 //jshint esversion:9
 
+let termIndex = 0;
+
+const app = document.getElementById('app');
+const setContainer = document.querySelector('.sets-container');
+
 function ReturnAsString(text){
     return text;
 }
@@ -36,6 +41,7 @@ let lecture = "Leccion 1";
 fetch(`files/${lecture}.txt`)
   .then(response =>  response.text())
   .then(text => CheckForTabsAndSpaces(text))
+  .then(() => CreateHomepageApp(setContainer))
 
 //anadie a setNameArray el nombre
 setNameArray.push(lecture);
@@ -54,7 +60,7 @@ function CheckForTabsAndSpaces(text){
             len = j;
             //guardar un string temporal para el key
             tempKey = text.substr(start, j - start)
-            console.log((text.substr(start, j - start)));
+            //console.log((text.substr(start, j - start)));
             start = j;
         }
         if (text.substr(j, 1) === '\n') {
@@ -62,10 +68,10 @@ function CheckForTabsAndSpaces(text){
             //guardar un string temporal para el value
             //push un objeto al array con key de lecture en objsets
             tempValue = text.substr(start+1, j - start -2);
-            let tempObj = {[ReturnAsString(tempKey)] : tempValue};
+            let tempObj = {[tempKey] : tempValue};
             let tempArray = objSets[lecture];
-             tempArray.push(tempObj);
-            console.log((text.substr(start+1, j - start)));
+            tempArray.push(tempObj);
+            //console.log((text.substr(start+1, j - start)));
             start = j+1;
             }
         }
@@ -120,17 +126,6 @@ for (let i = 0; i < localStorage.length; i++)   {
 
 //FIN seccion local storage
 
-
-
-
-
-let termIndex = 0;
-
-const app = document.getElementById('app');
-const setContainer = document.querySelector('.sets-container');
-
-CreateHomepageApp(setContainer);
-
 function CreateHomepageApp(container){
     //crear barra buscar
     let searchDiv = document.createElement('div');
@@ -165,11 +160,14 @@ function CreateHomepageApp(container){
     foundDiv.appendChild(foundText);
     app.appendChild(foundDiv);
 
-    //crear un boton por cada nombre en setNAmeArray
-    setNameArray.forEach(set => {
+    //FIX crear un boton por cada key en objSets
+    for([key, value] of Object.entries(objSets)){
+        console.log("tho");
+        console.log(key);
+
         let button = document.createElement('button');
         button.classList.add('set-button');
-        button.setAttribute('name', set);
+        button.setAttribute('name', key);
         button.addEventListener('click', FlashSetButton);
         container.appendChild(button);
 
@@ -179,12 +177,13 @@ function CreateHomepageApp(container){
 
         //number of cards div
         const numberDiv = CreateElement('div', numberContainer);
-        const total = objSets[set].length;
+        const total = objSets["Leccion 1"].length;
+        console.log(total);
         numberDiv.textContent = total + ' Terminos';
 
         //percent learned div
         const percentDiv = CreateElement('div', numberContainer);
-        const learnedAmountStringObj = localStorage.getItem(set);
+        const learnedAmountStringObj = localStorage.getItem(key);
         const currentLocalObj = JSON.parse(learnedAmountStringObj); 
         let percent = 0;
         
@@ -203,7 +202,7 @@ function CreateHomepageApp(container){
         
         //lecture name div
         let textDiv = document.createElement('div');
-        textDiv.textContent = set;
+        textDiv.textContent = key;
         button.appendChild(textDiv);
 
         //last visit div
@@ -221,9 +220,7 @@ function CreateHomepageApp(container){
         }else{   
             lastVisitDiv.textContent = `No checkout.`;
         }
-        
-        // const date = new Date().toLocaleDateString();
-    });
+    }    
 }
 
 function FlashSetButton(event){
