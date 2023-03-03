@@ -60,18 +60,18 @@ function CheckForTabsAndSpaces(text){
             len = j;
             //guardar un string temporal para el key
             tempKey = text.substr(start, j - start)
-            //console.log((text.substr(start, j - start)));
+            console.log((text.substr(start, j - start)));
             start = j;
         }
         if (text.substr(j, 1) === '\n') {
             //aqui debo crear un objeto con lo que llevo guardado
             //guardar un string temporal para el value
             //push un objeto al array con key de lecture en objsets
-            tempValue = text.substr(start+1, j - start -2);
+            tempValue = text.substr(start+1, j - start);
             let tempObj = {[tempKey] : tempValue};
             let tempArray = objSets[lecture];
             tempArray.push(tempObj);
-            //console.log((text.substr(start+1, j - start)));
+            console.log((text.substr(start+1, j - start)));
             start = j+1;
             }
         }
