@@ -1,4 +1,77 @@
 //jshint esversion:9
+
+function ReturnAsString(text){
+    return text;
+}
+
+const setNameArray = [
+    // "Leccion 1",
+    // "Leccion 2",
+    // "Leccion 3"
+];
+
+//objeto
+const objSets = {
+    // "Leccion 1": [
+    //     {"けむり（煙）"	:"humo",
+    //      "knowledge" : ""},
+    //     {"まっしろ（真っ白）「な」":"totalmente blanco"},
+    //     {"なかみ（中身）":	"contenido"},
+    // ],
+    // "Leccion 2": [
+    //     {"じょうほう（情報）" :	"informacion"},
+    //     {"ぶんぽう（文法）"	: "gramatica"},
+    //     {"はつおん（発音）"	: "pronunciacion"},
+    // ],
+    // "Leccion 3": [
+    //     {"けむり（煙）"	:"humo"},
+    //     {"おばさん":"señora"},
+    //     {"しろ（城）":	"castillo"},
+    //     {"はつおん（発音）":"pronunciacion"}
+    // ],
+};
+
+//aqui probare filereader
+let lecture = "Leccion 1";
+fetch(`files/${lecture}.txt`)
+  .then(response =>  response.text())
+  .then(text => CheckForTabsAndSpaces(text))
+
+//anadie a setNameArray el nombre
+setNameArray.push(lecture);
+
+//anadir a objSets un pair
+objSets[lecture] = [];
+let tempKey = "";
+let tempValue = "";
+
+function CheckForTabsAndSpaces(text){
+    //console.log(text.name);
+    let start = 0;
+    let len = 0;
+    for (let j = 0; j < text.length; j++) {
+        if (text.substr(j, 1) === '\t') {
+            len = j;
+            //guardar un string temporal para el key
+            tempKey = text.substr(start, j - start)
+            console.log((text.substr(start, j - start)));
+            start = j;
+        }
+        if (text.substr(j, 1) === '\n') {
+            //aqui debo crear un objeto con lo que llevo guardado
+            //guardar un string temporal para el value
+            //push un objeto al array con key de lecture en objsets
+            tempValue = text.substr(start+1, j - start -2);
+            let tempObj = {[ReturnAsString(tempKey)] : tempValue};
+            let tempArray = objSets[lecture];
+             tempArray.push(tempObj);
+            console.log((text.substr(start+1, j - start)));
+            start = j+1;
+            }
+        }
+}
+//FIN seccion filereader
+
 const varToString = varObj => Object.keys(varObj)[0];//variable name helper
 
 //aqui probare el localStorage
@@ -9,15 +82,25 @@ let leccion1Storage = {
     "けむり（煙）" : 'learned',
     "まっしろ（真っ白）「な」" : 'learning',
     "なかみ（中身）" : '',
+    // "lastCheckout" : '3/1/2023',
+};
+
+let leccion2Storage = {
+    "けむり（煙）" : 'learned',
+    "まっしろ（真っ白）「な」" : 'learning',
+    "なかみ（中身）" : '',
 };
 
 //esto limpia todo el local storage
-localStorage.clear();
+// localStorage.clear();
 
 // para poder agregar un item a local storage debo convertirlo a string
 // localStorage.setItem('name', 'josue');
-let objString = JSON.stringify(leccion1Storage);
-localStorage.setItem('Leccion 1', objString);
+// let objString = JSON.stringify(leccion1Storage);
+// localStorage.setItem('Leccion 1', objString);
+
+// let objString2 = JSON.stringify(leccion2Storage);
+// localStorage.setItem('Leccion 2', objString2);
 // console.log("local storage saved");
 
 console.log("local storage");
@@ -37,29 +120,9 @@ for (let i = 0; i < localStorage.length; i++)   {
 
 //FIN seccion local storage
 
-const setNameArray = [
-    "Leccion 1",
-    "Leccion 2"
-];
 
-//objeto
-const objSets = {
-    "Leccion 1": [
-        {"けむり（煙）"	:"humo", "knowledge" : ""},
-        {"まっしろ（真っ白）「な」":"totalmente blanco"},
-        {"なかみ（中身）":	"contenido"},
-    ],
-    "Leccion 2": [
-        {"じょうほう（情報）" :	"informacion"},
-        {"ぶんぽう（文法）"	: "gramatica"},
-        {"はつおん（発音）"	: "pronunciacion"},
-    ],
-    "Leccion 3": [
-        {"けむり（煙）"	:"humo"},
-        {"おばさん":"señora"},
-        {"しろ（城）":	"castillo"},
-    ],
-};
+
+
 
 let termIndex = 0;
 
@@ -102,19 +165,64 @@ function CreateHomepageApp(container){
     foundDiv.appendChild(foundText);
     app.appendChild(foundDiv);
 
+    //crear un boton por cada nombre en setNAmeArray
     setNameArray.forEach(set => {
-        // let card = document.createElement('div');
-        // container.appendChild(card);
         let button = document.createElement('button');
-        // button.textContent = set;
         button.classList.add('set-button');
         button.setAttribute('name', set);
         button.addEventListener('click', FlashSetButton);
         container.appendChild(button);
-        let text = document.createElement('div');
-        text.textContent = set;
-        button.appendChild(text);
-        // card.appendChild(button);
+
+        //numbers container
+        const numberContainer = CreateElement('div', button);
+        numberContainer.classList.add('set-buttons-helper', 'number-terms');
+
+        //number of cards div
+        const numberDiv = CreateElement('div', numberContainer);
+        const total = objSets[set].length;
+        numberDiv.textContent = total + ' Terminos';
+
+        //percent learned div
+        const percentDiv = CreateElement('div', numberContainer);
+        const learnedAmountStringObj = localStorage.getItem(set);
+        const currentLocalObj = JSON.parse(learnedAmountStringObj); 
+        let percent = 0;
+        
+        if(learnedAmountStringObj !== null){           
+            let amount = 0;
+            for(let [key, value] of Object.entries(currentLocalObj)){
+                if(value ==="learned") amount++;
+            }
+
+            percent = Math.trunc((amount / total) * 100);
+        }else{
+            percent = "0"
+        }
+    
+        percentDiv.textContent = `(${percent}% Learned.)`;      
+        
+        //lecture name div
+        let textDiv = document.createElement('div');
+        textDiv.textContent = set;
+        button.appendChild(textDiv);
+
+        //last visit div
+        const lastVisitDiv = CreateElement('div', button);
+        lastVisitDiv.classList.add('set-buttons-helper', 'last-visit');
+
+        if(learnedAmountStringObj !== null){
+            if(currentLocalObj.hasOwnProperty("lastCheckout")){
+                console.log("existe last check");
+                last = currentLocalObj.lastCheckout;
+                lastVisitDiv.textContent = `Last Checkout: ${last}`;
+            }else{
+                lastVisitDiv.textContent = `No checkout.`;
+            }
+        }else{   
+            lastVisitDiv.textContent = `No checkout.`;
+        }
+        
+        // const date = new Date().toLocaleDateString();
     });
 }
 
@@ -138,6 +246,13 @@ function FlashSetButton(event){
     learnButton.setAttribute('data-lecture', stringKey);
     learnButton.addEventListener('click', LearnLecture);
     buttonsContainer.appendChild(learnButton);
+
+    //FIX aqui agregar boton de checkout
+    let checkoutButton = CreateElement('button', buttonsContainer);
+    checkoutButton.classList.add('checkout-button');
+    checkoutButton.textContent = "Checkout";
+    checkoutButton.setAttribute('data-lecture', stringKey);
+    checkoutButton.addEventListener('click', CheckoutLecture);
 
     let container = document.createElement('div');
     container.classList.add('set-container');
@@ -235,6 +350,33 @@ function LearnLecture(event){
     knowledgeButton.addEventListener('click', ClickKnowledgeButton);
 }
 
+function CheckoutLecture(event){
+    console.log("click checkout");
+    let lectureKey = event.target.dataset.lecture;
+    const date = new Date().toLocaleDateString();
+
+    let lectureObjString = localStorage.getItem(lectureKey);
+    if(lectureObjString !== null){
+        console.log(lectureObjString);
+        let lectureObject = JSON.parse(lectureObjString);
+        console.log(lectureObject);
+        lectureObject.lastCheckout = date;
+        lectureObjString = JSON.stringify(lectureObject);
+        localStorage.setItem(lectureKey, lectureObjString);
+    }else{
+        //crear el objeto desde 0 y luego agregar fecha
+        CreateLocalStorageObject(lectureKey);
+        let lectureObjString = localStorage.getItem(lectureKey);
+        console.log(lectureObjString);
+        let lectureObject = JSON.parse(lectureObjString);
+        console.log(lectureObject);
+        lectureObject.lastCheckout = date;
+        lectureObjString = JSON.stringify(lectureObject);
+        localStorage.setItem(lectureKey, lectureObjString);
+    }
+    
+}
+
 function CheckLearnStatus(){
     let currentString;
     let currentObject;
@@ -242,10 +384,10 @@ function CheckLearnStatus(){
 
     //reviso todo el localstorage hasta encontrar 
     //un item con el key igual a la leccion actual
-    for (let i = 0; i < localStorage.length; i++)   {
-        if(localStorage.key(i) === currentLecture){
+      
+        if(localStorage[currentLecture]){
             console.log("found");
-            currentString = localStorage.getItem(localStorage.key(i));
+            currentString = localStorage.getItem(currentLecture);
             currentObject = JSON.parse(currentString);
 
             let prompt = document.querySelector('.prompt').firstChild;
@@ -268,10 +410,44 @@ function CheckLearnStatus(){
                     }
                 }
             }
-        }else{
+        }else
+        {
             console.log("No se encontro la leccion en Local Storage");
-        }
-    }  
+
+
+            CreateLocalStorageObject(currentLecture);
+            // //crear objeto
+            // let storageObject = {};
+            // let currentArray = objSets[currentLecture];
+
+            // //popular objecto
+            // for (let index = 0; index < currentArray.length; index++) {
+            //     const obj = currentArray[index];  
+            //     const firstKey = Object.keys(obj)[0];
+                
+            //     storageObject[firstKey]  = '';             
+            // }
+
+            // let objectString = JSON.stringify(storageObject);
+            // localStorage.setItem(currentLecture, objectString);
+        }  
+}
+
+function CreateLocalStorageObject(currentLecture){
+    //crear objeto
+    let storageObject = {};
+    let currentArray = objSets[currentLecture];
+
+    //popular objecto
+    for (let index = 0; index < currentArray.length; index++) {
+        const obj = currentArray[index];  
+        const firstKey = Object.keys(obj)[0];
+        
+        storageObject[firstKey]  = '';             
+    }
+
+    let objectString = JSON.stringify(storageObject);
+    localStorage.setItem(currentLecture, objectString);
 }
 
 function ChangeKnowledgeButtonString(btnclass){
@@ -304,28 +480,28 @@ function UpdateLocalStorage(btnClicked){
     //aqui actualizar local storage
     //recorro todo el local storage
     let currentLecture = document.querySelector('.title-div').firstChild.textContent;
-    for (let i = 0; i < localStorage.length; i++)   {
-        if(localStorage.key(i) === currentLecture){
-            //aqui se encontro el objeto en local storage basado en la leccion actual
-            console.log("al hacer click en el boton se encontro un objeto en local storage");
-            currentString = localStorage.getItem(localStorage.key(i));
-            currentObject = JSON.parse(currentString);  
 
-            let prompt = document.querySelector('.prompt').firstChild;
-            
-            //aqui buscar por el objeto por el key basado en el prompt
-            for(let [key, value] of Object.entries(currentObject)){
-                if(key === prompt.textContent){
-                    console.log("se encontro el prompt en la lista con el valor de: " + value);
-                    currentObject[key] = btnClicked.className;
-                    localStorage.setItem(currentLecture, JSON.stringify(currentObject));
-                    console.log("se cambio el valor a: " + btnClicked.className);
-                }
+    if(localStorage[currentLecture]){
+        //aqui se encontro el objeto en local storage basado en la leccion actual
+        console.log("al hacer click en el boton se encontro un objeto en local storage");
+        currentString = localStorage.getItem(currentLecture);
+        currentObject = JSON.parse(currentString);  
+
+        let prompt = document.querySelector('.prompt').firstChild;
+        
+        //aqui buscar por el objeto por el key basado en el prompt
+        for(let [key, value] of Object.entries(currentObject)){
+            if(key === prompt.textContent){
+                console.log("se encontro el prompt en la lista con el valor de: " + value);
+                currentObject[key] = btnClicked.className;
+                localStorage.setItem(currentLecture, JSON.stringify(currentObject));
+                console.log("se cambio el valor a: " + btnClicked.className);
             }
-        }else{
-            console.log("No se encontro la leccion en Local Storage y deberia crear uno");
         }
-    } 
+    }else{
+        //esto nunca deberia pasar
+        console.log("No se encontro la leccion en Local Storage al momento de actualizar y deberia crear uno");
+    }
 }
 
 //necesito sacarle a los dos las clases y desactivarlos
@@ -466,6 +642,11 @@ function ClickArrow(event){
     }
 }
 
+/**
+ * Creates an element and parents it
+ * @param {String} elem
+ * @param {Element} parent
+ */
 function CreateElement(elem, parent){
     let element =document.createElement(`${elem}`);
     parent.appendChild(element);
@@ -490,13 +671,14 @@ function CreatePairCard(key, value, parent){
     valueDiv.classList.add('valueDiv');
     container.appendChild(valueDiv);
 
+    //FIX aqui devolver la estrella y hacerla funcionar
     //create misc div
     // <i class="fa-regular fa-star"></i>
-    let miscDiv = document.createElement('div');
-    let star = document.createElement('i');
-    star.classList.add('fa-regular', 'fa-star');
-    miscDiv.appendChild(star);
-    container.appendChild(miscDiv);
+    // let miscDiv = document.createElement('div');
+    // let star = document.createElement('i');
+    // star.classList.add('fa-regular', 'fa-star');
+    // miscDiv.appendChild(star);
+    // container.appendChild(miscDiv);
 }
 
 function FilterSets(event){
