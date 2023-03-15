@@ -1,5 +1,43 @@
 //jshint esversion:9
 
+//Seccion History
+let state = {
+    currentPage : "home",
+    lastLecture: "",
+};
+
+window.history.replaceState(state, null, "");
+
+window.onpopstate = function(event) {
+    if(event.state){
+        state = event.state;
+    }
+
+    Render(state);
+};
+
+function Render(state){
+    switch (state.currentPage) {
+        case "home":
+            ReloadPage();
+            break;
+        case "lectureList":
+            FlashSetButton(state.lastLecture);
+            break;
+        case "lectureFlash":
+            console.log("lecture Flash");
+            break;
+        default:
+            break;
+    }
+}
+
+function ReloadPage(){
+    location.reload();
+}
+
+//Fin Seccion History
+
 let termIndex = 0;
 
 const app = document.getElementById('app');
@@ -60,7 +98,7 @@ function CheckForTabsAndSpaces(text){
             len = j;
             //guardar un string temporal para el key
             tempKey = text.substr(start, j - start)
-            console.log((text.substr(start, j - start)));
+            //console.log((text.substr(start, j - start)));
             start = j;
         }
         if (text.substr(j, 1) === '\n') {
@@ -71,7 +109,7 @@ function CheckForTabsAndSpaces(text){
             let tempObj = {[tempKey] : tempValue};
             let tempArray = objSets[lecture];
             tempArray.push(tempObj);
-            console.log((text.substr(start+1, j - start)));
+            //console.log((text.substr(start+1, j - start)));
             start = j+1;
             }
         }
@@ -109,10 +147,10 @@ let leccion2Storage = {
 // localStorage.setItem('Leccion 2', objString2);
 // console.log("local storage saved");
 
-console.log("local storage");
-for (let i = 0; i < localStorage.length; i++)   {
-    console.log(localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i)));
-}
+// console.log("local storage");
+// for (let i = 0; i < localStorage.length; i++)   {
+//     console.log(localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i)));
+// }
 
 //aqui checkeo si el objeto localstorage.leccion1 existe
 // currentStorageObj = JSON.parse(localStorage.leccion1);
@@ -168,7 +206,7 @@ function CreateHomepageApp(container){
         let button = document.createElement('button');
         button.classList.add('set-button');
         button.setAttribute('name', key);
-        button.addEventListener('click', FlashSetButton);
+        button.addEventListener('click', () => OnFlashSetButton(button.name));
         container.appendChild(button);
 
         //numbers container
@@ -223,8 +261,19 @@ function CreateHomepageApp(container){
     }    
 }
 
-function FlashSetButton(event){
-    let stringKey = event.currentTarget.name; 
+function OnFlashSetButton(name){
+    state.currentPage = "lectureList";
+    state.lastLecture = name;
+    window.history.pushState(state, null, "");
+    console.log("pushed state");
+
+    FlashSetButton(name);
+}
+
+function FlashSetButton(name)
+{
+    // let stringKey = event.currentTarget.name; 
+    let stringKey = name; 
     //aqui crear pagina con informacion de set
     console.log('clicked boton');
     app.innerHTML = '';
@@ -241,7 +290,7 @@ function FlashSetButton(event){
     learnButton.classList.add('learn-button');
     learnButton.textContent = 'Learn';
     learnButton.setAttribute('data-lecture', stringKey);
-    learnButton.addEventListener('click', LearnLecture);
+    learnButton.addEventListener('click', OnLearnLecture);
     buttonsContainer.appendChild(learnButton);
 
     //FIX aqui agregar boton de checkout
@@ -264,7 +313,17 @@ function FlashSetButton(event){
     });
 }
 
-function LearnLecture(event){
+function OnLearnLecture(event){
+    state.currentPage = "lectureFlash";
+    state.lastLecture = event.target.dataset.lecture;
+    window.history.pushState(state, null, "");
+    console.log("pushed state");
+
+    LearnLecture(event);
+}
+
+function LearnLecture(event)
+{  
     console.log('click learn lecture');
     let lectureKey = event.target.dataset.lecture;
     app.innerHTML = '';
