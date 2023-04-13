@@ -444,8 +444,8 @@ function PopulateProgressBar(parent, key){
     console.log('length of lecture: ' + length);
     // console.log(termsArray);
 
-    const learnedAmountStringObj = localStorage.getItem(key);
-    const currentLocalObj = JSON.parse(learnedAmountStringObj); 
+    let learnedAmountStringObj = localStorage.getItem(key);
+    let currentLocalObj = JSON.parse(learnedAmountStringObj); 
     console.log("current local storage object");
     console.log(learnedAmountStringObj);
 
