@@ -449,27 +449,30 @@ function PopulateProgressBar(parent, key){
     console.log("current local storage object");
     console.log(learnedAmountStringObj);
 
-    if(learnedAmountStringObj !== null){           
-        for(let [key, value] of Object.entries(currentLocalObj)){
-            switch (value){
-                case "learned":
-                    let progressBarItemLearned = CreateElement('div', parent);
-                    progressBarItemLearned.classList.add('learned-progress');  
-                    break;
-                case "learning":
-                    let progressBarItemLearning = CreateElement('div', parent);
-                    progressBarItemLearning.classList.add('learning-progress');  
-                    break;
-                case "":
-                    let progressBarItemNone = CreateElement('div', parent);
-                    progressBarItemNone.classList.add('progress-bar-item');  
-                    break;
-                default:
-                    console.log('no encontre un termino en el local obj'); 
-                    break;
-            }
+    if(learnedAmountStringObj == null){
+        CreateLocalStorageObject(key);
+    }
+           
+    for(let [key, value] of Object.entries(currentLocalObj)){
+        switch (value){
+            case "learned":
+                let progressBarItemLearned = CreateElement('div', parent);
+                progressBarItemLearned.classList.add('learned-progress');  
+                break;
+            case "learning":
+                let progressBarItemLearning = CreateElement('div', parent);
+                progressBarItemLearning.classList.add('learning-progress');  
+                break;
+            case "":
+                let progressBarItemNone = CreateElement('div', parent);
+                progressBarItemNone.classList.add('progress-bar-item');  
+                break;
+            default:
+                console.log('no encontre un termino en el local obj'); 
+                break;
         }
     }
+    
 
     let firstProgressItem = document.querySelector('.progress-bar-josue').childNodes[0];
     console.log('added current class on populate');
