@@ -403,6 +403,7 @@ function LearnLecture(event)
     //aqui tengo que buscar la 'carta' correspondiente, por ahora
     //poner la primera nomas
     let termObject = Object.values(objSets[lectureKey])[0];
+    let termsLenght = Object.values(objSets[lectureKey]).length;
     let [key, value] = Object.entries(termObject)[0];
     promptText.textContent = key;
     promptText.classList.add('align-self-center');
@@ -413,7 +414,7 @@ function LearnLecture(event)
     //temp counter section
     let counterDiv = CreateElement('div', app);
     counterDiv.classList.add('counter');
-    counterDiv.textContent = '1/3';
+    counterDiv.textContent = `1/${termsLenght}`;
 
     //Knowledge buttons section
     let knowledgeDiv = CreateElement('div', app);
@@ -806,7 +807,7 @@ function ShowNextTerm(dir){
     document.querySelector('.learned').setAttribute('id','');
 
     //temp actualizar counter
-    UpdateCounter();
+    UpdateCounter(termsArray.length);
 
     //cada vez que cambio de card revisar si existe algo en local storage
     CheckLearnStatus();
@@ -823,9 +824,9 @@ function updateSelectedProgressItem(index){
     progressItem.classList.add('progress-item-current');
 }
 
-function UpdateCounter(){
+function UpdateCounter(total){
     let counter = document.querySelector('.counter');
-    counter.textContent = `${termIndex+1}/3`;
+    counter.textContent = `${termIndex+1}/${total}`;
 }
 
 function DeleteElement(element){
