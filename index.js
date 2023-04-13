@@ -1,12 +1,18 @@
 //jshint esversion:9
 
+"use strict";
+
+import {ReplaceState, PushHistoryState} from "./history.js";
+
 //Seccion History
 let state = {
     currentPage : "home",
     lastLecture: "",
 };
 
-window.history.replaceState(state, null, "");
+ReplaceState(state);
+
+// window.history.replaceState(state, null, "");
 
 window.onpopstate = function(event) {
     if(event.state){
@@ -38,7 +44,8 @@ function ReloadPage(){
 
 //Fin Seccion History
 
-let termIndex = 0;
+var termIndex = 0;
+var nextTermTimeoutId;
 
 const app = document.getElementById('app');
 const setContainer = document.querySelector('.sets-container');
@@ -50,11 +57,10 @@ function ReturnAsString(text){
 const setNameArray = [
     // "Leccion 1",
     // "Leccion 2",
-    // "Leccion 3"
 ];
 
 //objeto
-const objSets = {
+let objSets = {
     // "Leccion 1": [
     //     {"けむり（煙）"	:"humo",
     //      "knowledge" : ""},
@@ -66,36 +72,35 @@ const objSets = {
     //     {"ぶんぽう（文法）"	: "gramatica"},
     //     {"はつおん（発音）"	: "pronunciacion"},
     // ],
-    // "Leccion 3": [
-    //     {"けむり（煙）"	:"humo"},
-    //     {"おばさん":"señora"},
-    //     {"しろ（城）":	"castillo"},
-    //     {"はつおん（発音）":"pronunciacion"}
-    // ],
 };
+console.log("after creating the object");
+console.log(JSON.stringify(objSets));
 
 //aqui probare filereader
 let lecture = "Leccion 1";
+//anadie a setNameArray el nombre
+setNameArray.push(lecture);
+//anadir a objSets un pair
+//objSets[lecture] = [];
+objSets[lecture] = [];
+console.log("after setting the first key/pair");
+console.log(JSON.stringify(objSets));
+
 fetch(`files/${lecture}.txt`)
   .then(response =>  response.text())
   .then(text => CheckForTabsAndSpaces(text))
   .then(() => CreateHomepageApp(setContainer))
 
-//anadie a setNameArray el nombre
-setNameArray.push(lecture);
-
-//anadir a objSets un pair
-objSets[lecture] = [];
-let tempKey = "";
-let tempValue = "";
 
 function CheckForTabsAndSpaces(text){
+    let tempKey = "";
+    let tempValue = "";
     //console.log(text.name);
     let start = 0;
     let len = 0;
     for (let j = 0; j < text.length; j++) {
         if (text.substr(j, 1) === '\t') {
-            len = j;
+            // len = j;
             //guardar un string temporal para el key
             tempKey = text.substr(start, j - start)
             //console.log((text.substr(start, j - start)));
@@ -108,6 +113,7 @@ function CheckForTabsAndSpaces(text){
             tempValue = text.substr(start+1, j - start);
             let tempObj = {[tempKey] : tempValue};
             let tempArray = objSets[lecture];
+            //console.log(tempArray);
             tempArray.push(tempObj);
             //console.log((text.substr(start+1, j - start)));
             start = j+1;
@@ -198,23 +204,28 @@ function CreateHomepageApp(container){
     foundDiv.appendChild(foundText);
     app.appendChild(foundDiv);
 
+    // let key = "";
+    // let value = [];
     //FIX crear un boton por cada key en objSets
-    for([key, value] of Object.entries(objSets)){
+    for(let [key, value] of Object.entries(objSets)){
         console.log("tho");
         console.log(key);
+        //console.log(value);
 
         let button = document.createElement('button');
-        button.classList.add('set-button');
+        button.classList.add('set-button','row');
+        // button.classList.add()
         button.setAttribute('name', key);
         button.addEventListener('click', () => OnFlashSetButton(button.name));
         container.appendChild(button);
 
         //numbers container
         const numberContainer = CreateElement('div', button);
-        numberContainer.classList.add('set-buttons-helper', 'number-terms');
+        numberContainer.classList.add('set-buttons-helper', 'number-terms', 'col-12', 'col-sm-4');
 
         //number of cards div
         const numberDiv = CreateElement('div', numberContainer);
+        numberDiv.classList.add('align-self-center');
         const total = objSets["Leccion 1"].length;
         console.log(total);
         numberDiv.textContent = total + ' Terminos';
@@ -223,6 +234,8 @@ function CreateHomepageApp(container){
         const percentDiv = CreateElement('div', numberContainer);
         const learnedAmountStringObj = localStorage.getItem(key);
         const currentLocalObj = JSON.parse(learnedAmountStringObj); 
+        console.log("current local storage object");
+        console.log(learnedAmountStringObj);
         let percent = 0;
         
         if(learnedAmountStringObj !== null){           
@@ -241,16 +254,17 @@ function CreateHomepageApp(container){
         //lecture name div
         let textDiv = document.createElement('div');
         textDiv.textContent = key;
+        textDiv.classList.add('button-title', 'col-12', 'col-sm-4');
         button.appendChild(textDiv);
 
         //last visit div
         const lastVisitDiv = CreateElement('div', button);
-        lastVisitDiv.classList.add('set-buttons-helper', 'last-visit');
+        lastVisitDiv.classList.add('set-buttons-helper', 'last-visit', 'col-12', 'col-sm-4', 'text-center', 'text-sm-end');
 
         if(learnedAmountStringObj !== null){
             if(currentLocalObj.hasOwnProperty("lastCheckout")){
                 console.log("existe last check");
-                last = currentLocalObj.lastCheckout;
+                let last = currentLocalObj.lastCheckout;
                 lastVisitDiv.textContent = `Last Checkout: ${last}`;
             }else{
                 lastVisitDiv.textContent = `No checkout.`;
@@ -264,7 +278,8 @@ function CreateHomepageApp(container){
 function OnFlashSetButton(name){
     state.currentPage = "lectureList";
     state.lastLecture = name;
-    window.history.pushState(state, null, "");
+    PushHistoryState(state);
+    // window.history.pushState(state, null, "");
     console.log("pushed state");
 
     FlashSetButton(name);
@@ -279,11 +294,12 @@ function FlashSetButton(name)
     app.innerHTML = '';
 
     let lectureTitle = document.createElement('h1');
+    lectureTitle.classList.add('my-3');
     lectureTitle.textContent = stringKey;
     app.appendChild(lectureTitle);
     
     let buttonsContainer = document.createElement('div');
-    buttonsContainer.classList.add('buttons-div');
+    buttonsContainer.classList.add('buttons-div','xwidth','xwidth-md');
     app.appendChild(buttonsContainer);
 
     let learnButton = document.createElement('button');
@@ -301,7 +317,7 @@ function FlashSetButton(name)
     checkoutButton.addEventListener('click', CheckoutLecture);
 
     let container = document.createElement('div');
-    container.classList.add('set-container');
+    container.classList.add('set-container','xwidth','xwidth-md');
     app.appendChild(container);
 
     let cardArray = Object.values(objSets[stringKey]);
@@ -316,7 +332,8 @@ function FlashSetButton(name)
 function OnLearnLecture(event){
     state.currentPage = "lectureFlash";
     state.lastLecture = event.target.dataset.lecture;
-    window.history.pushState(state, null, "");
+    PushHistoryState(state);
+    //window.history.pushState(state, null, "");
     console.log("pushed state");
 
     LearnLecture(event);
@@ -325,6 +342,9 @@ function OnLearnLecture(event){
 function LearnLecture(event)
 {  
     console.log('click learn lecture');
+
+    termIndex = 0;
+
     let lectureKey = event.target.dataset.lecture;
     app.innerHTML = '';
 
@@ -333,6 +353,11 @@ function LearnLecture(event)
 
     let title = CreateElement('h1', titleDiv);
     title.textContent = lectureKey;
+
+    let progressBar = CreateElement('div', app);
+    progressBar.classList.add('progress-bar-josue');
+
+    PopulateProgressBar(progressBar,lectureKey);
 
     let middleDiv = CreateElement('div', app);
     middleDiv.classList.add('middle-div');
@@ -358,27 +383,31 @@ function LearnLecture(event)
     rightArrow.addEventListener('click', ClickArrow);
     rightArrow.setAttribute('data-direction', 'right');
 
-    bigCardDiv.classList.add('big-card-div');
+    bigCardDiv.classList.add('big-card-div', 'm-2');
     bigCard.classList.add('big-card');
     firstLabel.classList.add('label', 'txt-left');
     secondLabel.classList.add('label', 'txt-right');
-    prompt.classList.add('prompt');
+    prompt.classList.add('prompt', 'flex-grow-1');
     separator.classList.add('separator');
-    answerDiv.classList.add('answer-div');
+    answerDiv.classList.add('answer-div', 'flex-grow-1');
     answerDiv.addEventListener('click', ClickAnswer);
-    answerPlaceholder.classList.add('answer-placeholder');
-    answerText.classList.add('answer');
-    answerText.classList.add('hide');
+    answerPlaceholder.classList.add('answer-placeholder', 'align-self-center');
+    answerPlaceholder.setAttribute('id', 'answer-placeholder');
+    answerText.classList.add('answer', 'align-self-center', 'hide');
+    answerText.setAttribute('id', 'answer-text');
 
     firstLabel.textContent = "Term";
     secondLabel.textContent = "Answer";
 
+    //FIX
     //aqui tengo que buscar la 'carta' correspondiente, por ahora
     //poner la primera nomas
     let termObject = Object.values(objSets[lectureKey])[0];
     let [key, value] = Object.entries(termObject)[0];
     promptText.textContent = key;
-    answerPlaceholder.textContent = "Click to reveal answer";
+    promptText.classList.add('align-self-center');
+    promptText.setAttribute('id', 'prompt-text');
+    answerPlaceholder.textContent = "Click to reveal";
     answerText.textContent = value;
 
     //temp counter section
@@ -404,6 +433,55 @@ function LearnLecture(event)
 
     noKnowledgeButton.addEventListener('click', ClickKnowledgeButton);
     knowledgeButton.addEventListener('click', ClickKnowledgeButton);
+}
+
+/**
+ * Es llamado cuando creo la pantalla de learn
+ */
+function PopulateProgressBar(parent, key){
+    let termsArray = Object.values(objSets[key]);
+    let length = objSets[key].length;
+    console.log('length of lecture: ' + length);
+    // console.log(termsArray);
+
+    const learnedAmountStringObj = localStorage.getItem(key);
+    const currentLocalObj = JSON.parse(learnedAmountStringObj); 
+    console.log("current local storage object");
+    console.log(learnedAmountStringObj);
+
+    if(learnedAmountStringObj !== null){           
+        for(let [key, value] of Object.entries(currentLocalObj)){
+            switch (value){
+                case "learned":
+                    let progressBarItemLearned = CreateElement('div', parent);
+                    progressBarItemLearned.classList.add('learned-progress');  
+                    break;
+                case "learning":
+                    let progressBarItemLearning = CreateElement('div', parent);
+                    progressBarItemLearning.classList.add('learning-progress');  
+                    break;
+                case "":
+                    let progressBarItemNone = CreateElement('div', parent);
+                    progressBarItemNone.classList.add('progress-bar-item');  
+                    break;
+                default:
+                    console.log('no encontre un termino en el local obj'); 
+                    break;
+            }
+        }
+    }
+
+    let firstProgressItem = document.querySelector('.progress-bar-josue').childNodes[0];
+    console.log('added current class on populate');
+    firstProgressItem.classList.add('progress-item-current');
+
+
+    // for (let index = 0; index < length; index++) {
+    //     let progressBarItem = CreateElement('div', parent);
+
+    //     //FIX clase depende en estado 
+    //     progressBarItem.classList.add('progress-bar-item');    
+    // }
 }
 
 function CheckoutLecture(event){
@@ -530,33 +608,77 @@ function ChangeKnowledgeButtonElem(element){
     UpdateLocalStorage(element);
 }
 
+/**
+ * Es llamado cuando apreto un boton de knowledge
+ */
 function UpdateLocalStorage(btnClicked){
     console.log("boton clikeado " + btnClicked.className);
 
     //aqui actualizar local storage
-    //recorro todo el local storage
     let currentLecture = document.querySelector('.title-div').firstChild.textContent;
+
+    let counter = 0;
 
     if(localStorage[currentLecture]){
         //aqui se encontro el objeto en local storage basado en la leccion actual
         console.log("al hacer click en el boton se encontro un objeto en local storage");
-        currentString = localStorage.getItem(currentLecture);
-        currentObject = JSON.parse(currentString);  
+        let currentString = localStorage.getItem(currentLecture);
+        let currentObject = JSON.parse(currentString);  
 
-        let prompt = document.querySelector('.prompt').firstChild;
+        let prompt = document.querySelector('.prompt').firstChild;   
         
         //aqui buscar por el objeto por el key basado en el prompt
         for(let [key, value] of Object.entries(currentObject)){
+            
             if(key === prompt.textContent){
                 console.log("se encontro el prompt en la lista con el valor de: " + value);
+                
+                //cambio el valor del key actual basado en la clase del boton
                 currentObject[key] = btnClicked.className;
+                
+                //reemplazo el objeto en localstorage con el objeto actualizado
                 localStorage.setItem(currentLecture, JSON.stringify(currentObject));
                 console.log("se cambio el valor a: " + btnClicked.className);
+                break;
             }
+
+            counter++;
         }
+
+        
     }else{
         //esto nunca deberia pasar
         console.log("No se encontro la leccion en Local Storage al momento de actualizar y deberia crear uno");
+    }
+
+    //una vez actualizado el local storage deberia rehacer o actualizar la barra de progreso
+    console.log("veces que busque un key en local storage:" + counter);
+    UpdateProgressBar(counter, btnClicked.className);
+
+}
+
+/**
+ * Se llama cuando termino de actualizar el local storage object
+ */
+function UpdateProgressBar(counter, classToAdd){
+    let progressBar = document.querySelector('.progress-bar-josue');
+    let progressItem = progressBar.childNodes[counter];
+
+    progressItem.classList.remove('learning-progress');
+    progressItem.classList.remove('learned-progress');
+
+    // progressItem.setAttribute('class', '');
+
+    switch(classToAdd){
+        case "learning":
+            progressItem.classList.add("learning-progress");
+            break;
+        case "learned":
+            progressItem.classList.add("learned-progress");
+            break;
+        default:
+            console.log("hubo un error");
+            break;
     }
 }
 
@@ -567,7 +689,8 @@ function ClickKnowledgeButton(event){
 
     DisableKnowledgeButtons();
     
-    setTimeout(() => ShowNextTerm(1), 450);   
+    nextTermTimeoutId = setTimeout(() => ShowNextTerm(1), 1000); 
+    console.log('called shownextterm with timeout');  
 }
 
 function DisableKnowledgeButtons(){
@@ -596,6 +719,12 @@ function ShowNextTerm(dir){
     let currentLecture = document.querySelector('.title-div').firstChild.textContent;
     let termsArray = Object.values(objSets[currentLecture]);
 
+    let progressItem = document.querySelector('.progress-bar-josue').childNodes[termIndex];
+    progressItem.classList.toggle('progress-item-current');
+
+    // removeSelectedProgressItem(termIndex);
+    // console.log('called remove selected item');
+
     if(termIndex + dir == termsArray.length){
         termIndex = 0;
     }else if(termIndex + dir < 0){
@@ -605,6 +734,12 @@ function ShowNextTerm(dir){
     }
 
     let termObj = termsArray[termIndex];
+    console.log('este es el numero index: ' + termIndex);
+
+    updateSelectedProgressItem(termIndex);
+
+    console.log('este es el obj par prompt/meaning');
+    console.log(termObj);
 
     let [key, value] = Object.entries(termObj)[0];
 
@@ -633,21 +768,24 @@ function ShowNextTerm(dir){
     newCard.classList.add('big-card');
     firstLabel.classList.add('label', 'txt-left');
     secondLabel.classList.add('label', 'txt-right');
-    prompt.classList.add('prompt');
+    prompt.classList.add('prompt', 'flex-grow-1');
     separator.classList.add('separator');
-    answerDiv.classList.add('answer-div');
+    answerDiv.classList.add('answer-div', 'flex-grow-1');
     answerDiv.addEventListener('click', ClickAnswer);
-    answerPlaceholder.classList.add('answer-placeholder');
-    answerText.classList.add('answer');
-    answerText.classList.add('hide');
+    answerPlaceholder.classList.add('answer-placeholder', 'align-self-center');
+    answerPlaceholder.setAttribute('id', 'answer-placeholder');
+    answerText.classList.add('answer', 'align-self-center', 'hide');
+    answerText.setAttribute('id', 'answer-text');
 
     firstLabel.textContent = "Term";
     secondLabel.textContent = "Answer";
-    answerPlaceholder.textContent = "Click to reveal answer";
+    answerPlaceholder.textContent = "Click to reveal";
 
     //FIX //popular datos
-    prompt = document.querySelector('.prompt').firstChild;
-    prompt.textContent = key;
+    // prompt = document.querySelector('.prompt').firstChild;
+    promptText.textContent = key;
+    promptText.classList.add('align-self-center');
+    promptText.setAttribute('id', 'prompt-text');
 
     let placeholder = document.querySelector('.answer-placeholder');
     placeholder.classList.remove('hide');
@@ -666,6 +804,17 @@ function ShowNextTerm(dir){
 
     //cada vez que cambio de card revisar si existe algo en local storage
     CheckLearnStatus();
+}
+
+// function removeSelectedProgressItem(index){
+//     console.log('called remove');
+//     let progressItem = document.querySelector('.progress-bar-josue').childNodes[index];
+//     progressItem.classList.remove('progress-item-current');
+// }
+
+function updateSelectedProgressItem(index){
+    let progressItem = document.querySelector('.progress-bar-josue').childNodes[index];
+    progressItem.classList.add('progress-item-current');
 }
 
 function UpdateCounter(){
@@ -688,6 +837,8 @@ function ClickAnswer(){
 }
 
 function ClickArrow(event){
+    clearTimeout(nextTermTimeoutId);
+
     let direction = event.target.dataset.direction;
     // console.log(event.target.dataset.direction);
 
@@ -712,19 +863,19 @@ function CreateElement(elem, parent){
 function CreatePairCard(key, value, parent){
     //create container div
     let container = document.createElement('div');
-    container.classList.add('pair-card-container');
+    container.classList.add('pair-card-container', 'row-12');
     parent.appendChild(container);
 
     //create key div
     let keyDiv = document.createElement('div');
     keyDiv.textContent = key;
-    keyDiv.classList.add('keyDiv');
+    keyDiv.classList.add('keyDiv', 'align-self-center', 'col-md-6');
     container.appendChild(keyDiv);
 
     //create value div
     let valueDiv = document.createElement('div');
     valueDiv.textContent = value;
-    valueDiv.classList.add('valueDiv');
+    valueDiv.classList.add('valueDiv', 'text-end', 'col-md-6');
     container.appendChild(valueDiv);
 
     //FIX aqui devolver la estrella y hacerla funcionar
