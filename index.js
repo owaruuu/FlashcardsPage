@@ -450,7 +450,8 @@ function PopulateProgressBar(parent, key){
     console.log(learnedAmountStringObj);
 
     if(learnedAmountStringObj == null){
-        CreateLocalStorageObject(key);
+        learnedAmountStringObj = CreateLocalStorageObject(key);
+        currentLocalObj = JSON.parse(learnedAmountStringObj); 
     }
            
     for(let [key, value] of Object.entries(currentLocalObj)){
@@ -585,6 +586,8 @@ function CreateLocalStorageObject(currentLecture){
 
     let objectString = JSON.stringify(storageObject);
     localStorage.setItem(currentLecture, objectString);
+
+    return localStorage.getItem(currentLecture);
 }
 
 function ChangeKnowledgeButtonString(btnclass){
