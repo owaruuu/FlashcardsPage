@@ -65,7 +65,7 @@ header>h1{
     align-items: center;
 }
 
-.set-button:hover{
+body.hasHover .set-button:hover{
     background-color: rgb(233, 214, 214);
 }
 
@@ -196,7 +196,7 @@ header>h1{
     border-radius: 5px;
 }
 
-.arrow-btn:hover{
+body.hasHover  .arrow-btn:hover{
     background-color: #eaea9b;
     transform: scale(1.1);
 }
@@ -247,11 +247,11 @@ header>h1{
     display: grid;
 }
 
-.answer-div:hover{
+body.hasHover .answer-div:hover{
     cursor: pointer;
 }
 
-.answer:hover{
+body.hasHover .answer:hover{
     color: blue;
 }
 
@@ -264,7 +264,7 @@ header>h1{
     color: rgb(201 151 200);
 }
 
-.answer-div:hover .answer-placeholder{
+body.hasHover .answer-div:hover .answer-placeholder{
     color: rgb(187, 117, 186);
 }
 
@@ -293,16 +293,16 @@ header>h1{
     border-style: solid;
 }
 
-.learning:hover, .learned:hover{
+body.hasHover .learning:hover,body.hasHover  .learned:hover{
     border-style: dashed;
     border-width: 2px;
 }
 
-.learning:hover{
+body.hasHover .learning:hover{
     background-color: #dfa9a9;
 }
 
-.learned:hover{
+body.hasHover .learned:hover{
     background-color: #9fd1ac;
 }
 
