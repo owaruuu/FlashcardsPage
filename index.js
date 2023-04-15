@@ -165,6 +165,8 @@ function CheckForTabsAndSpaces(texts){
         }
     }
 
+    console.log(objSets[setNameArray[0]]);
+
     // for (let j = 0; j < text.length; j++) {
     //     if (text.substr(j, 1) === '\t') {
     //         // len = j;
