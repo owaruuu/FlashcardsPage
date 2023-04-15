@@ -990,6 +990,7 @@ function FilterSets(event){
             break;
         case 'Tag':
             console.log('La busqueda por Tag no esta implementada.');
+            UpdateFoundText(`La busqueda por Tag no esta implementada.`);
             break;
         default:
             break;
@@ -1004,7 +1005,7 @@ function FilterByName(filter){
 
     let list = document.getElementsByClassName('set-button');
     for (let i = 0; i < list.length; i++) {
-        textButton = list[i].firstChild.textContent;
+        textButton = list[i].childNodes[1].textContent;
 
         if(textButton.toLowerCase().indexOf(filter) > -1){
             list[i].style.display = '';
