@@ -1,0 +1,25 @@
+いしゃ	doctor
+けんきゅうしゃ	investigador
+エンジニア	ingeniero
+だいがく	universidad
+びょういん	hospital
+でんき	electricidad
+だれ	quien
+どなた	quien formal
+さい	contador edad
+なんさい	que edad
+おいくつ	que edad
+はい	si
+いいえ	no
+しつれいですが	disculpe pero
+おなまえは	cual es tu nombre
+はじめまして	mucho gusto
+どうぞよろしく	encantado de conocerte
+こちらは。。。さんです	le presento a...
+。。。からきました	vengo de...
+イギリス	inglaterra
+ドイツ	alemania
+かんこく	corea del sur
+ちゅうごく	china
+にほん	japon
+けむり（煙）	humo

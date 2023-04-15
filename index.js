@@ -84,8 +84,9 @@ function ReturnAsString(text){
 }
 
 const setNameArray = [
-    // "Leccion 1",
-    // "Leccion 2",
+    "Leccion 1",
+    "Leccion 2",
+    "Leccion 3"
 ];
 
 //objeto
@@ -103,56 +104,90 @@ let objSets = {
     // ],
 };
 
-//aqui probare filereader
-let lecture = "Leccion 1";
-//anadie a setNameArray el nombre
-setNameArray.push(lecture);
-//anadir a objSets un pair
-objSets[lecture] = [];
+for (const lecture of setNameArray) {
+    objSets[lecture] = [];
+}
+
+const fetchExternalData = () => {
+    return Promise.all([
+      fetch("./files/Leccion 1.txt"),
+      fetch("./files/Leccion 2.txt"),
+      fetch("./files/Leccion 3.txt")
+    ])
+    .then(results => {
+      return Promise.all(results.map(result => result.text()));
+    });
+};
+
+fetchExternalData()
+.then(result => {
+    CheckForTabsAndSpaces(result);
+})
+.then(() => CreateHomepageApp(setContainer))
+
+//File Reader Section
 
 // console.log("after setting the first key/pair");
 // console.log(JSON.stringify(objSets));
 
-fetch(`files/${lecture}.txt`)
-  .then(response =>  response.text())
-  .then(text => CheckForTabsAndSpaces(text))
-  .then(() => CreateHomepageApp(setContainer))
+// fetch(`files/${lecture}.txt`)
+//   .then(response =>  response.text())
+//   .then(text => CheckForTabsAndSpaces(text))
+//   .then(() => CreateHomepageApp(setContainer))
 
-  console.log(JSON.stringify(objSets));
+//   console.log(JSON.stringify(objSets));
 
 /**
  *  Llamado sobre el archivo de texto
  *  avanza por el texto separandolo en par de prompt y answer.
  * */  
-function CheckForTabsAndSpaces(text){
+function CheckForTabsAndSpaces(texts){
     let tempKey = "";
     let tempValue = "";
     let start = 0;
-    // let len = 0;
 
-    for (let j = 0; j < text.length; j++) {
-        if (text.substr(j, 1) === '\t') {
-            // len = j;
-            //guardar un string temporal para el key
-            tempKey = text.substr(start, j - start)
-            //console.log((text.substr(start, j - start)));
-            start = j;
-        }
-        if (text.substr(j, 1) === '\n') {
-            //aqui debo crear un objeto con lo que llevo guardado
-            //guardar un string temporal para el value
-            //push un objeto al array con key de lecture en objsets
-            tempValue = text.substr(start+1, j - start);
-            let tempObj = {[tempKey] : tempValue};
-            let tempArray = objSets[lecture];//IMPORTANT copias de arrays y objs apuntan a la misma memoria.
-            tempArray.push(tempObj);//IMPORTANT esto modifica el array dentro de objSets
-
-            // console.log((text.substr(start+1, j - start)));
-            start = j+1;
+    for (let index = 0; index < texts.length; index++) {
+        let tempKey = "";
+        let tempValue = "";
+        let start = 0;
+        for (let j = 0; j < texts[index].length; j++) {
+            if (texts[index].substr(j, 1) === '\t') {
+                tempKey = texts[index].substr(start, j - start)
+                start = j;
+            }
+            if (texts[index].substr(j, 1) === '\n') {
+                tempValue = texts[index].substr(start+1, j - start - 2);//el 2 es necesario para remover '/r/n' del texto
+                let tempObj = {[tempKey] : tempValue};
+                let tempArray = objSets[setNameArray[index]];//IMPORTANT copias de arrays y objs apuntan a la misma memoria.
+                tempArray.push(tempObj);//IMPORTANT esto modifica el array dentro de objSets   
+                start = j+1;
+            }
         }
     }
 
-    console.log(JSON.stringify(objSets));
+    // for (let j = 0; j < text.length; j++) {
+    //     if (text.substr(j, 1) === '\t') {
+    //         // len = j;
+    //         //guardar un string temporal para el key
+    //         tempKey = text.substr(start, j - start)
+    //         //console.log((text.substr(start, j - start)));
+    //         start = j;
+    //     }
+    //     if (text.substr(j, 1) === '\n') {
+    //         //aqui debo crear un objeto con lo que llevo guardado
+    //         //guardar un string temporal para el value
+    //         //push un objeto al array con key de lecture en objsets
+    //         tempValue = text.substr(start+1, j - start);
+    //         let tempObj = {[tempKey] : tempValue};
+    //         let tempArray = objSets[lecture];//IMPORTANT copias de arrays y objs apuntan a la misma memoria.
+    //         tempArray.push(tempObj);//IMPORTANT esto modifica el array dentro de objSets
+
+    //         // console.log((text.substr(start+1, j - start)));
+    //         start = j+1;
+    //     }
+    // }
+
+    // console.log(JSON.stringify(objSets));
 }
 //FIN seccion filereader
 
@@ -241,6 +276,8 @@ function CreateHomepageApp(container){
     // let key = "";
     // let value = [];
     //FIX crear un boton por cada key en objSets
+        let index = 0;
+
     for(let [key, value] of Object.entries(objSets)){
         // console.log("tho");
         console.log(key);
@@ -260,7 +297,7 @@ function CreateHomepageApp(container){
         //number of cards div
         const numberDiv = CreateElement('div', numberContainer);
         numberDiv.classList.add('align-self-center');
-        const total = objSets["Leccion 1"].length;
+        const total = objSets[setNameArray[index++]].length;
         console.log(total);
         numberDiv.textContent = total + ' Terminos';
 
@@ -987,16 +1024,20 @@ function FilterByContent(filter){
     let textButton;
 
     //for each pair in objSets
-    for(const [key, values] of Object.entries(objSets)){
-        values.forEach(pairObject => {
-            const [innerKey, innerValue] = Object.entries(pairObject)[0];
+    for(const [key, value] of Object.entries(objSets)){
+        console.log("leyendo una leccion");
+        for (const term of value) {
+            console.log(term);
+            const [innerKey, innerValue] = Object.entries(term)[0];
             if(innerKey === filter || innerValue === filter){
                 sets.push(key);
                 console.log(`found ${filter} in ${key} inside "objSets"`);
-                return;
+                break;
             }
-        });
+        }       
     }
+
+    console.log("despues del found el return no me deja pasar aca ?");
 
     //aqui modificar la lista si sets tiene algo
     if(sets.length > 0){
@@ -1004,7 +1045,7 @@ function FilterByContent(filter){
         UpdateFoundText(`${sets.length} found.`);
         let list = document.getElementsByClassName('set-button');
         for (let i = 0; i < list.length; i++) {
-            textButton = list[i].firstChild.textContent;
+            textButton = list[i].childNodes[1].textContent;
             let found = false;
 
             sets.forEach(name => {
