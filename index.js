@@ -155,6 +155,9 @@ function CheckForTabsAndSpaces(texts){
                 tempKey = texts[index].substr(start, j - start)
                 start = j;
             }
+            if(texts[index].substr(j, 1) === '\r'){
+                console.log("encontre /r");
+            }
             if (texts[index].substr(j, 1) === '\n') {
                 tempValue = texts[index].substr(start+1, j - start - 2);//el 2 es necesario para remover '/r/n' del texto
                 let tempObj = {[tempKey] : tempValue};
