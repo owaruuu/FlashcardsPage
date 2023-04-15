@@ -74,7 +74,7 @@ function ReloadPage(){
 //Fin Seccion History
 
 var termIndex = 0;
-var nextTermTimeoutId;
+var nextTermTimeoutId;//guarda referencia al timeout cuando hago click en un boton de knowledge
 
 const app = document.getElementById('app');
 const setContainer = document.querySelector('.sets-container');
@@ -102,31 +102,34 @@ let objSets = {
     //     {"はつおん（発音）"	: "pronunciacion"},
     // ],
 };
-console.log("after creating the object");
-console.log(JSON.stringify(objSets));
 
 //aqui probare filereader
 let lecture = "Leccion 1";
 //anadie a setNameArray el nombre
 setNameArray.push(lecture);
 //anadir a objSets un pair
-//objSets[lecture] = [];
 objSets[lecture] = [];
-console.log("after setting the first key/pair");
-console.log(JSON.stringify(objSets));
+
+// console.log("after setting the first key/pair");
+// console.log(JSON.stringify(objSets));
 
 fetch(`files/${lecture}.txt`)
   .then(response =>  response.text())
   .then(text => CheckForTabsAndSpaces(text))
   .then(() => CreateHomepageApp(setContainer))
 
+  console.log(JSON.stringify(objSets));
 
+/**
+ *  Llamado sobre el archivo de texto
+ *  avanza por el texto separandolo en par de prompt y answer.
+ * */  
 function CheckForTabsAndSpaces(text){
     let tempKey = "";
     let tempValue = "";
-    //console.log(text.name);
     let start = 0;
-    let len = 0;
+    // let len = 0;
+
     for (let j = 0; j < text.length; j++) {
         if (text.substr(j, 1) === '\t') {
             // len = j;
@@ -141,13 +144,15 @@ function CheckForTabsAndSpaces(text){
             //push un objeto al array con key de lecture en objsets
             tempValue = text.substr(start+1, j - start);
             let tempObj = {[tempKey] : tempValue};
-            let tempArray = objSets[lecture];
-            //console.log(tempArray);
-            tempArray.push(tempObj);
-            //console.log((text.substr(start+1, j - start)));
+            let tempArray = objSets[lecture];//IMPORTANT copias de arrays y objs apuntan a la misma memoria.
+            tempArray.push(tempObj);//IMPORTANT esto modifica el array dentro de objSets
+
+            // console.log((text.substr(start+1, j - start)));
             start = j+1;
-            }
         }
+    }
+
+    console.log(JSON.stringify(objSets));
 }
 //FIN seccion filereader
 
@@ -237,7 +242,7 @@ function CreateHomepageApp(container){
     // let value = [];
     //FIX crear un boton por cada key en objSets
     for(let [key, value] of Object.entries(objSets)){
-        console.log("tho");
+        // console.log("tho");
         console.log(key);
         //console.log(value);
 
