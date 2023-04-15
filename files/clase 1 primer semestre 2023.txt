@@ -1,0 +1,27 @@
+せつめい	Explicacion
+ないよう	Contenido
+きめます、きめる（決める）	Decidir, Elegir
+じゅぎょう	Clase
+かいわ	Conversacion
+ふくしゅう	Repaso
+か（課）	Contador leccion
+ほんもの	Real
+にんき	Popular
+ぐ	Relleno/Ingrediente
+ざいりょう	Material/Materiales
+ぐざい	Ingrediente(Carne, pescado y verduras para añadir a sopas, guisos, etc.)
+しょくざい	Ingrediente(Carne, pescado y verduras en general utilizados en la cocina.)
+ようい	Preparacion(Cuando lo que hay que preparar es formulista o específico.)
+よういする、よういします（用意する）	Preparar
+じゅんび	Preparacion(Puede ser más amplio e incluir posturas distintas de los objetos)
+じゅんびする、じゅんびします（準備する）	Preparar
+おいはらう、おいはらいます（追い払う）	Alejarse
+は/はっぱ	Hoja(s) de arbol o flor
+ふじん	Señora(s)
+しゃかい	Sociedad
+かつやく	Participacion activa
+さんか	Participacion
+さんかする、さんかします（参加する）	Participar
+けんり	Derechos
+とうひょうけん	Derecho de voto
+おくる、おくります（贈る）	Regalar

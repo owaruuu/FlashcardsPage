@@ -85,8 +85,7 @@ function ReturnAsString(text){
 
 const setNameArray = [
     "Leccion 1",
-    "Leccion 2",
-    "Leccion 3"
+    "Clase 1",
 ];
 
 //objeto
@@ -111,8 +110,7 @@ for (const lecture of setNameArray) {
 const fetchExternalData = () => {
     return Promise.all([
       fetch("./files/Leccion 1.txt"),
-      fetch("./files/Leccion 2.txt"),
-      fetch("./files/Leccion 3.txt")
+      fetch("./files/clase 1 primer semestre 2023.txt"),
     ])
     .then(results => {
       return Promise.all(results.map(result => result.text()));
@@ -1028,9 +1026,11 @@ function FilterByContent(filter){
     for(const [key, value] of Object.entries(objSets)){
         console.log("leyendo una leccion");
         for (const term of value) {
-            console.log(term);
+            
             const [innerKey, innerValue] = Object.entries(term)[0];
-            if(innerKey === filter || innerValue === filter){
+            console.log(innerValue);
+            if(innerKey.toLowerCase() === filter || innerValue.toLowerCase() === filter){
+                
                 sets.push(key);
                 console.log(`found ${filter} in ${key} inside "objSets"`);
                 break;
