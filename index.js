@@ -1,8 +1,12 @@
 //jshint esversion:9
+console.log(history.state);
 
 "use strict";
 
-import {ReplaceState, PushHistoryState} from "./history.js";
+// import {ReplaceState, PushHistoryState} from "./history.js";
+
+const titleButton = document.getElementById('title-btn');
+titleButton.addEventListener('click', () => ReloadPage());
 
 //Seccion Touch Watch
 
@@ -37,11 +41,13 @@ function watchForHover() {
 let state = {
     currentPage : "home",
     lastLecture: "",
+    lastAmmount: 0,
+    lastPercentage: 0,
 };
 
-ReplaceState(state);
+// ReplaceState(state);
 
-// window.history.replaceState(state, null, "");
+window.history.replaceState(state, null, "");
 
 window.onpopstate = function(event) {
     if(event.state){
@@ -57,7 +63,7 @@ function Render(state){
             ReloadPage();
             break;
         case "lectureList":
-            FlashSetButton(state.lastLecture);
+            FlashSetButton(state.lastLecture, state.lastAmmount);
             break;
         case "lectureFlash":
             console.log("lecture Flash");
@@ -296,7 +302,6 @@ function CreateHomepageApp(container){
         button.classList.add('set-button','row');
         // button.classList.add()
         button.setAttribute('name', key);
-        button.addEventListener('click', () => OnFlashSetButton(button.name));
         container.appendChild(button);
 
         //numbers container
@@ -317,10 +322,15 @@ function CreateHomepageApp(container){
         console.log("current local storage object");
         console.log(learnedAmountStringObj);
         let percent = 0;
+       
         
-        if(learnedAmountStringObj !== null){           
+        //FIX aqui necesito revisar de mejor manera el local object
+        if(learnedAmountStringObj !== null){     
+            let UpdatedObject = {};
+            UpdatedObject = CheckUpdates(key, currentLocalObj);
+            
             let amount = 0;
-            for(let [key, value] of Object.entries(currentLocalObj)){
+            for(let [key, value] of Object.entries(UpdatedObject)){
                 if(value ==="learned") amount++;
             }
 
@@ -352,20 +362,58 @@ function CreateHomepageApp(container){
         }else{   
             lastVisitDiv.textContent = `No checkout.`;
         }
+
+        //Dejo el event listener al final porque necesito los valores
+        button.addEventListener('click', () => OnFlashSetButton(button.name, total, percent));
+        console.log("percent cuando lo mando al evento: " + percent);
     }    
 }
+/** Revisa si hubo cambios en los archivos de texto de las lecciones */
+function CheckUpdates(lectureKey, currentLocalObj){
+    console.log("checking for updates on lecture texts");
+    let newObject = {};
+    let lectureArray = objSets[lectureKey];
+    for (const object of lectureArray) {//por cada objecto dentro del array
+        for (const key in object) {//por cada key de cada objeto
+            if(currentLocalObj.hasOwnProperty(key)){
+                console.log("contiene ya este key");
+                newObject[key] = currentLocalObj[key];
+            }else{
+                console.log("no contenia este key");
+                newObject[key] = "";
+            }
+        }     
+    }
 
-function OnFlashSetButton(name){
-    state.currentPage = "lectureList";
-    state.lastLecture = name;
-    PushHistoryState(state);
-    // window.history.pushState(state, null, "");
-    console.log("pushed state");
+    let lastkey = "lastCheckout";
 
-    FlashSetButton(name);
+    if(currentLocalObj.hasOwnProperty(lastkey)){
+        console.log("existe last checkout, agregandolo al final del nuevo objeto");      
+        newObject[lastkey] = currentLocalObj[lastkey];
+        // console.log(JSON.stringify(newObject));
+    }
+
+    console.log("updated localstorage acording to text file");
+    localStorage.setItem(lectureKey, JSON.stringify(newObject));
+
+    return newObject;
 }
 
-function FlashSetButton(name)
+function OnFlashSetButton(name, ammount, percentage){
+    console.log("percent cuando lo recibe la funcion que creala pagina: " + percentage);
+    state.currentPage = "lectureList";
+    state.lastAmmount = ammount;
+    state.lastPercentage = percentage;
+    state.lastLecture = name;
+    // PushHistoryState(state);
+    window.history.pushState(state, null, "");
+    console.log("pushed state");
+
+    FlashSetButton(name , ammount);
+}
+
+/** Crea la pagina con los terminos de esa clase y los botones para estudiar/checkout */
+function FlashSetButton(name, ammount)
 {
     // let stringKey = event.currentTarget.name; 
     let stringKey = name; 
@@ -373,29 +421,56 @@ function FlashSetButton(name)
     console.log('clicked boton');
     app.innerHTML = '';
 
+    //Creacion titulo
     let lectureTitle = document.createElement('h1');
     lectureTitle.classList.add('my-3');
     lectureTitle.textContent = stringKey;
     app.appendChild(lectureTitle);
+
+    //Creacion info
+    let termsAmmountDiv = CreateElement('section', app);
+    let ammountText = CreateElement('p', termsAmmountDiv);
+    let percentageText = CreateElement('p', termsAmmountDiv);
+
+    ammountText.textContent = ammount + " Terms /";
+    let percentage = CalculatePercentageLearned(name);
+    percentageText.textContent = percentage + "% Learned";
+
+    termsAmmountDiv.classList.add('d-flex', 'justify-content-center', 'terms-ammount-div');
+    // ammountText.classList.add('col');
+    // percentageText.classList.add('col');
     
+    //Creacion Seccion botones
     let buttonsContainer = document.createElement('div');
     buttonsContainer.classList.add('buttons-div','xwidth','xwidth-md');
     app.appendChild(buttonsContainer);
 
-    let learnButton = document.createElement('button');
+    let learnButton = CreateElement('button', buttonsContainer);
     learnButton.classList.add('learn-button');
     learnButton.textContent = 'Learn';
     learnButton.setAttribute('data-lecture', stringKey);
     learnButton.addEventListener('click', OnLearnLecture);
-    buttonsContainer.appendChild(learnButton);
 
-    //FIX aqui agregar boton de checkout
     let checkoutButton = CreateElement('button', buttonsContainer);
     checkoutButton.classList.add('checkout-button');
     checkoutButton.textContent = "Checkout";
     checkoutButton.setAttribute('data-lecture', stringKey);
     checkoutButton.addEventListener('click', CheckoutLecture);
 
+    //Creacion text last checkout en pagina de terminos
+    let lastCheckoutTextDiv = CreateElement('div', buttonsContainer);
+    let lastCheckoutText = CreateElement('span', lastCheckoutTextDiv);
+    lastCheckoutText.setAttribute('id', 'last-check-text-term-page');
+    let localStorageObject = GetLocalStorageObject(name);
+
+    if(localStorageObject.hasOwnProperty("lastCheckout")){
+        lastCheckoutText.textContent = localStorageObject['lastCheckout'];
+    }
+
+    lastCheckoutTextDiv.classList.add('float-end');
+    // lastCheckoutText.classList.add('float-end');
+
+    //Creacion seccion terminos
     let container = document.createElement('div');
     container.classList.add('set-container','xwidth','xwidth-md');
     app.appendChild(container);
@@ -409,11 +484,39 @@ function FlashSetButton(name)
     });
 }
 
+function GetLocalStorageObject(lectureKey){
+    const learnedAmountStringObj = localStorage.getItem(lectureKey);
+    const currentLocalObj = JSON.parse(learnedAmountStringObj); 
+    return currentLocalObj;
+}
+
+function isObjEmpty (obj) {
+    return Object.keys(obj).length === 0;
+}
+
+function CalculatePercentageLearned(lectureKey){
+    console.log("aqui estoy calculando el porcentage de learned desde una funcion propia");
+    let percent = 0;
+    const total = objSets[lectureKey].length;
+
+    const learnedAmountStringObj = localStorage.getItem(lectureKey);
+    const currentLocalObj = JSON.parse(learnedAmountStringObj);   
+           
+    let amount = 0;
+    for(let [key, value] of Object.entries(currentLocalObj)){
+        if(value ==="learned") amount++;
+    }
+
+    percent = Math.trunc((amount / total) * 100);
+
+    return percent;
+}
+
 function OnLearnLecture(event){
     state.currentPage = "lectureFlash";
     state.lastLecture = event.target.dataset.lecture;
-    PushHistoryState(state);
-    //window.history.pushState(state, null, "");
+    // PushHistoryState(state);
+    window.history.pushState(state, null, "");
     console.log("pushed state");
 
     LearnLecture(event);
@@ -594,6 +697,8 @@ function CheckoutLecture(event){
         localStorage.setItem(lectureKey, lectureObjString);
     }
     
+    const lastCheckoutText = document.getElementById('last-check-text-term-page');
+    lastCheckoutText.textContent = date;
 }
 
 function CheckLearnStatus(){
@@ -741,7 +846,6 @@ function UpdateLocalStorage(btnClicked){
     //una vez actualizado el local storage deberia rehacer o actualizar la barra de progreso
     console.log("veces que busque un key en local storage:" + counter);
     UpdateProgressBar(counter, btnClicked.className);
-
 }
 
 /**
