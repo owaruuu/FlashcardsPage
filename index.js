@@ -321,8 +321,7 @@ function CreateHomepageApp(container){
         const currentLocalObj = JSON.parse(learnedAmountStringObj); 
         console.log("current local storage object");
         console.log(learnedAmountStringObj);
-        let percent = 0;
-       
+        let percent = 0;     
         
         //FIX aqui necesito revisar de mejor manera el local object
         if(learnedAmountStringObj !== null){     
@@ -442,7 +441,7 @@ function FlashSetButton(name, ammount)
     
     //Creacion Seccion botones
     let buttonsContainer = document.createElement('div');
-    buttonsContainer.classList.add('buttons-div','xwidth','xwidth-md');
+    buttonsContainer.classList.add('buttons-div','xwidth','xwidth-md', 'text-center', 'text-md-start');
     app.appendChild(buttonsContainer);
 
     let learnButton = CreateElement('button', buttonsContainer);
@@ -463,11 +462,13 @@ function FlashSetButton(name, ammount)
     lastCheckoutText.setAttribute('id', 'last-check-text-term-page');
     let localStorageObject = GetLocalStorageObject(name);
 
-    if(localStorageObject.hasOwnProperty("lastCheckout")){
-        lastCheckoutText.textContent = localStorageObject['lastCheckout'];
+    lastCheckoutText.textContent = "No Checkout."
+
+    if(localStorageObject !== null && localStorageObject.hasOwnProperty("lastCheckout")){
+        lastCheckoutText.textContent = "Last Checkout: " + localStorageObject['lastCheckout'];
     }
 
-    lastCheckoutTextDiv.classList.add('float-end');
+    lastCheckoutTextDiv.classList.add('float-md-end');
     // lastCheckoutText.classList.add('float-end');
 
     //Creacion seccion terminos
@@ -494,22 +495,33 @@ function isObjEmpty (obj) {
     return Object.keys(obj).length === 0;
 }
 
+/**
+ * Es llamado cuando armo la pagina de terminos
+ * y quiero mostrar el porcentage aprendido
+ * @param {string} name nombre de la leccion
+ */
 function CalculatePercentageLearned(lectureKey){
     console.log("aqui estoy calculando el porcentage de learned desde una funcion propia");
-    let percent = 0;
+    
     const total = objSets[lectureKey].length;
 
     const learnedAmountStringObj = localStorage.getItem(lectureKey);
-    const currentLocalObj = JSON.parse(learnedAmountStringObj);   
+
+    if(learnedAmountStringObj != null){
+        const currentLocalObj = JSON.parse(learnedAmountStringObj);   
            
-    let amount = 0;
-    for(let [key, value] of Object.entries(currentLocalObj)){
-        if(value ==="learned") amount++;
+        let percent = 0;
+        let amount = 0;
+        for(let [key, value] of Object.entries(currentLocalObj)){
+            if(value ==="learned") amount++;
+        }
+
+        percent = Math.trunc((amount / total) * 100);
+
+        return percent;
+    }else {
+        return 0;
     }
-
-    percent = Math.trunc((amount / total) * 100);
-
-    return percent;
 }
 
 function OnLearnLecture(event){
@@ -1054,19 +1066,19 @@ function CreateElement(elem, parent){
 function CreatePairCard(key, value, parent){
     //create container div
     let container = document.createElement('div');
-    container.classList.add('pair-card-container', 'row-12');
+    container.classList.add('pair-card-container', 'd-flex');
     parent.appendChild(container);
 
     //create key div
     let keyDiv = document.createElement('div');
     keyDiv.textContent = key;
-    keyDiv.classList.add('keyDiv', 'align-self-center', 'col-md-6');
+    keyDiv.classList.add('keyDiv', 'align-self-center', 'col-6');
     container.appendChild(keyDiv);
 
     //create value div
     let valueDiv = document.createElement('div');
     valueDiv.textContent = value;
-    valueDiv.classList.add('valueDiv', 'text-end', 'col-md-6');
+    valueDiv.classList.add('valueDiv', 'align-self-center', 'text-end', 'col-6');
     container.appendChild(valueDiv);
 
     //FIX aqui devolver la estrella y hacerla funcionar
