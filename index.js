@@ -684,6 +684,7 @@ function PopulateProgressBar(parent, key){
     // }
 }
 
+/**Se llama cuando hago click en el boton de checkout */
 function CheckoutLecture(event){
     console.log("click checkout");
     let lectureKey = event.target.dataset.lecture;
@@ -710,7 +711,7 @@ function CheckoutLecture(event){
     }
     
     const lastCheckoutText = document.getElementById('last-check-text-term-page');
-    lastCheckoutText.textContent = date;
+    lastCheckoutText.textContent = "Last Checkout: " + date;
 }
 
 function CheckLearnStatus(){
