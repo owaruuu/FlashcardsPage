@@ -1147,8 +1147,10 @@ function FilterByName(filter){
 function FilterByContent(filter){
     console.log('Filtering by ' + filter);
     filter = filter.toLowerCase();
+
+    /**Array de strings que representan en que lecture esta el contenido*/
     let sets = [];
-    let textButton;
+    let textButtonContent;
 
     //for each pair in objSets
     for(const [key, value] of Object.entries(objSets)){
@@ -1156,7 +1158,7 @@ function FilterByContent(filter){
         for (const term of value) {
             
             const [innerKey, innerValue] = Object.entries(term)[0];
-            console.log(innerValue);
+            // console.log(innerValue);
             if(innerKey.toLowerCase() === filter || innerValue.toLowerCase() === filter){
                 
                 sets.push(key);
@@ -1172,22 +1174,29 @@ function FilterByContent(filter){
     if(sets.length > 0){
         console.log("encontre algo y modificare la lista");
         UpdateFoundText(`${sets.length} found.`);
+
+        /**Array de todos los botones de lectures*/
         let list = document.getElementsByClassName('set-button');
         for (let i = 0; i < list.length; i++) {
-            textButton = list[i].childNodes[1].textContent;
+            /**Nombre de lecture dentro del boton */
+            textButtonContent = list[i].childNodes[1].textContent;
             let found = false;
 
+            //reviso si este boton coincide a uno de los botones que deberia dejar
+            //si no, lo escondo
             sets.forEach(name => {
                 name = name.toLowerCase();
+                textButtonContent = textButtonContent.toLowerCase();
+               
                 if(found){
-                    return;
+                    return;   
                 }
-                if(textButton.toLowerCase().indexOf(name) > -1){
+                if(textButtonContent == name){
                     list[i].style.display = '';
                     found = true;
                 }else{
                     list[i].style.display = 'none';
-                }       
+                } 
             });      
         }
     }
