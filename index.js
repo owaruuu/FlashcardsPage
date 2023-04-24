@@ -90,7 +90,7 @@ function ReturnAsString(text){
 }
 
 const setNameArray = [
-    "Leccion 1",
+    // "Test Lecture",
     "Clase 1",
     "Clase 1 Kanji",
 ];
@@ -116,7 +116,7 @@ for (const lecture of setNameArray) {
 
 const fetchExternalData = () => {
     return Promise.all([
-      fetch("./files/Leccion 1.txt"),
+    //   fetch("./files/Leccion 1.txt"),
       fetch("./files/clase 1 primer semestre 2023.txt"),
       fetch("./files/clase 1 primer semestre 2023 kanji.txt"),
     ])

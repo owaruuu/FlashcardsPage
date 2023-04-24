@@ -1,27 +1,65 @@
-せつめい	Explicacion
-ないよう	Contenido
+せつめい（説明）	Explicacion
+ないよう（内容）	Contenido
 きめます、きめる（決める）	Decidir, Elegir
-じゅぎょう	Clase
-かいわ	Conversacion
-ふくしゅう	Repaso
+じゅぎょう（授業）	Clase
+かいわ（会話）	Conversacion
+ふくしゅう（復習）	Repaso
 か（課）	Contador leccion
-ほんもの	Real
-にんき	Popular
-ぐ	Relleno/Ingrediente
-ざいりょう	Material/Materiales
-ぐざい	Ingrediente(Carne, pescado y verduras para añadir a sopas, guisos, etc.)
-しょくざい	Ingrediente(Carne, pescado y verduras en general utilizados en la cocina.)
-ようい	Preparacion(Cuando lo que hay que preparar es formulista o específico.)
+ほんもの（本物）	Real
+にんき（人気）	Popular
+ぐ（具）	Relleno/Ingrediente
+ざいりょう（材料）	Material/Materiales
+ぐざい（具材）	Ingrediente(Carne, pescado y verduras para añadir a sopas, guisos, etc.)
+しょくざい（食材）	Ingrediente(Carne, pescado y verduras en general utilizados en la cocina.)
+ようい（用意）	Preparacion(Cuando lo que hay que preparar es formulista o específico.)
 よういする、よういします（用意する）	Preparar
-じゅんび	Preparacion(Puede ser más amplio e incluir posturas distintas de los objetos)
+じゅんび（準備）	Preparacion(Puede ser más amplio e incluir posturas distintas de los objetos)
 じゅんびする、じゅんびします（準備する）	Preparar
 おいはらう、おいはらいます（追い払う）	Alejarse
-は/はっぱ	Hoja(s) de arbol o flor
-ふじん	Señora(s)
-しゃかい	Sociedad
-かつやく	Participacion activa
-さんか	Participacion
+は/はっぱ（葉/葉っぱ）	Hoja(s) de arbol o flor
+ふじん（婦人）	Señora(s)
+しゃかい（社会）	Sociedad
+かつやく（活躍）	Participacion activa
+さんか（参加）	Participacion
 さんかする、さんかします（参加する）	Participar
-けんり	Derechos
-とうひょうけん	Derecho de voto
+けんり（権利）	Derechos
+とうひょうけん（投票権）	Derecho de voto
 おくる、おくります（贈る）	Regalar
+れんしゅう（練習）	Practica, Entrenamiento
+りゆう（理由）	Razon, Pretexto, Motivo
+ぜんぶ（全部）	Todo
+つかいます、つかう（使う）	Usar
+ならいます、ならう（習う）	Aprender(de un profesor), Tomar clases en
+かんじ（漢字）	Kanji, Caracter chino
+よみます、よむ（読む）	Leer
+かた（方）	Direccion, Persona, Manera
+なおします、なおす（直す）	Reparar, Arreglar, Corregir
+はなします、はなす（話す）	Hablar, Decir
+かきます、かく（書く）	Escribir, Dibujar, Pintar
+みじかい（短い）	Corto
+かんがえます、かんがえる（考える）	Pensar, Contemplar, Meditar
+しゃしん（写真）	Foto
+ろう（蝋）	Cera
+ひつよう（必要）	Necesario, Esencial
+あまずっぱい（甘酸っぱい）	Agridulce
+す（酢）	Vinagre
+はんぶん（半分）	Mitad
+やさい（野菜）	Vegetal
+たまごやき（卵焼き）	Tamagoyaki, Omelette japones
+とります、とる（取る）	Sacar, Remover
+せわた（背わた）	Tracto digestivo del camaron
+のせます、のせる（乗せる）	Poner algo en (algo)
+さいご（最後）	Final, Conclusion
+かたち（形）	Forma, Figura
+まきます、まく（巻く）	Enrollar, Envolver
+おまつり（お祭り）	Festival
+にんぎょう（人形）	Muñeca
+とくべつ（特別）	Especial
+かざり（飾り）	Decoracion
+けんこう（健康）	Salud
+しあわせ（幸せ）	Felicidad, Buena suerte
+いのります、いのる（祈る）	Rezar
+きせつ（季節）	Estacion(del año)
+もも（桃）	Durazno
+はだ（肌）	Piel
+おふろ（お風呂）	Bañera
