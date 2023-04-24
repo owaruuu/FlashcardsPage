@@ -178,24 +178,28 @@ body.hasHover .set-button:hover{
 
 .progress-bar-josue{
     display: flex;
-    height: 10px;
+    height: 16px;
     background-color: #6e6e6e;
     min-width: 95%;
 }
 
-.progress-bar-josue>div{
+.progress-bar-josue>div>div{
     border-left: #c9e4d0 solid;
     border-right: #404040 solid;
-    border-top: none;
+    border-top: #c9e4d0 solid;
+    border-bottom: #404040 solid;
     border-width: 1px;
     /* border-style: solid; */
 }
 
-.progress-bar-josue>.progress-item-current{
+.progress-bar-josue>div>.progress-item-current{
     border: #FFC107 2px inset;
 }
 
 .progress-bar-item{
+}
+
+.no-progress{
     flex-grow: 1;
     background-color: #a1a1a1;
 }
@@ -462,5 +466,12 @@ body.hasHover .learned:hover{
 
     .valueDiv{
         padding-right: 5%;
+    }
+}
+
+@media (min-width: 992px)
+{
+    .progress-bar-josue{
+        height: 10px;
     }
 }
