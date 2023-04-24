@@ -93,7 +93,7 @@ const setNameArray = [
     // "Test Lecture",
     "Clase 1",
     "Clase 1 Kanji",
-    "Prueba"
+    // "Prueba"
 ];
 
 //objeto
@@ -120,7 +120,7 @@ const fetchExternalData = () => {
     //   fetch("./files/Leccion 1.txt"),
       fetch("./files/clase 1 primer semestre 2023.txt"),
       fetch("./files/clase 1 primer semestre 2023 kanji.txt"),
-      fetch("./files/prueba.txt"),
+    //   fetch("./files/prueba.txt"),
     ])
     .then(results => {
       return Promise.all(results.map(result => result.text()));
