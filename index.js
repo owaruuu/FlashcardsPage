@@ -91,6 +91,7 @@ function ReturnAsString(text){
 
 const setNameArray = [
     // "Test Lecture",
+    "Leccion 1 Minna",
     "Clase 1",
     "Clase 1 Kanji",
     // "Prueba"
@@ -118,8 +119,9 @@ for (const lecture of setNameArray) {
 const fetchExternalData = () => {
     return Promise.all([
     //   fetch("./files/Leccion 1.txt"),
-      fetch("./files/clase 1 primer semestre 2023.txt"),
-      fetch("./files/clase 1 primer semestre 2023 kanji.txt"),
+    fetch("./files/Leccion 1 Minna.txt"),
+    fetch("./files/clase 1 primer semestre 2023.txt"),
+    fetch("./files/clase 1 primer semestre 2023 kanji.txt"),
     //   fetch("./files/prueba.txt"),
     ])
     .then(results => {
@@ -154,10 +156,6 @@ function CheckForTabsAndSpaces(texts){
     let tempValue = "";
     let start = 0;
 
-    if(texts[0].includes('\r')){
-        console.log("encontre /r");
-    }
-
     for (let index = 0; index < texts.length; index++) {
         let tempKey = "";
         let tempValue = "";
@@ -179,32 +177,6 @@ function CheckForTabsAndSpaces(texts){
             }
         }
     }
-
-    console.log(objSets[setNameArray[0]]);
-
-    // for (let j = 0; j < text.length; j++) {
-    //     if (text.substr(j, 1) === '\t') {
-    //         // len = j;
-    //         //guardar un string temporal para el key
-    //         tempKey = text.substr(start, j - start)
-    //         //console.log((text.substr(start, j - start)));
-    //         start = j;
-    //     }
-    //     if (text.substr(j, 1) === '\n') {
-    //         //aqui debo crear un objeto con lo que llevo guardado
-    //         //guardar un string temporal para el value
-    //         //push un objeto al array con key de lecture en objsets
-    //         tempValue = text.substr(start+1, j - start);
-    //         let tempObj = {[tempKey] : tempValue};
-    //         let tempArray = objSets[lecture];//IMPORTANT copias de arrays y objs apuntan a la misma memoria.
-    //         tempArray.push(tempObj);//IMPORTANT esto modifica el array dentro de objSets
-
-    //         // console.log((text.substr(start+1, j - start)));
-    //         start = j+1;
-    //     }
-    // }
-
-    // console.log(JSON.stringify(objSets));
 }
 //FIN seccion filereader
 

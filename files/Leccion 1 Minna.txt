@@ -1,0 +1,46 @@
+わたし（私）	Yo
+わたしたち（私たち）	Nosotros
+あなた	Usted
+あのひと（あの人）	Aquella persona
+あのかた（あの方）	Aquella persona(formal)
+みなさん（皆さん）	Todos
+さん	Señor
+ちゃん	Sufijo niños
+くん	Sufijo varones
+じん（人）	Sufijo nacionalidad
+せんせい（先生）	Profesor
+きょうし（教師）	Profesor(cuando te refieres a ti mismo)
+がくせい（学生）	Estudiante
+かいしゃいん（会社員）	Empleado de una empresa
+しゃいん（社員）	Empleado de la empresa
+ぎんこういん（銀行員）	Empleado de banco
+いしゃ（医者）	Doctor
+けんきゅうしゃ（研究者）	Investigador
+エンジニア	Ingeniero
+だいがく（大学）	Universidad
+びょういん（病院）	Hospital
+でんき（電気）	Electricidad
+だれ	Quien
+どなた	Quien(formal)
+さい（歳 / 才）	Contador edad
+なんさい（何歳）	Que edad
+おいくつ	Que edad(formal)
+はい	Si
+いいえ	No
+しつれいですが	Disculpe pero
+おなまえは？	Cual es tu nombre?
+はじめまして	Mucho gusto
+どうぞよろしく	Encantado de conocerte
+こちらは。。。さんです	Le presento a...
+。。。からきました	Vengo de...
+アメリカ	EE.UU
+イギリス	Inglaterra
+インド	India
+インドネシア	Indonesia
+かんこく（韓国）	Corea del sur
+タイ	Tailandia
+ちゅうごく（中国）	China
+ドイツ	Alemania
+にほん（日本）	Japon
+フランス	Francia
+ブラジル	Brasil

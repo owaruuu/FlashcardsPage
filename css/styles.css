@@ -94,7 +94,7 @@ body.hasHover .set-button:hover{
 
 .button-title{
     /* background-color: #127030; */
-    font-size: clamp(1rem, 1rem + 2vw, 3rem);
+    font-size: clamp(1rem, 1rem + 1vw, 3rem);
 }
 
 .last-visit{
