@@ -1,11 +1,11 @@
 せつめい（説明）	Explicacion
-ないよう（内容）	Contenido
+ないよう（内容）	Contenido, Detalle
 きめます、きめる（決める）	Decidir, Elegir
 じゅぎょう（授業）	Clase
 かいわ（会話）	Conversacion
 ふくしゅう（復習）	Repaso
 か（課）	Contador leccion
-ほんもの（本物）	Real
+ほんもの（本物）	Real, Autentico
 にんき（人気）	Popular
 ぐ（具）	Relleno/Ingrediente
 ざいりょう（材料）	Material/Materiales
@@ -35,12 +35,15 @@
 かた（方）	Direccion, Persona, Manera
 なおします、なおす（直す）	Reparar, Arreglar, Corregir
 はなします、はなす（話す）	Hablar, Decir
-かきます、かく（書く）	Escribir, Dibujar, Pintar
+かきます、かく（書く）	Escribir 
+かきます、かく（描く）	Dibujar, Pintar
 みじかい（短い）	Corto
 かんがえます、かんがえる（考える）	Pensar, Contemplar, Meditar
 しゃしん（写真）	Foto
 ろう（蝋）	Cera
-ひつよう（必要）	Necesario, Esencial
+ロウソク/キャンドル	Vela
+ひつよう（必要）	Necesario
+ぜったいに必要	No puede faltar, Debe tener
 あまずっぱい（甘酸っぱい）	Agridulce
 す（酢）	Vinagre
 はんぶん（半分）	Mitad
@@ -62,4 +65,5 @@
 きせつ（季節）	Estacion(del año)
 もも（桃）	Durazno
 はだ（肌）	Piel
-おふろ（お風呂）	Bañera
+おふろ（お風呂）	Ducha, Duchar, Lugar de ducha
+よくそう（浴槽）	Bañera
