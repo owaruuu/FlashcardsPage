@@ -1,0 +1,32 @@
+国際	こくさい / Internacional
+女性	じょせい / Mujer, Genero Femenino
+男性	だんせい / Hombre, Genero Masculino
+多い	おおい / Muchos, Numeroso
+進む	すすむ / Progresar, Avanzar
+教育	きょういく / Educacion, Entrenamiento
+受ける	うける / Recibir
+有るべき	あるべき / Ideal, Deseable, La forma que algo deberia ser
+増える	ふえる / Incrementar, Multiplicar
+年	ねん / Año
+世界	せかい / El mundo, Sociedad, El Universo
+初めて	はじめて / Por primera vez
+政治	せいじ / Politica, Gobierno
+認める	みとめる / Permitir, Aprovar
+大統領	だいとうりょう / Presidente
+主人	しゅじん / Esposo
+家内	かない / Esposa
+後	あと / Atras, Despues
+漸く	ようやく / Finalmente
+国々	くにぐに / Paises
+集まる	あつまる / Juntarse
+約束	やくそく / Promesa, Cita
+約束する	やくそくする / Prometer
+第	だい / Prefijo numero ordinal
+賞	しょう / Premio
+特に	とくに / En particular..., En especial...
+式	しき / Ceremonia
+行う	おかなう / Llevar a cabo, Hacer
+映画	えいが / Pelicula
+現在	げんざい / Ahora
+最後	さいご / Ultimo
+最初	さいしょ / Primero

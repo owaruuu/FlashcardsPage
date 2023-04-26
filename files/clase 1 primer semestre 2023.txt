@@ -43,7 +43,7 @@
 ろう（蝋）	Cera
 ロウソク/キャンドル	Vela
 ひつよう（必要）	Necesario
-ぜったいに必要	No puede faltar, Debe tener
+ぜったいにひつよう（ぜったいに必要）	No puede faltar, Debe tener
 あまずっぱい（甘酸っぱい）	Agridulce
 す（酢）	Vinagre
 はんぶん（半分）	Mitad
