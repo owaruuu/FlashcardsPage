@@ -1,15 +1,14 @@
 //jshint esversion:9
-console.log(history.state);
 
 "use strict";
 
+import { lectures } from "./lectures.js";
 // import {ReplaceState, PushHistoryState} from "./history.js";
 
 const titleButton = document.getElementById('title-btn');
 titleButton.addEventListener('click', () => ReloadPage());
 
 //Seccion Touch Watch
-
 function watchForHover() {
     // lastTouchTime is used for ignoring emulated mousemove events
     let lastTouchTime = 0;
@@ -45,8 +44,6 @@ let state = {
     lastPercentage: 0,
 };
 
-// ReplaceState(state);
-
 window.history.replaceState(state, null, "");
 
 window.onpopstate = function(event) {
@@ -72,31 +69,23 @@ function Render(state){
             break;
     }
 }
-
-function ReloadPage(){
-    location.reload();
-}
-
 //Fin Seccion History
 
 var termIndex = 0;
-var nextTermTimeoutId;//guarda referencia al timeout cuando hago click en un boton de knowledge
+
+//guarda referencia al timeout cuando hago click en un boton de knowledge
+var nextTermTimeoutId;
 
 const app = document.getElementById('app');
 const setContainer = document.querySelector('.sets-container');
 
-function ReturnAsString(text){
-    return text;
-}
-
+//FIX REMOVE
 const setNameArray = [
-    // "Test Lecture",
     "Leccion 1 Minna",
     "Clase 1",
     "Clase 1 Extra",
     "Clase 1 Kanji",
     "Clase 1 Kanji Extra",
-    // "Prueba"
 ];
 
 //objeto
@@ -118,6 +107,7 @@ for (const lecture of setNameArray) {
     objSets[lecture] = [];
 }
 
+//FIX REMOVE
 const fetchExternalData = () => {
     return Promise.all([
     //   fetch("./files/Leccion 1.txt"),
@@ -133,33 +123,19 @@ const fetchExternalData = () => {
     });
 };
 
-fetchExternalData()
-.then(result => {
-    CheckForTabsAndSpaces(result);
-})
-.then(() => CreateHomepageApp(setContainer))
+// fetchExternalData()
+// .then(result => {
+//     CheckForTabsAndSpaces(result);
+// })
+// .then(() => CreateHomepageApp(setContainer))
 
 //File Reader Section
-
-// console.log("after setting the first key/pair");
-// console.log(JSON.stringify(objSets));
-
-// fetch(`files/${lecture}.txt`)
-//   .then(response =>  response.text())
-//   .then(text => CheckForTabsAndSpaces(text))
-//   .then(() => CreateHomepageApp(setContainer))
-
-//   console.log(JSON.stringify(objSets));
 
 /**
  *  Llamado sobre el archivo de texto
  *  avanza por el texto separandolo en par de prompt y answer.
  * */  
 function CheckForTabsAndSpaces(texts){
-    let tempKey = "";
-    let tempValue = "";
-    let start = 0;
-
     for (let index = 0; index < texts.length; index++) {
         let tempKey = "";
         let tempValue = "";
@@ -183,8 +159,6 @@ function CheckForTabsAndSpaces(texts){
     }
 }
 //FIN seccion filereader
-
-const varToString = varObj => Object.keys(varObj)[0];//variable name helper
 
 //aqui probare el localStorage
 let currentStorageObj;
@@ -211,10 +185,6 @@ let leccion2Storage = {
 // let objString = JSON.stringify(leccion1Storage);
 // localStorage.setItem('Leccion 1', objString);
 
-// let objString2 = JSON.stringify(leccion2Storage);
-// localStorage.setItem('Leccion 2', objString2);
-// console.log("local storage saved");
-
 // console.log("local storage");
 // for (let i = 0; i < localStorage.length; i++)   {
 //     console.log(localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i)));
@@ -231,6 +201,8 @@ let leccion2Storage = {
 // }
 
 //FIN seccion local storage
+
+CreateHomepageApp(setContainer );
 
 function CreateHomepageApp(container){
     //crear barra buscar
@@ -262,93 +234,103 @@ function CreateHomepageApp(container){
     foundDiv.classList.add('foundContainer');
     let foundText = document.createElement('p');
     foundText.classList.add('foundText');
-    // foundText.textContent = "0 found.";
     foundDiv.appendChild(foundText);
     app.appendChild(foundDiv);
+    //Fin Seccion Busqueda
 
-    // let key = "";
-    // let value = [];
-    //FIX crear un boton por cada key en objSets
-        let index = 0;
+    lectures.forEach(lecture => {
+      //creo button div
+      let button = document.createElement("button");
+      button.classList.add("set-button", "row");
+      button.setAttribute("name", lecture.name);
+      container.appendChild(button);
 
-    for(let [key, value] of Object.entries(objSets)){
-        // console.log("tho");
-        console.log(key);
-        //console.log(value);
+      //numbers container
+      const numberContainer = CreateElement("div", button);
+      numberContainer.classList.add(
+        "set-buttons-helper",
+        "number-terms",
+        "col-12",
+        "col-sm-4"
+      );
 
-        let button = document.createElement('button');
-        button.classList.add('set-button','row');
-        // button.classList.add()
-        button.setAttribute('name', key);
-        container.appendChild(button);
+      //number of cards div
+      const numberDiv = CreateElement("div", numberContainer);
+      numberDiv.classList.add("align-self-center");
+      const total = lecture.termList.length;
+      numberDiv.textContent = total + " Terminos";
 
-        //numbers container
-        const numberContainer = CreateElement('div', button);
-        numberContainer.classList.add('set-buttons-helper', 'number-terms', 'col-12', 'col-sm-4');
+      //percent learned div
+      let percent = 0;
 
-        //number of cards div
-        const numberDiv = CreateElement('div', numberContainer);
-        numberDiv.classList.add('align-self-center');
-        const total = objSets[setNameArray[index++]].length;
-        console.log(total);
-        numberDiv.textContent = total + ' Terminos';
+      //veo si existe un local storage con la leccion actual
+      const percentDiv = CreateElement("div", numberContainer);
+      const learnedAmountStringObj = localStorage.getItem(lecture.id);
 
-        //percent learned div
-        const percentDiv = CreateElement('div', numberContainer);
-        const learnedAmountStringObj = localStorage.getItem(key);
-        const currentLocalObj = JSON.parse(learnedAmountStringObj); 
+      //si no existe simplemente pongo 0
+      //si existe
+      if (learnedAmountStringObj == null) {
+        console.log("no se encontro local storage para esta id: " + lecture.id);
+        percent = "0";
+      } else {
+        const currentLocalObj = JSON.parse(learnedAmountStringObj);
         console.log("current local storage object");
         console.log(learnedAmountStringObj);
-        let percent = 0;     
-        
-        //FIX aqui necesito revisar de mejor manera el local object
-        if(learnedAmountStringObj !== null){     
-            let UpdatedObject = {};
-            UpdatedObject = CheckUpdates(key, currentLocalObj);
-            
-            let amount = 0;
-            for(let [key, value] of Object.entries(UpdatedObject)){
-                if(value ==="learned") amount++;
-            }
 
-            percent = Math.trunc((amount / total) * 100);
-        }else{
-            percent = "0"
-        }
-    
-        percentDiv.textContent = `(${percent}% Learned.)`;      
-        
-        //lecture name div
-        let textDiv = document.createElement('div');
-        textDiv.textContent = key;
-        textDiv.classList.add('button-title', 'col-12', 'col-sm-4');
-        button.appendChild(textDiv);
-
-        //last visit div
-        const lastVisitDiv = CreateElement('div', button);
-        lastVisitDiv.classList.add('set-buttons-helper', 'last-visit', 'col-12', 'col-sm-4', 'text-center', 'text-sm-end');
-
-        if(learnedAmountStringObj !== null){
-            if(currentLocalObj.hasOwnProperty("lastCheckout")){
-                console.log("existe last check");
-                let last = currentLocalObj.lastCheckout;
-                lastVisitDiv.textContent = `Last Checkout: ${last}`;
-            }else{
-                lastVisitDiv.textContent = `No checkout.`;
-            }
-        }else{   
-            lastVisitDiv.textContent = `No checkout.`;
+        let amount = 0;
+        for (let [key, value] of Object.entries(currentLocalObj)) {
+          if (value === "learned") amount++;
         }
 
-        //Dejo el event listener al final porque necesito los valores
-        button.addEventListener('click', () => OnFlashSetButton(button.name, total, percent));
-        console.log("percent cuando lo mando al evento: " + percent);
-    }    
+        percent = Math.trunc((amount / total) * 100);
+      }
+
+      percentDiv.textContent = `(${percent}% Learned.)`;
+      //Fin percent learned div
+
+      //lecture name div
+      let textDiv = document.createElement("div");
+      textDiv.textContent = lecture.name;
+      textDiv.classList.add("button-title", "col-12", "col-sm-4");
+      button.appendChild(textDiv);
+
+      //last visit div
+      const lastVisitDiv = CreateElement("div", button);
+      lastVisitDiv.classList.add(
+        "set-buttons-helper",
+        "last-visit",
+        "col-12",
+        "col-sm-4",
+        "text-center",
+        "text-sm-end"
+      );
+
+      if (learnedAmountStringObj !== null) {
+        if (currentLocalObj.hasOwnProperty("lastCheckout")) {
+          let last = currentLocalObj.lastCheckout;
+          lastVisitDiv.textContent = `Last Checkout: ${last}`;
+        } else {
+          lastVisitDiv.textContent = `No checkout.`;
+        }
+      } else {
+        lastVisitDiv.textContent = `No checkout.`;
+      }
+
+      //Dejo el event listener al final porque necesito los valores
+      button.addEventListener("click", () =>
+        OnFlashSetButton(lecture, total)
+      );
+    });  
 }
+
 /** Revisa si hubo cambios en los archivos de texto de las lecciones */
 function CheckUpdates(lectureKey, currentLocalObj){
     console.log("checking for updates on lecture texts");
+
+    //nuevo objeto que representa el local storage
     let newObject = {};
+
+    //aqui aga
     let lectureArray = objSets[lectureKey];
     for (const object of lectureArray) {//por cada objecto dentro del array
         for (const key in object) {//por cada key de cada objeto
@@ -376,26 +358,23 @@ function CheckUpdates(lectureKey, currentLocalObj){
     return newObject;
 }
 
-function OnFlashSetButton(name, ammount, percentage){
-    console.log("percent cuando lo recibe la funcion que creala pagina: " + percentage);
+function OnFlashSetButton(lectureObj, ammount){
+    //console.log("percent cuando lo recibe la funcion que creala pagina: " + percentage);
     state.currentPage = "lectureList";
     state.lastAmmount = ammount;
-    state.lastPercentage = percentage;
-    state.lastLecture = name;
     // PushHistoryState(state);
     window.history.pushState(state, null, "");
     console.log("pushed state");
 
-    FlashSetButton(name , ammount);
+    FlashSetButton(lectureObj, ammount);
 }
 
 /** Crea la pagina con los terminos de esa clase y los botones para estudiar/checkout */
-function FlashSetButton(name, ammount)
+function FlashSetButton(lectureObj, ammount)
 {
     // let stringKey = event.currentTarget.name; 
-    let stringKey = name; 
+    let stringKey = lectureObj.name; 
     //aqui crear pagina con informacion de set
-    console.log('clicked boton');
     app.innerHTML = '';
 
     //Creacion titulo
@@ -410,12 +389,10 @@ function FlashSetButton(name, ammount)
     let percentageText = CreateElement('p', termsAmmountDiv);
 
     ammountText.textContent = ammount + " Terms /";
-    let percentage = CalculatePercentageLearned(name);
+    let percentage = CalculatePercentageLearned(lectureObj.id);
     percentageText.textContent = percentage + "% Learned";
 
     termsAmmountDiv.classList.add('d-flex', 'justify-content-center', 'terms-ammount-div');
-    // ammountText.classList.add('col');
-    // percentageText.classList.add('col');
     
     //Creacion Seccion botones
     let buttonsContainer = document.createElement('div');
@@ -438,7 +415,7 @@ function FlashSetButton(name, ammount)
     let lastCheckoutTextDiv = CreateElement('div', buttonsContainer);
     let lastCheckoutText = CreateElement('span', lastCheckoutTextDiv);
     lastCheckoutText.setAttribute('id', 'last-check-text-term-page');
-    let localStorageObject = GetLocalStorageObject(name);
+    let localStorageObject = GetLocalStorageObject(lectureObj.id);
 
     lastCheckoutText.textContent = "No Checkout."
 
@@ -447,19 +424,19 @@ function FlashSetButton(name, ammount)
     }
 
     lastCheckoutTextDiv.classList.add('float-md-end');
-    // lastCheckoutText.classList.add('float-end');
 
     //Creacion seccion terminos
     let container = document.createElement('div');
     container.classList.add('set-container','xwidth','xwidth-md');
     app.appendChild(container);
 
-    let cardArray = Object.values(objSets[stringKey]);
+    let cardArray = Object.values(lectureObj.termList);
+    // let cardArray2 = Object.values(objSets[stringKey]);
 
     //create each card
-    cardArray.forEach(pair => {
-        let [key, value] = Object.entries(pair)[0];
-        CreatePairCard(key, value, container);
+    cardArray.forEach(term => {
+        console.log(term);
+        CreatePairCard(term, container);
     });
 }
 
@@ -478,12 +455,20 @@ function isObjEmpty (obj) {
  * y quiero mostrar el porcentage aprendido
  * @param {string} name nombre de la leccion
  */
-function CalculatePercentageLearned(lectureKey){
+function CalculatePercentageLearned(id){
     console.log("aqui estoy calculando el porcentage de learned desde una funcion propia");
     
-    const total = objSets[lectureKey].length;
-
-    const learnedAmountStringObj = localStorage.getItem(lectureKey);
+    //el total de terminos
+    let total = 0;
+    let tempObj = lectures.find((lecture) => lecture.id == id);
+    if(tempObj == null){
+        console.log("hubo un error y no encontre el id de la clase en el objeto lectures");
+    }else{
+        total = tempObj.termList.length;
+    }
+    
+    //trato de obtener el objeto de total basado en la id
+    const learnedAmountStringObj = localStorage.getItem(id);
 
     if(learnedAmountStringObj != null){
         const currentLocalObj = JSON.parse(learnedAmountStringObj);   
@@ -1062,21 +1047,27 @@ function CreateElement(elem, parent){
     return element;
 }
 
-function CreatePairCard(key, value, parent){
+function CreatePairCard(termObj, parent){
     //create container div
     let container = document.createElement('div');
     container.classList.add('pair-card-container', 'd-flex');
     parent.appendChild(container);
 
+    //FIX
     //create key div
     let keyDiv = document.createElement('div');
-    keyDiv.textContent = key;
     keyDiv.classList.add('keyDiv', 'align-self-center', 'col-6');
     container.appendChild(keyDiv);
 
+    if(termObj.kanji !== ""){
+        keyDiv.textContent = termObj.jap + "（" + termObj.kanji+ "）";
+    }else{
+        keyDiv.textContent = termObj.jap;
+    }
+
     //create value div
     let valueDiv = document.createElement('div');
-    valueDiv.textContent = value;
+    valueDiv.textContent = termObj.esp;
     valueDiv.classList.add('valueDiv', 'align-self-center', 'text-end', 'col-6');
     container.appendChild(valueDiv);
 
@@ -1230,41 +1221,16 @@ function CreateSelectElement(options){
     return select;
 }
 
+//Helpers
+function ReloadPage(){
+    location.reload();
+}
 
-//////////////// OLD /////////////////////
+function ReturnAsString(text){
+    return text;
+}
 
-// let set = {
-//     name : "leccion 1",
-//     cards : [
-//     {"けむり（煙）"	:"humo"},
-//     {"まっしろ（真っ白）「な」":"totalmente blanco"},
-//     {"なかみ（中身）":	"contenido"},
-//     ]
-// };
+//variable name helper
+const varToString = varObj => Object.keys(varObj)[0];
 
-//array
-// const sets = [
-//     {
-//         name : "Leccion 1",
-//         cards : [
-//         {"けむり（煙）"	:"humo"},
-//         {"まっしろ（真っ白）「な」":"totalmente blanco"},
-//         {"なかみ（中身）":	"contenido"},
-//         ] 
-//     },
-//     {
-//         name : "Leccion 2",
-//         cards : [
-//         {"けむり（煙）"	:"humo"},
-//         {"まっしろ（真っ白）「な」":"totalmente blanco"},
-//         {"なかみ（中身）":	"contenido"},
-//         ] 
-//     }
-// ];
-
-//print all local storage
-// console.log("local storage");
-// for (let i = 0; i < localStorage.length; i++)   {
-//     console.log(localStorage.key(i) + "=[" + localStorage.getItem(localStorage.key(i)) + "]");
-// }
 
