@@ -39,7 +39,7 @@ function watchForHover() {
 //Seccion History
 let state = {
     currentPage : "home",
-    lastLecture: "",
+    lastLecture: {},
     lastAmmount: 0,
     lastPercentage: 0,
 };
@@ -72,6 +72,7 @@ function Render(state){
 //Fin Seccion History
 
 var termIndex = 0;
+var termId = 0;
 
 //guarda referencia al timeout cuando hago click en un boton de knowledge
 var nextTermTimeoutId;
@@ -161,8 +162,6 @@ function CheckForTabsAndSpaces(texts){
 //FIN seccion filereader
 
 //aqui probare el localStorage
-let currentStorageObj;
-
 //creacion de objeto de prueba
 let leccion1Storage = {
     "けむり（煙）" : 'learned',
@@ -266,6 +265,7 @@ function CreateHomepageApp(container){
       //veo si existe un local storage con la leccion actual
       const percentDiv = CreateElement("div", numberContainer);
       const learnedAmountStringObj = localStorage.getItem(lecture.id);
+      let currentLocalObj = {};
 
       //si no existe simplemente pongo 0
       //si existe
@@ -273,7 +273,7 @@ function CreateHomepageApp(container){
         console.log("no se encontro local storage para esta id: " + lecture.id);
         percent = "0";
       } else {
-        const currentLocalObj = JSON.parse(learnedAmountStringObj);
+        currentLocalObj = JSON.parse(learnedAmountStringObj);
         console.log("current local storage object");
         console.log(learnedAmountStringObj);
 
@@ -305,7 +305,8 @@ function CreateHomepageApp(container){
         "text-sm-end"
       );
 
-      if (learnedAmountStringObj !== null) {
+      if (learnedAmountStringObj !== null) 
+      {
         if (currentLocalObj.hasOwnProperty("lastCheckout")) {
           let last = currentLocalObj.lastCheckout;
           lastVisitDiv.textContent = `Last Checkout: ${last}`;
@@ -361,6 +362,7 @@ function CheckUpdates(lectureKey, currentLocalObj){
 function OnFlashSetButton(lectureObj, ammount){
     //console.log("percent cuando lo recibe la funcion que creala pagina: " + percentage);
     state.currentPage = "lectureList";
+    state.lastLecture = lectureObj;
     state.lastAmmount = ammount;
     // PushHistoryState(state);
     window.history.pushState(state, null, "");
@@ -372,6 +374,9 @@ function OnFlashSetButton(lectureObj, ammount){
 /** Crea la pagina con los terminos de esa clase y los botones para estudiar/checkout */
 function FlashSetButton(lectureObj, ammount)
 {
+    //cancelo show next term, si llego a volver a la pagina anterior
+    clearTimeout(nextTermTimeoutId);
+   
     // let stringKey = event.currentTarget.name; 
     let stringKey = lectureObj.name; 
     //aqui crear pagina con informacion de set
@@ -402,27 +407,21 @@ function FlashSetButton(lectureObj, ammount)
     let learnButton = CreateElement('button', buttonsContainer);
     learnButton.classList.add('learn-button');
     learnButton.textContent = 'Learn';
-    learnButton.setAttribute('data-lecture', stringKey);
-    learnButton.addEventListener('click', OnLearnLecture);
+    learnButton.setAttribute('data-id', lectureObj.id);
+    learnButton.addEventListener('click', () => OnLearnLecture(lectureObj));
 
     let checkoutButton = CreateElement('button', buttonsContainer);
     checkoutButton.classList.add('checkout-button');
     checkoutButton.textContent = "Checkout";
-    checkoutButton.setAttribute('data-lecture', stringKey);
-    checkoutButton.addEventListener('click', CheckoutLecture);
+    checkoutButton.setAttribute('data-id', lectureObj.id);
+    checkoutButton.addEventListener('click', (event) => CheckoutLecture(event, lectureObj));
 
     //Creacion text last checkout en pagina de terminos
     let lastCheckoutTextDiv = CreateElement('div', buttonsContainer);
     let lastCheckoutText = CreateElement('span', lastCheckoutTextDiv);
     lastCheckoutText.setAttribute('id', 'last-check-text-term-page');
-    let localStorageObject = GetLocalStorageObject(lectureObj.id);
-
-    lastCheckoutText.textContent = "No Checkout."
-
-    if(localStorageObject !== null && localStorageObject.hasOwnProperty("lastCheckout")){
-        lastCheckoutText.textContent = "Last Checkout: " + localStorageObject['lastCheckout'];
-    }
-
+    let localStorageObject = GetLocalStorageObject(lectureObj);
+    lastCheckoutText.textContent = "Last Checkout: " + localStorageObject['lastCheckout'];  
     lastCheckoutTextDiv.classList.add('float-md-end');
 
     //Creacion seccion terminos
@@ -440,10 +439,23 @@ function FlashSetButton(lectureObj, ammount)
     });
 }
 
-function GetLocalStorageObject(lectureKey){
-    const learnedAmountStringObj = localStorage.getItem(lectureKey);
-    const currentLocalObj = JSON.parse(learnedAmountStringObj); 
-    return currentLocalObj;
+//FIX cambiar nombre a create ? y return el que existe si no crear uno
+/**Return el objeto de local storage, si no existe lo crea, incluyendo la key 'lastCheckout*/
+function GetLocalStorageObject(lectureObj){
+    //FIX aqui deberia aprovechar de crearlo
+    const learnedAmountString = localStorage.getItem(lectureObj.id);
+    
+    if(learnedAmountString == null ){
+        let lectureObjString = CreateLocalStorageObject(lectureObj);
+        let lectureObject = JSON.parse(lectureObjString);
+        lectureObject.lastCheckout = "No Checkout";
+        lectureObjString = JSON.stringify(lectureObject);
+        localStorage.setItem(lectureObj.id, lectureObjString);
+    }
+
+    const localStorageString = localStorage.getItem(lectureObj.id);
+    const localStorageObject = JSON.parse(localStorageString);
+    return localStorageObject;
 }
 
 function isObjEmpty (obj) {
@@ -487,35 +499,34 @@ function CalculatePercentageLearned(id){
     }
 }
 
-function OnLearnLecture(event){
+function OnLearnLecture(lectureObj){
     state.currentPage = "lectureFlash";
-    state.lastLecture = event.target.dataset.lecture;
+    state.lastLecture = lectureObj;
     // PushHistoryState(state);
     window.history.pushState(state, null, "");
     console.log("pushed state");
 
-    LearnLecture(event);
+    LearnLecture(lectureObj);
 }
 
-function LearnLecture(event)
-{  
+function LearnLecture(lectureObj){  
     console.log('click learn lecture');
 
     termIndex = 0;
 
-    let lectureKey = event.target.dataset.lecture;
+    let lectureKey = lectureObj.id;
     app.innerHTML = '';
 
     let titleDiv = CreateElement('div', app);
     titleDiv.classList.add('title-div');
 
     let title = CreateElement('h1', titleDiv);
-    title.textContent = lectureKey;
+    title.textContent = lectureObj.name;
 
     let progressBar = CreateElement('div', app);
     progressBar.classList.add('progress-bar-josue', 'd-flex', 'flex-column', 'flex-lg-row');
 
-    PopulateProgressBar(progressBar,lectureKey);
+    PopulateProgressBar(progressBar, lectureObj);
 
     let middleDiv = CreateElement('div', app);
     middleDiv.classList.add('middle-div');
@@ -523,7 +534,7 @@ function LearnLecture(event)
     let leftArrow = CreateElement('i', middleDiv);
     leftArrow.classList.add('fa-solid', 'fa-angle-left', 'fa-xl', 'arrow-btn');
     leftArrow.setAttribute('data-direction', 'left');
-    leftArrow.addEventListener('click', ClickArrow);
+    leftArrow.addEventListener('click', (event) => ClickArrow(event, lectureObj));
 
     let bigCardDiv = CreateElement('div', middleDiv);
     let bigCard = CreateElement('div', bigCardDiv);
@@ -538,7 +549,7 @@ function LearnLecture(event)
 
     let rightArrow = CreateElement('i', middleDiv);
     rightArrow.classList.add('fa-solid', 'fa-angle-right', 'fa-xl', 'arrow-btn');
-    rightArrow.addEventListener('click', ClickArrow);
+    rightArrow.addEventListener('click',(event) => ClickArrow(event, lectureObj));
     rightArrow.setAttribute('data-direction', 'right');
 
     bigCardDiv.classList.add('big-card-div', 'm-2');
@@ -560,14 +571,14 @@ function LearnLecture(event)
     //FIX
     //aqui tengo que buscar la 'carta' correspondiente, por ahora
     //poner la primera nomas
-    let termObject = Object.values(objSets[lectureKey])[0];
-    let termsLenght = Object.values(objSets[lectureKey]).length;
-    let [key, value] = Object.entries(termObject)[0];
-    promptText.textContent = key;
+    // let termObject = Object.values(objSets[lectureKey])[0];
+    let termsLenght = lectureObj.termList.length;
+    // let [key, value] = Object.entries(termObject)[0];
+    promptText.textContent = lectureObj.termList[0].jap;
     promptText.classList.add('align-self-center');
     promptText.setAttribute('id', 'prompt-text');
     answerPlaceholder.textContent = "Click to reveal";
-    answerText.textContent = value;
+    answerText.textContent = lectureObj.termList[0].esp;
 
     //temp counter section
     let counterDiv = CreateElement('div', app);
@@ -588,35 +599,36 @@ function LearnLecture(event)
 
     //cuando termino de crear la pagina learn 
     //checkeo por primera vez si hay algo en local storage
-    CheckLearnStatus();
+    CheckLearnStatus(lectureObj, 0);
 
-    noKnowledgeButton.addEventListener('click', ClickKnowledgeButton);
-    knowledgeButton.addEventListener('click', ClickKnowledgeButton);
+    noKnowledgeButton.addEventListener('click', (event) => ClickKnowledgeButton(event, lectureObj, "learning"));
+    knowledgeButton.addEventListener('click', (event) => ClickKnowledgeButton(event, lectureObj, "learned"));
 }
 
 /**
  * Es llamado cuando creo la pantalla de learn
  * Crea los squares de la barra de progreso
  */
-function PopulateProgressBar(parent, key){
-    let termsArray = Object.values(objSets[key]);
+function PopulateProgressBar(parent, lectureObj){
+    //let termsArray = Object.values(objSets[key]);
 
     //obtengo referencia al local storage para revisar avanze
-    let learnedAmountStringObj = localStorage.getItem(key);
+    let learnedAmountStringObj = localStorage.getItem(lectureObj.id);
     let currentLocalObj = JSON.parse(learnedAmountStringObj); 
 
-    //Creo un objeto local si no existe
-    if(learnedAmountStringObj == null){
-        learnedAmountStringObj = CreateLocalStorageObject(key);
-        currentLocalObj = JSON.parse(learnedAmountStringObj); 
-    }
+    //Ya no es necesario
+    // //Creo un objeto local si no existe
+    // if(learnedAmountStringObj == null){
+    //     learnedAmountStringObj = CreateLocalStorageObject(key);
+    //     currentLocalObj = JSON.parse(learnedAmountStringObj); 
+    // }
 
     //Obtengo una referencia al tamano del local object
-    const length = objSets[key].length;
+    const length = lectureObj.termList.length;
     const half = Math.ceil(length / 2);
     let afterHalf = false;
     let counter = 1;
-    console.log("half " + half);
+    // console.log("half " + half);
 
     //Creo 2 divs que serviran de left col y right col
     let leftDiv = CreateElement('div', parent);
@@ -662,108 +674,79 @@ function PopulateProgressBar(parent, key){
 }
 
 /**Se llama cuando hago click en el boton de checkout */
-function CheckoutLecture(event){
+function CheckoutLecture(event, lectureObj){
     console.log("click checkout");
-    let lectureKey = event.target.dataset.lecture;
+    let lectureId = event.target.dataset.id;
     const date = new Date().toLocaleDateString();
 
-    let lectureObjString = localStorage.getItem(lectureKey);
+    let lectureObjString = localStorage.getItem(lectureObj.id);
     if(lectureObjString !== null){
         console.log(lectureObjString);
         let lectureObject = JSON.parse(lectureObjString);
         console.log(lectureObject);
         lectureObject.lastCheckout = date;
         lectureObjString = JSON.stringify(lectureObject);
-        localStorage.setItem(lectureKey, lectureObjString);
+        localStorage.setItem(lectureObj.id, lectureObjString);
     }else{
         //crear el objeto desde 0 y luego agregar fecha
-        CreateLocalStorageObject(lectureKey);
-        let lectureObjString = localStorage.getItem(lectureKey);
+        
+        let lectureObjString = CreateLocalStorageObject(lectureObj);
         console.log(lectureObjString);
         let lectureObject = JSON.parse(lectureObjString);
         console.log(lectureObject);
         lectureObject.lastCheckout = date;
         lectureObjString = JSON.stringify(lectureObject);
-        localStorage.setItem(lectureKey, lectureObjString);
+        localStorage.setItem(lectureObj.id, lectureObjString);
     }
     
     const lastCheckoutText = document.getElementById('last-check-text-term-page');
     lastCheckoutText.textContent = "Last Checkout: " + date;
 }
 
-function CheckLearnStatus(){
+/**Lo llamo cuando creo la pagina de learn por primera vez,
+ * tambien cuando cambio de card
+ */
+function CheckLearnStatus(lectureObj, termIndex){
     let currentString;
     let currentObject;
-    let currentLecture = document.querySelector('.title-div').firstChild.textContent;
+    let currentLectureId = lectureObj.id;
 
-    //reviso todo el localstorage hasta encontrar 
-    //un item con el key igual a la leccion actual
-      
-        if(localStorage[currentLecture]){
-            console.log("found");
-            currentString = localStorage.getItem(currentLecture);
-            currentObject = JSON.parse(currentString);
+    currentString = localStorage.getItem(currentLectureId);
+    currentObject = JSON.parse(currentString);
 
-            let prompt = document.querySelector('.prompt').firstChild;
-            console.log(prompt.textContent);
+    let prompt = document.querySelector('.prompt').firstChild;
+    console.log(prompt.textContent);
 
-            for(let [key, value] of Object.entries(currentObject)){
-                if(key === prompt.textContent){
-                    console.log("found key," + "its value is :" + value);
-                    switch (value) {
-                        case "learned": console.log("aqui cambio el boton learned");
-                            ChangeKnowledgeButtonString("learned");
-                            break;
-                        case "learning": console.log("aqui cambio el boton learning");
-                            ChangeKnowledgeButtonString("learning");    
-                            break;
-                        case "": console.log("aqui hago nada");
-                            break;
-                        default: console.log("el valor es: " + value);
-                            break;
-                    }
-                }
-            }
-        }else
-        {
-            console.log("No se encontro la leccion en Local Storage");
-
-
-            CreateLocalStorageObject(currentLecture);
-            // //crear objeto
-            // let storageObject = {};
-            // let currentArray = objSets[currentLecture];
-
-            // //popular objecto
-            // for (let index = 0; index < currentArray.length; index++) {
-            //     const obj = currentArray[index];  
-            //     const firstKey = Object.keys(obj)[0];
-                
-            //     storageObject[firstKey]  = '';             
-            // }
-
-            // let objectString = JSON.stringify(storageObject);
-            // localStorage.setItem(currentLecture, objectString);
-        }  
+    //basado en el id del termino actual, buscar el knowledge
+    //en el local storage
+    switch (currentObject[termIndex]) {
+        case "learned": console.log("aqui cambio el boton learned");
+            ChangeKnowledgeButtonString("learned");
+            break;
+        case "learning": console.log("aqui cambio el boton learning");
+            ChangeKnowledgeButtonString("learning");    
+            break;
+        case "": console.log("aqui hago nada");
+            break;
+        default: console.log("el valor es: " + value);
+            break;
+    }   
 }
 
-function CreateLocalStorageObject(currentLecture){
+function CreateLocalStorageObject(currentLectureObj){
     //crear objeto
     let storageObject = {};
-    let currentArray = objSets[currentLecture];
+    let currentArray = currentLectureObj.termList;
 
     //popular objecto
-    for (let index = 0; index < currentArray.length; index++) {
-        const obj = currentArray[index];  
-        const firstKey = Object.keys(obj)[0];
-        
-        storageObject[firstKey]  = '';             
-    }
+    currentArray.forEach(term => {
+        storageObject[term.id]  = ''; 
+    });
 
     let objectString = JSON.stringify(storageObject);
-    localStorage.setItem(currentLecture, objectString);
+    localStorage.setItem(currentLectureObj.id, objectString);
 
-    return localStorage.getItem(currentLecture);
+    return localStorage.getItem(currentLectureObj.id);
 }
 
 function ChangeKnowledgeButtonString(btnclass){
@@ -777,65 +760,81 @@ function ChangeKnowledgeButtonString(btnclass){
     buttonToChange.setAttribute('id','checked');    
 }
 
-function ChangeKnowledgeButtonElem(element){
+function ChangeKnowledgeButtonElem(event, lectureObj, tag, id){
     let leftButton = document.querySelector('.learning');
     let rightButton = document.querySelector('.learned');
 
     leftButton.removeAttribute('id');
     rightButton.removeAttribute('id');
 
-    element.setAttribute('id','checked');
+    event.target.setAttribute('id','checked');
 
     //aqui actualizar storage
-    UpdateLocalStorage(element);
+    UpdateLocalStorage(lectureObj, tag, id);
+}
+
+function GetTermId(termArray, term){
+    console.log("get term id");
+    console.log(termArray);
+    console.log(term);
+    let id = -1;
+
+    for (let index = 0; index < termArray.length; index++) {
+        if(termArray[index].jap == term){
+            console.log("found the term at index: "+ index);
+            id = termArray[index].id;
+            break;
+        }
+    }
+
+    if(id < 0){
+        console.log("hubo un error y no se encontro el termino dentro del array");
+    }else{
+        console.log("id encontrado " + id);
+        return id;
+    }
 }
 
 /**
  * Es llamado cuando apreto un boton de knowledge
  */
-function UpdateLocalStorage(btnClicked){
-    console.log("boton clikeado " + btnClicked.className);
+function UpdateLocalStorage(lectureObj, tag, id){
+    console.log("boton clikeado " + tag);
 
     //aqui actualizar local storage
-    let currentLecture = document.querySelector('.title-div').firstChild.textContent;
+    let currentLecture = lectureObj.id;
 
     let counter = 0;
 
-    if(localStorage[currentLecture]){
-        //aqui se encontro el objeto en local storage basado en la leccion actual
-        console.log("al hacer click en el boton se encontro un objeto en local storage");
-        let currentString = localStorage.getItem(currentLecture);
-        let currentObject = JSON.parse(currentString);  
+    //aqui se encontro el objeto en local storage basado en la leccion actual
+    console.log("al hacer click en el boton se encontro un objeto en local storage");
+    let currentString = localStorage.getItem(currentLecture);
+    let currentObject = JSON.parse(currentString); 
+    console.log("el objeto que recibo dentro de updatelocal storage: " + currentString); 
 
-        let prompt = document.querySelector('.prompt').firstChild;   
+    let prompt = document.querySelector('.prompt').firstChild;   
+    
+    //aqui buscar por el objeto por el key basado en el prompt
+    for(let [key, value] of Object.entries(currentObject)){
         
-        //aqui buscar por el objeto por el key basado en el prompt
-        for(let [key, value] of Object.entries(currentObject)){
+        if(key == id){
+            console.log("se encontro el prompt en la lista con el valor de: " + value);
             
-            if(key === prompt.textContent){
-                console.log("se encontro el prompt en la lista con el valor de: " + value);
-                
-                //cambio el valor del key actual basado en la clase del boton
-                currentObject[key] = btnClicked.className;
-                
-                //reemplazo el objeto en localstorage con el objeto actualizado
-                localStorage.setItem(currentLecture, JSON.stringify(currentObject));
-                console.log("se cambio el valor a: " + btnClicked.className);
-                break;
-            }
-
-            counter++;
+            //cambio el valor del key actual basado en la clase del boton
+            currentObject[key] = tag;
+            
+            //reemplazo el objeto en localstorage con el objeto actualizado
+            localStorage.setItem(currentLecture, JSON.stringify(currentObject));
+            console.log("se cambio el valor a: " + tag);
+            break;
         }
 
-        
-    }else{
-        //esto nunca deberia pasar
-        console.log("No se encontro la leccion en Local Storage al momento de actualizar y deberia crear uno");
+        counter++;
     }
 
     //una vez actualizado el local storage deberia rehacer o actualizar la barra de progreso
     console.log("veces que busque un key en local storage:" + counter);
-    UpdateProgressBar(counter, btnClicked.className);
+    UpdateProgressBar(counter, tag);
 }
 
 /**
@@ -867,13 +866,15 @@ function UpdateProgressBar(counter, classToAdd){
 }
 
 //necesito sacarle a los dos las clases y desactivarlos
-function ClickKnowledgeButton(event){
+function ClickKnowledgeButton(event, lectureObj, tag){
     //buscar ambos botones y sacarle el checked
-    ChangeKnowledgeButtonElem(event.target);
+    let promptText = document.getElementById("prompt-text").textContent;
+    let currentTermId = GetTermId(lectureObj.termList, promptText)
+    ChangeKnowledgeButtonElem(event, lectureObj, tag, currentTermId);
 
     DisableKnowledgeButtons();
     
-    nextTermTimeoutId = setTimeout(() => ShowNextTerm(1), 1000); 
+    nextTermTimeoutId = setTimeout(() => ShowNextTerm(1, lectureObj), 1000); 
     console.log('called shownextterm with timeout');  
 }
 
@@ -890,7 +891,7 @@ function DisableKnowledgeButtons(){
     }, 500);
 }
 
-function ShowNextTerm(dir){
+function ShowNextTerm(dir, lectureObj){
     console.log('changing term');
 
     let bigCard = document.querySelector('.big-card');
@@ -900,8 +901,8 @@ function ShowNextTerm(dir){
     setTimeout(() => DeleteElement(bigCard), 300);
     
     //necesito buscar el siguiente termino y popular la tarjeta
-    let currentLecture = document.querySelector('.title-div').firstChild.textContent;
-    let termsArray = Object.values(objSets[currentLecture]);
+    //let currentLecture = document.querySelector('.title-div').firstChild.textContent;
+    let termsArray = lectureObj.termList;
 
     let allProgressItem = document.getElementsByClassName('progress-bar-item');
     let progressItem = allProgressItem[termIndex];
@@ -926,17 +927,16 @@ function ShowNextTerm(dir){
     console.log('este es el obj par prompt/meaning');
     console.log(termObj);
 
+    let japValue = termsArray[termIndex].jap;
+    let espValue = termsArray[termIndex].esp;
     let [key, value] = Object.entries(termObj)[0];
 
     //FIX aqui buscar el termino actual y basado en 'knowledge'
     //modificar las clases de los botones de abajo
     let knowledge = Object.values(termObj)[1];
-    //console.log(knowledge);
 
     //creacion de nueva carta
     let bigCardDiv = document.querySelector('.big-card-div');
-
-    //parentElement.insertBefore(newElement, parentElement.children[2]);
 
     let newCard = document.createElement('div');
     bigCardDiv.insertBefore(newCard, bigCardDiv.children[0]);
@@ -968,7 +968,7 @@ function ShowNextTerm(dir){
 
     //FIX //popular datos
     // prompt = document.querySelector('.prompt').firstChild;
-    promptText.textContent = key;
+    promptText.textContent = japValue;
     promptText.classList.add('align-self-center');
     promptText.setAttribute('id', 'prompt-text');
 
@@ -977,7 +977,7 @@ function ShowNextTerm(dir){
 
     let answer = document.querySelector('.answer');
     answer.classList.add('hide');
-    answer.textContent = value;
+    answer.textContent = espValue;
 
     //reset botones
     //buscar informacion guardada sobre boton
@@ -988,7 +988,7 @@ function ShowNextTerm(dir){
     UpdateCounter(termsArray.length);
 
     //cada vez que cambio de card revisar si existe algo en local storage
-    CheckLearnStatus();
+    CheckLearnStatus(lectureObj, termIndex);
 }
 
 // function removeSelectedProgressItem(index){
@@ -1023,16 +1023,15 @@ function ClickAnswer(){
     answer.classList.toggle('hide');
 }
 
-function ClickArrow(event){
+function ClickArrow(event, lectureObj){
     clearTimeout(nextTermTimeoutId);
 
     let direction = event.target.dataset.direction;
-    // console.log(event.target.dataset.direction);
 
     if(direction === 'left'){
-        ShowNextTerm(-1);
+        ShowNextTerm(-1, lectureObj);
     }else{
-        ShowNextTerm(1);
+        ShowNextTerm(1, lectureObj);
     }
 }
 
