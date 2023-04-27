@@ -277,10 +277,13 @@ function CreateHomepageApp(container){
         console.log("current local storage object for this lecture");
         console.log(learnedAmountStringObj);
 
+        //FIX como calculo el porcentage
         let amount = 0;
-        for (let [key, value] of Object.entries(currentLocalObj)) {
-          if (value === "learned") amount++;
-        }
+        lecture.termList.forEach(term => {
+            if(currentLocalObj[term.id] == "learned"){
+                amount++;
+            }
+        });
 
         percent = Math.trunc((amount / total) * 100);
       }
@@ -325,36 +328,33 @@ function CreateHomepageApp(container){
 }
 
 /** Revisa si hubo cambios en los archivos de texto de las lecciones */
-function CheckUpdates(lectureKey, currentLocalObj){
+function CheckUpdates(lectureObj, currentLocalObj){
     console.log("checking for updates on lecture texts");
 
     //nuevo objeto que representa el local storage
     let newObject = {};
 
-    //aqui aga
-    let lectureArray = objSets[lectureKey];
-    for (const object of lectureArray) {//por cada objecto dentro del array
-        for (const key in object) {//por cada key de cada objeto
-            if(currentLocalObj.hasOwnProperty(key)){
-                console.log("contiene ya este key");
-                newObject[key] = currentLocalObj[key];
-            }else{
-                console.log("no contenia este key");
-                newObject[key] = "";
-            }
-        }     
-    }
+    lectureObj.termList.forEach(term=> {
+        if(currentLocalObj.hasOwnProperty(term.id)){
+            console.log("contiene ya este key");
+            newObject[term.id] = currentLocalObj[term.id];
+        }else{
+            console.log("no contenia este key");
+            newObject[term.id] = "";
+        }
+    });
 
     let lastkey = "lastCheckout";
 
     if(currentLocalObj.hasOwnProperty(lastkey)){
         console.log("existe last checkout, agregandolo al final del nuevo objeto");      
         newObject[lastkey] = currentLocalObj[lastkey];
-        // console.log(JSON.stringify(newObject));
+    }else{
+        newObject[lastkey] = "No Checkout.";
     }
 
     console.log("updated localstorage acording to text file");
-    localStorage.setItem(lectureKey, JSON.stringify(newObject));
+    localStorage.setItem(lectureObj.id, JSON.stringify(newObject));
 
     return newObject;
 }
@@ -381,6 +381,10 @@ function FlashSetButton(lectureObj, ammount)
     let stringKey = lectureObj.name; 
     //aqui crear pagina con informacion de set
     app.innerHTML = '';
+
+    //lo primero que hago es checkear si existe un objeto local
+    //esto me retorna un objeto local actualizado
+    let localStorageObject = GetLocalStorageObject(lectureObj);
 
     //Creacion titulo
     let lectureTitle = document.createElement('h1');
@@ -420,7 +424,7 @@ function FlashSetButton(lectureObj, ammount)
     let lastCheckoutTextDiv = CreateElement('div', buttonsContainer);
     let lastCheckoutText = CreateElement('span', lastCheckoutTextDiv);
     lastCheckoutText.setAttribute('id', 'last-check-text-term-page');
-    let localStorageObject = GetLocalStorageObject(lectureObj);
+    
     lastCheckoutText.textContent = "Last Checkout: " + localStorageObject['lastCheckout'];  
     lastCheckoutTextDiv.classList.add('float-md-end');
 
@@ -439,27 +443,29 @@ function FlashSetButton(lectureObj, ammount)
     });
 }
 
-//FIX cambiar nombre a create ? y return el que existe si no crear uno
-/**Return el objeto de local storage, si no existe lo crea, incluyendo la key 'lastCheckout*/
+/**Return el objeto de local storage, si no existe lo crea, incluyendo la key 'lastCheckout
+ * Si existe, lo revisa por actualizaciones y lo returna.
+*/
 function GetLocalStorageObject(lectureObj){
-    //FIX aqui deberia aprovechar de crearlo
-    const learnedAmountString = localStorage.getItem(lectureObj.id);
-    
-    if(learnedAmountString == null ){
-        let lectureObjString = CreateLocalStorageObject(lectureObj);
-        let lectureObject = JSON.parse(lectureObjString);
+    //intento obtener una referencia al objeto local basado en el id
+    let localStorageString  = localStorage.getItem(lectureObj.id);
+    let localStorageObject = {};
+    //si no existe
+    if(localStorageString  == null ){       
+        localStorageString = CreateLocalStorageObject(lectureObj);
+        let lectureObject = JSON.parse(localStorageString);
         lectureObject.lastCheckout = "No Checkout";
-        lectureObjString = JSON.stringify(lectureObject);
-        localStorage.setItem(lectureObj.id, lectureObjString);
+        localStorageString = JSON.stringify(lectureObject);
+        localStorage.setItem(lectureObj.id, localStorageString);
+        localStorageObject = JSON.parse(localStorageString);
+    }else{
+        //si existe aprovechar de checkear por updates;
+        let lectureObject = JSON.parse(localStorageString);
+        localStorageObject = CheckUpdates(lectureObj, lectureObject);
     }
 
-    const localStorageString = localStorage.getItem(lectureObj.id);
-    const localStorageObject = JSON.parse(localStorageString);
+    // localStorageString = localStorage.getItem(lectureObj.id);
     return localStorageObject;
-}
-
-function isObjEmpty (obj) {
-    return Object.keys(obj).length === 0;
 }
 
 /**
@@ -469,7 +475,8 @@ function isObjEmpty (obj) {
  */
 function CalculatePercentageLearned(id){
     console.log("aqui estoy calculando el porcentage de learned desde una funcion propia");
-    
+    //Cuando llego aqui ya hay un objeto local y actualizado
+
     //el total de terminos
     let total = 0;
     let tempObj = lectures.find((lecture) => lecture.id == id);
@@ -479,24 +486,18 @@ function CalculatePercentageLearned(id){
         total = tempObj.termList.length;
     }
     
-    //trato de obtener el objeto de total basado en la id
     const learnedAmountStringObj = localStorage.getItem(id);
-
-    if(learnedAmountStringObj != null){
-        const currentLocalObj = JSON.parse(learnedAmountStringObj);   
+    const currentLocalObj = JSON.parse(learnedAmountStringObj);   
            
-        let percent = 0;
-        let amount = 0;
-        for(let [key, value] of Object.entries(currentLocalObj)){
-            if(value ==="learned") amount++;
-        }
-
-        percent = Math.trunc((amount / total) * 100);
-
-        return percent;
-    }else {
-        return 0;
+    let percent = 0;
+    let amount = 0;
+    for(let [key, value] of Object.entries(currentLocalObj)){
+        if(value ==="learned") amount++;
     }
+
+    percent = Math.trunc((amount / total) * 100);
+
+    return percent;   
 }
 
 function OnLearnLecture(lectureObj){
@@ -599,7 +600,8 @@ function LearnLecture(lectureObj){
 
     //cuando termino de crear la pagina learn 
     //checkeo por primera vez si hay algo en local storage
-    CheckLearnStatus(lectureObj, 0);
+    let currentTermId = GetTermId(lectureObj.termList, promptText.textContent);
+    CheckLearnStatus(lectureObj, currentTermId);
 
     noKnowledgeButton.addEventListener('click', (event) => ClickKnowledgeButton(event, lectureObj, "learning"));
     knowledgeButton.addEventListener('click', (event) => ClickKnowledgeButton(event, lectureObj, "learned"));
@@ -743,13 +745,13 @@ function CheckoutLecture(event, lectureObj){
 
 /**Lo llamo cuando creo la pagina de learn por primera vez,
  * tambien cuando cambio de card
+ * Actualiza los botones de knowledge
  */
-function CheckLearnStatus(lectureObj, termIndex){
+function CheckLearnStatus(lectureObj, termId){
     let currentString;
     let currentObject;
-    let currentLectureId = lectureObj.id;
 
-    currentString = localStorage.getItem(currentLectureId);
+    currentString = localStorage.getItem(lectureObj.id);
     currentObject = JSON.parse(currentString);
 
     let prompt = document.querySelector('.prompt').firstChild;
@@ -757,7 +759,7 @@ function CheckLearnStatus(lectureObj, termIndex){
 
     //basado en el id del termino actual, buscar el knowledge
     //en el local storage
-    switch (currentObject[termIndex]) {
+    switch (currentObject[termId]) {
         case "learned": console.log("aqui cambio el boton learned");
             ChangeKnowledgeButtonString("learned");
             break;
@@ -811,28 +813,6 @@ function ChangeKnowledgeButtonElem(event, lectureObj, tag, id){
     UpdateLocalStorage(lectureObj, tag, id);
 }
 
-function GetTermId(termArray, term){
-    console.log("get term id");
-    console.log(termArray);
-    console.log(term);
-    let id = -1;
-
-    for (let index = 0; index < termArray.length; index++) {
-        if(termArray[index].jap == term){
-            console.log("found the term at index: "+ index);
-            id = termArray[index].id;
-            break;
-        }
-    }
-
-    if(id < 0){
-        console.log("hubo un error y no se encontro el termino dentro del array");
-    }else{
-        console.log("id encontrado " + id);
-        return id;
-    }
-}
-
 /**
  * Es llamado cuando apreto un boton de knowledge
  */
@@ -872,17 +852,16 @@ function UpdateLocalStorage(lectureObj, tag, id){
 
     //una vez actualizado el local storage deberia rehacer o actualizar la barra de progreso
     console.log("veces que busque un key en local storage:" + counter);
-    UpdateProgressBar(counter, tag);
 }
 
 /**
  * Se llama cuando termino de actualizar el local storage object
  */
-function UpdateProgressBar(counter, classToAdd){
-    let allProgressItem = document.getElementsByClassName('progress-bar-item');
-    let progressBar = document.querySelector('.progress-bar-josue');
-    // let progressItem = progressBar.childNodes[counter];
-    let progressItem =  allProgressItem[counter];
+function UpdateProgressBar(progressItem, classToAdd){
+    // let allProgressItem = document.getElementsByClassName('progress-bar-item');
+    // let progressBar = document.querySelector('.progress-bar-josue');
+    // // let progressItem = progressBar.childNodes[counter];
+    // let progressItem =  allProgressItem[counter];
 
     progressItem.classList.remove('learning-progress');
     progressItem.classList.remove('learned-progress');
@@ -907,12 +886,17 @@ function UpdateProgressBar(counter, classToAdd){
 function ClickKnowledgeButton(event, lectureObj, tag){
     //buscar ambos botones y sacarle el checked
     let promptText = document.getElementById("prompt-text").textContent;
-    let currentTermId = GetTermId(lectureObj.termList, promptText)
+    let currentTermId = GetTermId(lectureObj.termList, promptText);
+    console.log("current term id is : " + currentTermId);
+    
+    let progressItem = document.querySelector(".progress-item-current");
+    UpdateProgressBar(progressItem, tag);
+
     ChangeKnowledgeButtonElem(event, lectureObj, tag, currentTermId);
 
     DisableKnowledgeButtons();
     
-    nextTermTimeoutId = setTimeout(() => ShowNextTerm(1, lectureObj), 1000); 
+    nextTermTimeoutId = setTimeout(() => ShowNextTerm(1, lectureObj, currentTermId), 1000); 
     console.log('called shownextterm with timeout');  
 }
 
@@ -1025,8 +1009,10 @@ function ShowNextTerm(dir, lectureObj){
     //temp actualizar counter
     UpdateCounter(termsArray.length);
 
+    let currentTermId = GetTermId(lectureObj.termList, promptText.textContent);
+
     //cada vez que cambio de card revisar si existe algo en local storage
-    CheckLearnStatus(lectureObj, termIndex);
+    CheckLearnStatus(lectureObj, currentTermId);
 }
 
 // function removeSelectedProgressItem(index){
@@ -1178,6 +1164,12 @@ function FilterByContent(filter){
     let sets = [];
     let textButtonContent;
 
+    //por cada objeto en lectures
+    lectures.forEach(lecture => {
+        lecture.termList.forEach(term => {
+            
+        });
+    });
     //for each pair in objSets
     for(const [key, value] of Object.entries(objSets)){
         console.log("leyendo una leccion");
@@ -1270,4 +1262,30 @@ function ReturnAsString(text){
 //variable name helper
 const varToString = varObj => Object.keys(varObj)[0];
 
+function isObjEmpty (obj) {
+    return Object.keys(obj).length === 0;
+}
+
+/**Busca por todo el array y compara la palabra 'term' con el 'jap' o 'esp' de los objetos */
+function GetTermId(termArray, term){
+    console.log("get term id");
+    console.log(termArray);
+    console.log(term);
+    let id = -1;
+
+    for (let index = 0; index < termArray.length; index++) {
+        if(termArray[index].jap == term || termArray[index].esp == term){
+            console.log("found the term at index: "+ index);
+            id = termArray[index].id;
+            break;
+        }
+    }
+
+    if(id < 0){
+        console.log("hubo un error y no se encontro el termino dentro del array");
+    }else{
+        console.log("id encontrado " + id);
+        return id;
+    }
+}
 
