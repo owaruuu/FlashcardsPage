@@ -274,7 +274,7 @@ function CreateHomepageApp(container){
         percent = "0";
       } else {
         currentLocalObj = JSON.parse(learnedAmountStringObj);
-        console.log("current local storage object");
+        console.log("current local storage object for this lecture");
         console.log(learnedAmountStringObj);
 
         let amount = 0;
@@ -636,35 +636,73 @@ function PopulateProgressBar(parent, lectureObj){
     leftDiv.classList.add('d-flex', 'flex-grow-1');
     rightDiv.classList.add('d-flex', 'flex-grow-1');
         
-    //Por cada valor('learning'o'learned') 
-    //creo un cuadrado y le doy su clase
-    for(let [key, value] of Object.entries(currentLocalObj)){
+
+    //Por cada termino en el array termlist(array de objetos con los terminos)
+    //crear un cuadrado y con el id de ese termino buscar el valor
+    //en el objeto local
+    lectureObj.termList.forEach(term => {
         if(counter > half){
             afterHalf = true;
         }
 
         let boxParent = afterHalf ? rightDiv : leftDiv;
 
-        switch (value){
+        let knowledgeValue = currentLocalObj[term.id];
+
+        let progressBarItem;
+
+        switch (knowledgeValue){
             case "learned":
-                let progressBarItemLearned = CreateElement('div', boxParent);
-                progressBarItemLearned.classList.add('learned-progress', 'progress-bar-item');  
+                progressBarItem = CreateElement('div', boxParent);
+                progressBarItem.classList.add('learned-progress', 'progress-bar-item');  
                 break;
             case "learning":
-                let progressBarItemLearning = CreateElement('div', boxParent);
-                progressBarItemLearning.classList.add('learning-progress', 'progress-bar-item');  
+                progressBarItem = CreateElement('div', boxParent);
+                progressBarItem.classList.add('learning-progress', 'progress-bar-item');  
                 break;
             case "":
-                let progressBarItemNone = CreateElement('div', boxParent);
-                progressBarItemNone.classList.add('no-progress', 'progress-bar-item');  
+                progressBarItem = CreateElement('div', boxParent);
+                progressBarItem.classList.add('no-progress', 'progress-bar-item');  
                 break;
             default:
+                //FIX aqui podria crear una caja vacia 
                 console.log('no encontre un termino en el local obj'); 
+                console.log("se procede a crear una caja nueva");
+                progressBarItem = CreateElement('div', boxParent);
+                progressBarItem.classList.add('no-progress', 'progress-bar-item'); 
                 break;
         }
 
         counter++;
-    }
+    });
+
+    // for(let [key, value] of Object.entries(currentLocalObj)){
+    //     if(counter > half){
+    //         afterHalf = true;
+    //     }
+
+    //     let boxParent = afterHalf ? rightDiv : leftDiv;
+
+    //     switch (value){
+    //         case "learned":
+    //             let progressBarItemLearned = CreateElement('div', boxParent);
+    //             progressBarItemLearned.classList.add('learned-progress', 'progress-bar-item');  
+    //             break;
+    //         case "learning":
+    //             let progressBarItemLearning = CreateElement('div', boxParent);
+    //             progressBarItemLearning.classList.add('learning-progress', 'progress-bar-item');  
+    //             break;
+    //         case "":
+    //             let progressBarItemNone = CreateElement('div', boxParent);
+    //             progressBarItemNone.classList.add('no-progress', 'progress-bar-item');  
+    //             break;
+    //         default:
+    //             console.log('no encontre un termino en el local obj'); 
+    //             break;
+    //     }
+
+    //     counter++;
+    // }
     
     let allProgressItem = document.getElementsByClassName('progress-bar-item');
     let firstProgressItem = allProgressItem[0];

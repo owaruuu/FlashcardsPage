@@ -8,7 +8,6 @@ const lectures = [
       { id: 2, jap: "Termino3", kanji: "", esp: "Respuesta3" },
     ],
   },
-
   {
     id: "1",
     name: "Lecture 2",
@@ -16,6 +15,16 @@ const lectures = [
       { id: 0, jap: "Termino1", kanji: "kanji1", esp: "Respuesta1" },
       { id: 1, jap: "Termino2", kanji: "", esp: "Respuesta2" },
       { id: 2, jap: "Termino3", kanji: "kanji2", esp: "Respuesta3" },
+    ],
+  },
+  {
+    id: "2",
+    name: "Lecture 3",
+    termList: [
+      { id: 0, jap: "Termino1", kanji: "", esp: "Respuesta1" },
+      { id: 1, jap: "Termino2", kanji: "", esp: "Respuesta2" },
+      { id: 2, jap: "Termino3", kanji: "", esp: "Respuesta3" },
+      { id: 3, jap: "Termino4", kanji: "kanji 4", esp: "Respuesta4" },
     ],
   },
 ];
