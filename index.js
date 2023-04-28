@@ -481,11 +481,11 @@ function FlashSetButton(lectureObj, ammount)
     container.classList.add('set-container','xwidth','xwidth-md');
     app.appendChild(container);
 
-    let cardArray = Object.values(lectureObj.termList);
+    let cardArray = lectureObj.termList;
     // let cardArray2 = Object.values(objSets[stringKey]);
 
     //create each card
-    cardArray.forEach(term => {
+    lectureObj.termList.forEach(term => {
         console.log(term);
         CreatePairCard(term, container);
     });
@@ -629,20 +629,24 @@ function LearnLecture(lectureObj){
     let termsLenght = lectureObj.termList.length;
     // let [key, value] = Object.entries(termObject)[0];
 
-
-
-    if(lectureObj.termList[0].extra !== ""){
-        promptText.textContent = lectureObj.termList[0].term + "（" + lectureObj.termList[0].extra+ "）";
-    }else{
-        promptText.textContent = lectureObj.termList[0].term;
-    }
+   
     // promptText.textContent = lectureObj.termList[0].term;
 
     promptText.classList.add('align-self-center');
     promptText.setAttribute('id', 'prompt-text');
     promptText.setAttribute('data-termid', lectureObj.termList[0].id);
     answerPlaceholder.textContent = "Click to reveal";
-    answerText.textContent = lectureObj.termList[0].answer;
+
+    //Aqui populo la primera card cuando creo la pagina learn
+    let promptTextValue = lectureObj.termList[termIndex].term;
+    let answerTextValue = lectureObj.termList[termIndex].answer;
+
+    if(lectureObj.termList[termIndex].extra !== ""){
+        promptTextValue += "（" + lectureObj.termList[termIndex].extra + "）";
+    };
+
+    promptText.textContent = options.flipped ? answerTextValue : promptTextValue;
+    answerText.textContent = options.flipped ? promptTextValue : answerTextValue;
 
     //temp counter section
     let counterDiv = CreateElement('div', app);
@@ -1052,11 +1056,11 @@ function ShowNextTerm(dir, lectureObj){
     answerPlaceholder.textContent = "Click to reveal";
 
     //populo el term
-    if(termsArray[termIndex].extra !== ""){
-        promptText.textContent = termsArray[termIndex].term + "（" + termsArray[termIndex].extra+ "）";
-    }else{
-        promptText.textContent = termsArray[termIndex].term;
-    }
+    // if(termsArray[termIndex].extra !== ""){
+    //     promptText.textContent = termsArray[termIndex].term + "（" + termsArray[termIndex].extra+ "）";
+    // }else{
+    //     promptText.textContent = termsArray[termIndex].term;
+    // }
 
     promptText.classList.add('align-self-center');
     promptText.setAttribute('id', 'prompt-text');
@@ -1077,7 +1081,8 @@ function ShowNextTerm(dir, lectureObj){
     };
 
     promptText.textContent = options.flipped ? answerTextValue : promptTextValue;
-    answer.textContent = options.flipped ? promptTextValue : answerTextValue;;
+    answer.textContent = options.flipped ? promptTextValue : answerTextValue;
+    //fin escribir el contenido card
 
     //reset botones
     //buscar informacion guardada sobre boton
@@ -1162,7 +1167,7 @@ function CreatePairCard(termObj, parent){
     container.appendChild(keyDiv);
 
     if(termObj.extra !== ""){
-        keyDiv.textContent = termObj.term + "（" + termObj.extra+ "）";
+        keyDiv.textContent = termObj.term + "（" + termObj.extra + "）";
     }else{
         keyDiv.textContent = termObj.term;
     }
@@ -1379,4 +1384,24 @@ function GetTermId(termArray, term){
         return id;
     }
 }
+
+function shuffleArray(array) {
+    let currentIndex = array.length,
+      randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+  
+    return array;
+  }
 
