@@ -2,7 +2,7 @@
 
 "use strict";
 
-import { lectures } from "./lectures.js";
+import { lectures, options } from "./lectures.js";
 // import {ReplaceState, PushHistoryState} from "./history.js";
 
 const titleButton = document.getElementById('title-btn');
@@ -202,9 +202,56 @@ let leccion2Storage = {
 
 //FIN seccion local storage
 
-CreateHomepageApp(setContainer );
+CreateHomepageApp(setContainer);
+
+function FlipTerms(event){
+    console.log("the new value on the switch is: " + event.target.checked);
+    console.log("fliping terms");
+
+    //FIX esto deberia vivir en el local storage ??
+    //cambiar options object
+    options.flipped = event.target.checked;
+    console.log("new options flipped value is: " + options.flipped);
+
+    //actualizar card
+    //necesito una referencia al lecture object actual
+    let title = document.querySelector('.title-div').childNodes[0];
+    console.log(title);
+    let currentLecture = GetLecture(title.textContent);
+    let promptText = document.querySelector('#prompt-text');
+    let answerText = document.querySelector('#answer-text');
+
+    let promptTextValue = currentLecture.termList[termIndex].term;
+    let answerTextValue = currentLecture.termList[termIndex].answer;
+
+    if(currentLecture.termList[termIndex].extra !== ""){
+        promptTextValue += "（" + currentLecture.termList[termIndex].extra + "）";
+    };
+
+    promptText.textContent = options.flipped ? answerTextValue : promptTextValue;
+    answerText.textContent = options.flipped ? promptTextValue : answerTextValue;
+};
+
+function GetLecture(lectureTitle){
+    let foundLecture = {};
+    for (let index = 0; index < lectures.length; index++) {
+        if(lectures[index].name == lectureTitle){
+            console.log("found lecture?");
+            foundLecture = lectures[index];
+            break;
+        }
+    }
+    return foundLecture;
+}
 
 function CreateHomepageApp(container){
+    //setear switchs events
+    let flipSwitch = document.getElementById('flipTermsSwitch');
+    console.log(flipSwitch);
+    let randomSwitch = document.getElementById('randomSwitch');
+    console.log(randomSwitch);
+    flipSwitch.addEventListener('click', FlipTerms);
+
     //crear barra buscar
     let searchDiv = document.createElement('div');
     searchDiv.classList.add('searchContainer');
@@ -940,15 +987,15 @@ function ShowNextTerm(dir, lectureObj){
     //despues la destruyo
     setTimeout(() => DeleteElement(bigCard), 300);
     
-    //necesito buscar el siguiente termino y popular la tarjeta
-    //array de terminos
-    let termsArray = lectureObj.termList;
-
     //referencia a la barra y selecciono el cuadrado actual basado en termIndex
     let allProgressItem = document.getElementsByClassName('progress-bar-item');
     let progressItem = allProgressItem[termIndex];
     //le saco la clase que le da el borde amarillo
     progressItem.classList.toggle('progress-item-current');
+
+    //necesito buscar el siguiente termino y popular la tarjeta
+    //array de terminos
+    let termsArray = lectureObj.termList;
 
     //modifico el termIndex basado en la direccion de la flecha
     if(termIndex + dir == termsArray.length){
@@ -1020,7 +1067,17 @@ function ShowNextTerm(dir, lectureObj){
 
     let answer = document.querySelector('.answer');
     answer.classList.add('hide');
-    answer.textContent = termsArray[termIndex].answer;
+
+    //aqui escribo el contenido a la tarjeta basado en la opcion
+    let promptTextValue = termsArray[termIndex].term;
+    let answerTextValue = termsArray[termIndex].answer;
+
+    if(termsArray[termIndex].extra !== ""){
+        promptTextValue += "（" + termsArray[termIndex].extra + "）";
+    };
+
+    promptText.textContent = options.flipped ? answerTextValue : promptTextValue;
+    answer.textContent = options.flipped ? promptTextValue : answerTextValue;;
 
     //reset botones
     //buscar informacion guardada sobre boton

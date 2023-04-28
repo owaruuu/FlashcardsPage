@@ -1,3 +1,8 @@
+let options = {
+  flipped : false,
+  random : false,
+}
+
 //el  orden de los objetos es como apareceran en la pagina
 const lectures = [
   {
@@ -30,7 +35,7 @@ const lectures = [
   },
 ];
 
-export { lectures };
+export { lectures, options };
 
 //el localstorage es un objeto que en basado en keys guarda objetos
 let local = {
