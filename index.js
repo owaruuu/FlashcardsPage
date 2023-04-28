@@ -71,6 +71,7 @@ function Render(state){
 }
 //Fin Seccion History
 
+/**representa el contador del progress bar*/
 var termIndex = 0;
 var termId = 0;
 
@@ -519,10 +520,15 @@ function LearnLecture(lectureObj){
     app.innerHTML = '';
 
     let titleDiv = CreateElement('div', app);
-    titleDiv.classList.add('title-div');
+    titleDiv.classList.add('title-div', 'd-flex', 'flex-column', 'flex-md-row');
 
     let title = CreateElement('h1', titleDiv);
     title.textContent = lectureObj.name;
+
+    let optionsBtn = CreateElement('button', titleDiv);
+    optionsBtn.textContent = "Options";
+    optionsBtn.setAttribute('data-bs-toggle', 'modal');
+    optionsBtn.setAttribute('data-bs-target', '#exampleModal');
 
     let progressBar = CreateElement('div', app);
     progressBar.classList.add('progress-bar-josue', 'd-flex', 'flex-column', 'flex-lg-row');
@@ -575,11 +581,21 @@ function LearnLecture(lectureObj){
     // let termObject = Object.values(objSets[lectureKey])[0];
     let termsLenght = lectureObj.termList.length;
     // let [key, value] = Object.entries(termObject)[0];
-    promptText.textContent = lectureObj.termList[0].jap;
+
+
+
+    if(lectureObj.termList[0].extra !== ""){
+        promptText.textContent = lectureObj.termList[0].term + "（" + lectureObj.termList[0].extra+ "）";
+    }else{
+        promptText.textContent = lectureObj.termList[0].term;
+    }
+    // promptText.textContent = lectureObj.termList[0].term;
+
     promptText.classList.add('align-self-center');
     promptText.setAttribute('id', 'prompt-text');
+    promptText.setAttribute('data-termid', lectureObj.termList[0].id);
     answerPlaceholder.textContent = "Click to reveal";
-    answerText.textContent = lectureObj.termList[0].esp;
+    answerText.textContent = lectureObj.termList[0].answer;
 
     //temp counter section
     let counterDiv = CreateElement('div', app);
@@ -600,7 +616,7 @@ function LearnLecture(lectureObj){
 
     //cuando termino de crear la pagina learn 
     //checkeo por primera vez si hay algo en local storage
-    let currentTermId = GetTermId(lectureObj.termList, promptText.textContent);
+    let currentTermId = GetTermId(lectureObj.termList, lectureObj.termList[0].term);
     CheckLearnStatus(lectureObj, currentTermId);
 
     noKnowledgeButton.addEventListener('click', (event) => ClickKnowledgeButton(event, lectureObj, "learning"));
@@ -885,8 +901,8 @@ function UpdateProgressBar(progressItem, classToAdd){
 //necesito sacarle a los dos las clases y desactivarlos
 function ClickKnowledgeButton(event, lectureObj, tag){
     //buscar ambos botones y sacarle el checked
-    let promptText = document.getElementById("prompt-text").textContent;
-    let currentTermId = GetTermId(lectureObj.termList, promptText);
+    // let currentTermId = document.getElementById("prompt-text").dataset.termid;
+    let currentTermId = GetTermId(lectureObj.termList, lectureObj.termList[termIndex].term);
     console.log("current term id is : " + currentTermId);
     
     let progressItem = document.querySelector(".progress-item-current");
@@ -916,23 +932,25 @@ function DisableKnowledgeButtons(){
 function ShowNextTerm(dir, lectureObj){
     console.log('changing term');
 
+    //obtengo el card actual y le doy la clase que lo hace moverse
     let bigCard = document.querySelector('.big-card');
     const className = dir === -1 ? "disappear-right" : "disappear-left";
     bigCard.classList.add(className);
-    //bigCard.classList.add('disappear-right'); //activar despues
+
+    //despues la destruyo
     setTimeout(() => DeleteElement(bigCard), 300);
     
     //necesito buscar el siguiente termino y popular la tarjeta
-    //let currentLecture = document.querySelector('.title-div').firstChild.textContent;
+    //array de terminos
     let termsArray = lectureObj.termList;
 
+    //referencia a la barra y selecciono el cuadrado actual basado en termIndex
     let allProgressItem = document.getElementsByClassName('progress-bar-item');
     let progressItem = allProgressItem[termIndex];
+    //le saco la clase que le da el borde amarillo
     progressItem.classList.toggle('progress-item-current');
 
-    // removeSelectedProgressItem(termIndex);
-    // console.log('called remove selected item');
-
+    //modifico el termIndex basado en la direccion de la flecha
     if(termIndex + dir == termsArray.length){
         termIndex = 0;
     }else if(termIndex + dir < 0){
@@ -941,17 +959,15 @@ function ShowNextTerm(dir, lectureObj){
         termIndex += dir;
     }
 
+    //seleccion el siguiente term con el index actualizado
     let termObj = termsArray[termIndex];
     console.log('este es el numero index: ' + termIndex);
 
+    //le doy el borde amarillo a la siguiente caja 
     updateSelectedProgressItem(termIndex);
 
     console.log('este es el obj par prompt/meaning');
     console.log(termObj);
-
-    let japValue = termsArray[termIndex].jap;
-    let espValue = termsArray[termIndex].esp;
-    let [key, value] = Object.entries(termObj)[0];
 
     //FIX aqui buscar el termino actual y basado en 'knowledge'
     //modificar las clases de los botones de abajo
@@ -988,18 +1004,23 @@ function ShowNextTerm(dir, lectureObj){
     secondLabel.textContent = "Answer";
     answerPlaceholder.textContent = "Click to reveal";
 
-    //FIX //popular datos
-    // prompt = document.querySelector('.prompt').firstChild;
-    promptText.textContent = japValue;
+    //populo el term
+    if(termsArray[termIndex].extra !== ""){
+        promptText.textContent = termsArray[termIndex].term + "（" + termsArray[termIndex].extra+ "）";
+    }else{
+        promptText.textContent = termsArray[termIndex].term;
+    }
+
     promptText.classList.add('align-self-center');
     promptText.setAttribute('id', 'prompt-text');
+    promptText.setAttribute('data-termid', termsArray[termIndex].id);
 
     let placeholder = document.querySelector('.answer-placeholder');
     placeholder.classList.remove('hide');
 
     let answer = document.querySelector('.answer');
     answer.classList.add('hide');
-    answer.textContent = espValue;
+    answer.textContent = termsArray[termIndex].answer;
 
     //reset botones
     //buscar informacion guardada sobre boton
@@ -1009,7 +1030,8 @@ function ShowNextTerm(dir, lectureObj){
     //temp actualizar counter
     UpdateCounter(termsArray.length);
 
-    let currentTermId = GetTermId(lectureObj.termList, promptText.textContent);
+    //obtengo el id del termino actual
+    let currentTermId = GetTermId(lectureObj.termList, termsArray[termIndex].term);
 
     //cada vez que cambio de card revisar si existe algo en local storage
     CheckLearnStatus(lectureObj, currentTermId);
@@ -1082,15 +1104,15 @@ function CreatePairCard(termObj, parent){
     keyDiv.classList.add('keyDiv', 'align-self-center', 'col-6');
     container.appendChild(keyDiv);
 
-    if(termObj.kanji !== ""){
-        keyDiv.textContent = termObj.jap + "（" + termObj.kanji+ "）";
+    if(termObj.extra !== ""){
+        keyDiv.textContent = termObj.term + "（" + termObj.extra+ "）";
     }else{
-        keyDiv.textContent = termObj.jap;
+        keyDiv.textContent = termObj.term;
     }
 
     //create value div
     let valueDiv = document.createElement('div');
-    valueDiv.textContent = termObj.esp;
+    valueDiv.textContent = termObj.answer;
     valueDiv.classList.add('valueDiv', 'align-self-center', 'text-end', 'col-6');
     container.appendChild(valueDiv);
 
@@ -1166,25 +1188,37 @@ function FilterByContent(filter){
 
     //por cada objeto en lectures
     lectures.forEach(lecture => {
+        console.log("leyendo una leccion");
         lecture.termList.forEach(term => {
-            
+            console.log(term.term);
+            if (
+              term.term.toLowerCase() == filter ||
+              term.extra.toLowerCase() == filter ||
+              term.extra.toLowerCase() == filter
+            ) {
+              sets.push(lecture.name);
+              console.log(
+                `found ${filter} in ${lecture.name} inside "objSets"`
+              );
+            }
         });
     });
+
     //for each pair in objSets
-    for(const [key, value] of Object.entries(objSets)){
-        console.log("leyendo una leccion");
-        for (const term of value) {
+    // for(const [key, value] of Object.entries(objSets)){
+    //     console.log("leyendo una leccion");
+    //     for (const term of value) {
             
-            const [innerKey, innerValue] = Object.entries(term)[0];
-            // console.log(innerValue);
-            if(innerKey.toLowerCase() === filter || innerValue.toLowerCase() === filter){
+    //         const [innerKey, innerValue] = Object.entries(term)[0];
+    //         // console.log(innerValue);
+    //         if(innerKey.toLowerCase() === filter || innerValue.toLowerCase() === filter){
                 
-                sets.push(key);
-                console.log(`found ${filter} in ${key} inside "objSets"`);
-                break;
-            }
-        }       
-    }
+    //             sets.push(key);
+    //             console.log(`found ${filter} in ${key} inside "objSets"`);
+    //             break;
+    //         }
+    //     }       
+    // }
 
     console.log("despues del found el return no me deja pasar aca ?");
 
@@ -1274,7 +1308,7 @@ function GetTermId(termArray, term){
     let id = -1;
 
     for (let index = 0; index < termArray.length; index++) {
-        if(termArray[index].jap == term || termArray[index].esp == term){
+        if(termArray[index].term == term || termArray[index.answer] == term){
             console.log("found the term at index: "+ index);
             id = termArray[index].id;
             break;
