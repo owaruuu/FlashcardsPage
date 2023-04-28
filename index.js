@@ -109,57 +109,6 @@ for (const lecture of setNameArray) {
   objSets[lecture] = [];
 }
 
-//FIX REMOVE
-const fetchExternalData = () => {
-  return Promise.all([
-    //   fetch("./files/Leccion 1.txt"),
-    fetch("./files/Leccion 1 Minna.txt"),
-    fetch("./files/clase 1 primer semestre 2023.txt"),
-    fetch("./files/Clase 1 Extra.txt"),
-    fetch("./files/clase 1 primer semestre 2023 kanji.txt"),
-    fetch("./files/Clase 1 Kanji Extra.txt"),
-    //   fetch("./files/prueba.txt"),
-  ]).then((results) => {
-    return Promise.all(results.map((result) => result.text()));
-  });
-};
-
-// fetchExternalData()
-// .then(result => {
-//     CheckForTabsAndSpaces(result);
-// })
-// .then(() => CreateHomepageApp(setContainer))
-
-//File Reader Section
-
-/**
- *  Llamado sobre el archivo de texto
- *  avanza por el texto separandolo en par de prompt y answer.
- * */
-function CheckForTabsAndSpaces(texts) {
-  for (let index = 0; index < texts.length; index++) {
-    let tempKey = "";
-    let tempValue = "";
-    let start = 0;
-
-    for (let j = 0; j < texts[index].length; j++) {
-      if (texts[index].substr(j, 1) === "\t") {
-        tempKey = texts[index].substr(start, j - start);
-        start = j;
-      }
-
-      if (texts[index].substr(j, 1) === "\n") {
-        tempValue = texts[index].substr(start + 1, j - start - 2); //el 2 es necesario para remover '/r/n' del texto
-        let tempObj = { [tempKey]: tempValue };
-        let tempArray = objSets[setNameArray[index]]; //IMPORTANT copias de arrays y objs apuntan a la misma memoria.
-        tempArray.push(tempObj); //IMPORTANT esto modifica el array dentro de objSets
-        start = j + 1;
-      }
-    }
-  }
-}
-//FIN seccion filereader
-
 CreateHomepageApp(setContainer);
 
 function FlipTerms(event) {
