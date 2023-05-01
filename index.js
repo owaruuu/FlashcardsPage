@@ -873,7 +873,7 @@ function ClickKnowledgeButton(event, lectureObj, tag) {
 
     nextTermTimeoutId = setTimeout(
         () => ShowNextTerm(1, lectureObj),
-        3000
+        900
     );
     console.log("called shownextterm with timeout");
 }
