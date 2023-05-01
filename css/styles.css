@@ -441,6 +441,39 @@ body.hasHover .learned:hover{
     }
 } 
 
+/* Options Menu */
+
+.form-check-label{
+    font-weight: 550;
+    
+}
+
+.form-check-p{
+    font-size: .9rem;
+    color: #6e6e6e;
+    padding-left: 10px;
+}
+
+/* Fin Options Menu */
+
+/* Override Bootstrap Clasess */
+
+.form-switch .form-check-input {
+    filter: hue-rotate(244deg)!important;
+}
+
+.modal-header {
+    background-color: rgb(245, 214, 244);
+}
+
+.btn-close {
+    /* filter: invert(100%); */
+    --bs-btn-close-opacity: 0.75;
+    --bs-btn-close-hover-opacity: 1;
+}
+
+/* Fin Override */
+
 /* custom boot classes */
 
 .xwidth{

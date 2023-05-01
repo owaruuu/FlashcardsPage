@@ -872,8 +872,8 @@ function ClickKnowledgeButton(event, lectureObj, tag) {
     DisableKnowledgeButtons();
 
     nextTermTimeoutId = setTimeout(
-        () => ShowNextTerm(1, lectureObj, currentTermId),
-        1000
+        () => ShowNextTerm(1, lectureObj),
+        3000
     );
     console.log("called shownextterm with timeout");
 }
@@ -922,18 +922,14 @@ function ShowNextTerm(dir, lectureObj) {
     }
 
     //seleccion el siguiente term con el index actualizado
-    let termObj = termsArray[termIndex];
+    // let termObj = termsArray[termIndex];
     console.log("este es el numero index: " + termIndex);
 
     //le doy el borde amarillo a la siguiente caja
     updateSelectedProgressItem(termIndex);
 
-    console.log("este es el obj par prompt/meaning");
-    console.log(termObj);
-
-    //FIX aqui buscar el termino actual y basado en 'knowledge'
-    //modificar las clases de los botones de abajo
-    let knowledge = Object.values(termObj)[1];
+    // console.log("este es el obj par prompt/meaning");
+    // console.log(termObj);
 
     //creacion de nueva carta
     let bigCardDiv = document.querySelector(".big-card-div");
