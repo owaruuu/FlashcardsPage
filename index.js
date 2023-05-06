@@ -1151,7 +1151,7 @@ function FilterByContent(filter) {
     lectures.forEach((lecture) => {
         console.log("leyendo una leccion");
         lecture.termList.forEach((term) => {
-            console.log(term.term);
+            //console.log(term.term);
             if (
                 term.term.toLowerCase() == filter ||
                 term.extra.toLowerCase() == filter ||
@@ -1162,24 +1162,6 @@ function FilterByContent(filter) {
             }
         });
     });
-
-    //for each pair in objSets
-    // for(const [key, value] of Object.entries(objSets)){
-    //     console.log("leyendo una leccion");
-    //     for (const term of value) {
-
-    //         const [innerKey, innerValue] = Object.entries(term)[0];
-    //         // console.log(innerValue);
-    //         if(innerKey.toLowerCase() === filter || innerValue.toLowerCase() === filter){
-
-    //             sets.push(key);
-    //             console.log(`found ${filter} in ${key} inside "objSets"`);
-    //             break;
-    //         }
-    //     }
-    // }
-
-    console.log("despues del found el return no me deja pasar aca ?");
 
     //aqui modificar la lista si sets tiene algo
     if (sets.length > 0) {
@@ -1210,6 +1192,12 @@ function FilterByContent(filter) {
                 }
             });
         }
+    }else{
+        //necesito mostrar el mensaje 
+        ResetFilter();
+        UpdateFoundText(`${sets.length} found.`);
+
+        //necesito devolver todos los botones
     }
 
     console.log(sets);
