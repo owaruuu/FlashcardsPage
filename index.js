@@ -1,5 +1,7 @@
 //jshint esversion:9
 
+//este es un cambio hecho en macs
+
 "use strict";
 
 import { lectures, options } from "./lectures.js";
