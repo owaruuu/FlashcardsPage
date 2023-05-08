@@ -361,13 +361,15 @@ body.hasHover .learned:hover{
     flex-direction: column;
     gap: 10px;
     margin: 10px 0 10px;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
 .pair-card-container{
     background: rgb(245, 214, 244);
     display: flex;
     justify-content: space-between;
-    padding: 3px;
+    padding: 14px;
     border-radius: 7px;
     border: #c1a304 solid 2px;
 }
@@ -375,6 +377,15 @@ body.hasHover .learned:hover{
 .keyDiv{
     border-right: 0.05rem solid black;
     min-width: 40%;
+    padding-right: 10px;
+}
+
+.valueDiv{
+    padding-left: 10px;
+}
+
+.keyDiv, .valueDiv{
+    font-size: clamp(.5rem, .4rem + 3vw, 1.5rem);
 }
 
 .txt-left{
@@ -385,9 +396,6 @@ body.hasHover .learned:hover{
     text-align: right;
 }
 
-.keyDiv, .valueDiv{
-    font-size: clamp(1rem, .6rem + 3vw, 1.5rem);
-}
 
 .disappear-right{
     animation-name: disappear-right;
@@ -500,6 +508,10 @@ body.hasHover .learned:hover{
 
     .valueDiv{
         padding-right: 5%;
+    }
+
+    .pair-card-container{
+        padding: 2px;
     }
 }
 
