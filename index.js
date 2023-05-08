@@ -1074,7 +1074,7 @@ function CreatePairCard(termObj, parent) {
     //create value div
     let valueDiv = document.createElement("div");
     valueDiv.textContent = termObj.answer;
-    valueDiv.classList.add("valueDiv", "align-self-center", "text-end", "col-6");
+    valueDiv.classList.add("valueDiv", "align-self-center", "col-6");
     container.appendChild(valueDiv);
 
     //FIX aqui devolver la estrella y hacerla funcionar
