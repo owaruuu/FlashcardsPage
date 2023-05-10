@@ -1106,7 +1106,7 @@ const lectures = [
     ],
   },
   {
-    id: "10",
+    id: "11",
     name: "Clase 3 Kanji",
     termList: [
       { id: 0, term: "音声", extra: "", answer: "おんせい / Sonido de voz" },
