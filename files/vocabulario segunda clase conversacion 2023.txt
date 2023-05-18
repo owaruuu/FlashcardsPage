@@ -1,0 +1,50 @@
+じこしょうかい	自己紹介	Presentarse a si mismo
+かきじゅん	書き順	Orden de trazos
+おとこ	漢	Hombre de hombres, Macho, Tipo duro.
+じょし	女子	Mujer, Niña
+だんし	男子	Hombre, Niño
+もじ	文字	Letra
+ぶん	文	Oracion
+ぶんしょう	文章	Ensayo（escrito）
+ぶんか	文化	Cultura
+こうがく	工学	Ingenieria
+やど	宿	Alojamiento, Posada
+しゅくはく	宿泊	Alojamiento
+とまります、とまる	泊まる	Alojarse
+しゅくだい	宿題	Tarea
+だいめい	題名	Titulo
+めいし	名刺	Tarjeta de negocio
+めいじん	名人	Experto, Maestro
+ゆうめい	有名	Famoso
+なまえ	名前	Nombre
+まえ	前	En frente de, Antes
+ぜんじつ	前日	Dia anterior
+いいます、いう	言う	Decir
+ことば	言葉	Palabra
+げんご	言語	Lenguaje, Idioma
+はなします、はなす	話す	Hablar
+かいわ	会話	Conversacion
+さくぶん	作文	Composicion(escritura)
+おくります、おくる	送る	Mandar algo, Enviar
+おきます、おきる	起きる	Despertar, Levantarse
+きりつ	起立	Ponerse de pie
+ねます、ねる	寝る	Dormir, Acostarse
+はしります、はしる	走る	Correr
+そう	走	Carrera
+のります、のる	乗る	Subirse(a un tren, bus, avion, etc.)
+じょうしゃ	乗車	Embarque(en Tren, Bus, etc.)
+しよう	使用	Uso
+どくしょ	読書	Lectura
+ききます、きく	聞く	Escuchar
+しんぶん	新聞	Diario(noticias)
+じぶん	自分	Uno mismo
+とき	時	Cuando, Tiempo
+じ	時	Hora
+わけます、わける	分ける	Dividir
+のみます、のむ	飲む	Beber
+いんしょく	飲食	Comer y beber
+あいだ	間	Espacio entre
+わたし	私	Yo
+しぶつ	私物	Objetos personales
+どうぶつ	動物	Animal
+うごきます、うごく	動く	Mover

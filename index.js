@@ -132,7 +132,8 @@ function RandomizeTerms(event) {
 
         //updateKnowledgebuttons
         let lectureObj = GetLecture(lectureName);
-        let currentTermId = GetTermId(currentTermList, currentTermList[termIndex].term)
+        // let currentTermId = GetTermId(currentTermList, currentTermList[termIndex].term);
+        let currentTermId = currentTermList[termIndex].id;
         CheckLearnStatus(lectureObj, currentTermId);
     } else {
         currentTermList = currentLectureObject.termList;
@@ -145,7 +146,8 @@ function RandomizeTerms(event) {
         PopulateBigCard();
 
         let lectureObj = GetLecture(lectureName);
-        let currentTermId = GetTermId(currentTermList, currentTermList[termIndex].term)
+        // let currentTermId = GetTermId(currentTermList, currentTermList[termIndex].term)
+        let currentTermId = currentTermList[termIndex].id;
         CheckLearnStatus(lectureObj, currentTermId);
     };
 }
@@ -571,10 +573,11 @@ function LearnLecture(lectureObj) {
 
     //cuando termino de crear la pagina learn
     //checkeo por primera vez si hay algo en local storage
-    let currentTermId = GetTermId(
-        currentTermList,
-        currentTermList[termIndex].term
-    );
+    // let currentTermId = GetTermId(
+    //     currentTermList,
+    //     currentTermList[termIndex].term
+    // );
+    let currentTermId = currentTermList[termIndex].id;
 
     CheckLearnStatus(lectureObj, currentTermId);
 
@@ -858,10 +861,14 @@ function UpdateProgressBar(progressItem, classToAdd) {
 
 //necesito sacarle a los dos las clases y desactivarlos
 function ClickKnowledgeButton(event, lectureObj, tag) {
-    let currentTermId = GetTermId(
-        lectureObj.termList,
-        currentTermList[termIndex].term
-    );
+    // let currentTermId = GetTermId(
+    //     lectureObj.termList,
+    //     currentTermList[termIndex].term
+    // );
+
+    let currentTermId = currentTermList[termIndex].id;
+
+    // console.log("current term id is : " + currentTermId);
     console.log("current term id is : " + currentTermId);
 
     let progressItem = document.querySelector(".progress-item-current");
@@ -989,10 +996,12 @@ function ShowNextTerm(dir, lectureObj) {
     UpdateCounter(termsArray.length);
 
     //obtengo el id del termino actual
-    let currentTermId = GetTermId(
-        lectureObj.termList,
-        currentTermList[termIndex].term
-    );
+    // let currentTermId = GetTermId(
+    //     lectureObj.termList,
+    //     currentTermList[termIndex].term
+    // );
+
+    let currentTermId = currentTermList[termIndex].id;
 
     //cada vez que cambio de card revisar si existe algo en local storage
     CheckLearnStatus(lectureObj, currentTermId);

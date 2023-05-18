@@ -1,0 +1,31 @@
+おんせい	音声	Voz
+しんぱい	心配	Preocupacion
+ねんれい	年齢	Edad
+あまい	甘い	Dulce(sabor)
+ほん	本	Libro
+しごと	仕事	Trabajo
+むし	虫	Insecto
+むし	無視	Ignoracion*
+きらい	嫌い	(algo) Odiado
+なま	生	Natural, Crudo
+なましぼり	生絞り	Recien exprimido
+うすい	薄い	Aguado
+こい	濃い	Concentrado
+ま	間	Tiempo, Pausa
+きる	切る	Cortar
+そうしん	送信	Envio correo
+わすれます、わすれる	忘れる	Olvidar
+おぼえます、おぼえる	覚える	Memorizar
+けんがく	見学	Aprender por la vista
+あさ	朝	Mañana(hora del dia)
+あさごはん	朝ごはん	Desayuno
+ちょうしょく	朝食	Desayuno
+ひる	昼	Mediodia
+ひるごはん	昼ごはん	Almuerzo
+ちゅうしょく	昼食	Almuerzo
+おわります、おわる	終わる	Terminar(intransitivo)
+おえます、おえる	終える	Terminar(transitivo)
+つながります、つながる	繋がる	Conectar(Intransitivo)
+つなげます、つなげる	繋げる	Conectar(transitivo)
+よてい	予定	Plan
+おなじ	同じ	Igual, Identico
