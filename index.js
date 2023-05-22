@@ -1160,12 +1160,17 @@ function FilterByContent(filter) {
     lectures.forEach((lecture) => {
         console.log("leyendo una leccion");
         lecture.termList.forEach((term) => {
+            let sepTerm = SeparateString(term.term.toLowerCase());
+            let sepExtra = SeparateString(term.extra.toLowerCase());
+            let sepAnsw = SeparateString(term.answer.toLowerCase());
             //console.log(term.term);
             if (
-                term.term.toLowerCase() == filter ||
-                term.extra.toLowerCase() == filter ||
-                term.extra.toLowerCase() == filter
+                sepTerm.includes(filter) ||
+                sepExtra.includes(filter) ||
+                sepAnsw.includes(filter) ||
+                term.answer.toLowerCase() == filter
             ) {
+                console.log(sepTerm, term.extra, term.answer, filter);
                 sets.push(lecture.name);
                 console.log(`found ${filter} in ${lecture.name} inside "objSets"`);
             }
@@ -1336,6 +1341,12 @@ function shuffleArray(array) {
     }
 
     return array;
+}
+
+function SeparateString(term){
+    let sep = term.split(/[、,()\s\/]/);
+    //console.log(`separated term: ${sep}`);
+    return sep;
 }
 
 //codigo Local Storage
