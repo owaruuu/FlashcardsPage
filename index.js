@@ -97,7 +97,6 @@ function FlipTerms(event) {
     //necesito una referencia al lecture object actual
     let title = document.querySelector(".title-div").childNodes[0];
     console.log(title);
-    let currentLecture = GetLecture(title.textContent);
     let promptText = document.querySelector("#prompt-text");
     let answerText = document.querySelector("#answer-text");
 
@@ -164,7 +163,8 @@ function CreateHomepageApp(container) {
     //crear barra buscar
     let searchDiv = document.createElement("div");
     searchDiv.classList.add("searchContainer");
-    app.appendChild(searchDiv);
+    app.insertBefore(searchDiv, container);
+    // app.appendChild(searchDiv);
 
     let searchLabel = document.createElement("label");
     searchLabel.classList.add("search-label");
@@ -187,7 +187,8 @@ function CreateHomepageApp(container) {
     let foundText = document.createElement("p");
     foundText.classList.add("foundText");
     foundDiv.appendChild(foundText);
-    app.appendChild(foundDiv);
+    // app.appendChild(foundDiv);
+    app.insertBefore(foundDiv, container);
     //Fin Seccion Busqueda
 
     lectures.forEach((lecture) => {
@@ -286,10 +287,10 @@ function CheckUpdates(lectureObj, currentLocalObj) {
 
     lectureObj.termList.forEach((term) => {
         if (currentLocalObj.hasOwnProperty(term.id)) {
-            console.log("contiene ya este key");
+            //console.log("contiene ya este key");
             newObject[term.id] = currentLocalObj[term.id];
         } else {
-            console.log("no contenia este key");
+            //console.log("no contenia este key");
             newObject[term.id] = "";
         }
     });
@@ -490,8 +491,6 @@ function LearnLecture(lectureObj) {
         "flex-lg-row"
     );
 
-
-
     PopulateProgressBar(progressBar, lectureObj.id);
 
     let middleDiv = CreateElement("div", app);
@@ -519,6 +518,16 @@ function LearnLecture(lectureObj) {
         ClickArrow(event, lectureObj)
     );
     rightArrow.setAttribute("data-direction", "right");
+
+    let redArrowDiv = CreateElement("div", app);
+    redArrowDiv.classList.add("red-arrow-div");
+    let redArrowText = CreateElement("p", redArrowDiv);
+    redArrowText.classList.add("red-arrow-text");
+    redArrowText.textContent = "Next Learning";
+    redArrowDiv.addEventListener("click", redArrowClick);
+
+    let redArrow = CreateElement("i", redArrowDiv);
+    redArrow.classList.add("fa-solid", "fa-angles-right", "fa-xl", "red-arrow-btn");
 
     bigCardDiv.classList.add("big-card-div", "m-2");
     bigCard.classList.add("big-card");
@@ -1245,7 +1254,178 @@ function CreateSelectElement(options) {
     return select;
 }
 
+function redArrowClick(){
+    console.log("red arrow click");
+
+    const lectureName = document.querySelector('.title-div').childNodes[0].textContent;
+    const currentLectureObject = GetLecture(lectureName);
+    let localStorageObject = GetLocalStorageObject(currentLectureObject);
+    console.log(localStorageObject);
+    console.log(currentTermList);
+
+    // let foundTerm = currentTermList.find(term => localStorageObject[term.id] == "learning", 25);
+    // console.log(foundTerm);
+
+    let currentTermId = document.getElementById("prompt-text").dataset.termid;
+ 
+    //encontrar el siguinte termino con "learning" en el local storage
+    //para eso paso por cada termino en el currentTermList y busco su id en el local storage
+    // let counter = 0;
+    // let startingIndex = 0;
+
+    // for (let i = startingIndex; counter < currentTermList.length; i++) {
+
+
+
+    // }
+
+    let nextIndex=FindNextRed(termIndex, currentTermList, localStorageObject);
+
+    if(nextIndex == -1){
+        alert("No more learning terms found.");
+    }else{
+        clearTimeout(nextTermTimeoutId);
+        ShowTerm(nextIndex, currentLectureObject);
+    }
+
+    
+    // for (const [index, term] of currentTermList.entries()) {     
+    //     // console.log("term: " + currentTermList[term.id].id); 
+    //     if(localStorageObject[term.id] == "learning" && term.id != currentTermId){
+    //         // if(currentTermId == term.id){
+    //         //     console.log("estamos en el mismo termino");
+    //         // }
+    //         console.log("found red term");
+    //         clearTimeout(nextTermTimeoutId);
+    //         ShowTerm(index);
+    //         return;
+    //     }  
+    // }
+}
+
+function ShowTerm(index, lectureObj){
+    console.log("moving to term " + index);
+    
+    let bigCard = document.querySelector(".big-card");
+    const className = "disappear-left";
+    bigCard.classList.add(className);
+
+    //despues la destruyo
+    setTimeout(() => DeleteElement(bigCard), 300);
+
+    //referencia a la barra y selecciono el cuadrado actual basado en termIndex
+    let allProgressItem = document.getElementsByClassName("progress-bar-item");
+    let progressItem = allProgressItem[termIndex];
+    //le saco la clase que le da el borde amarillo
+    progressItem.classList.toggle("progress-item-current");
+
+    termIndex = index;
+
+    //le doy el borde amarillo a la siguiente caja
+    updateSelectedProgressItem(index);
+
+    //creacion de nueva carta
+    let bigCardDiv = document.querySelector(".big-card-div");
+
+    let newCard = document.createElement("div");
+    bigCardDiv.insertBefore(newCard, bigCardDiv.children[0]);
+
+    let firstLabel = CreateElement("p", newCard);
+    let prompt = CreateElement("div", newCard);
+    let promptText = CreateElement("p", prompt);
+    let separator = CreateElement("div", newCard);
+    let answerDiv = CreateElement("div", newCard);
+    let answerPlaceholder = CreateElement("p", answerDiv);
+    let answerText = CreateElement("p", answerDiv);
+    let secondLabel = CreateElement("p", newCard);
+
+    newCard.classList.add("big-card");
+    firstLabel.classList.add("label", "txt-left");
+    secondLabel.classList.add("label", "txt-right");
+    prompt.classList.add("prompt", "flex-grow-1");
+    separator.classList.add("separator");
+    answerDiv.classList.add("answer-div", "flex-grow-1");
+    answerDiv.addEventListener("click", ClickAnswer);
+    answerPlaceholder.classList.add("answer-placeholder", "align-self-center");
+    answerPlaceholder.setAttribute("id", "answer-placeholder");
+    answerText.classList.add("answer", "align-self-center", "hide");
+    answerText.setAttribute("id", "answer-text");
+
+    firstLabel.textContent = "Term";
+    secondLabel.textContent = "Answer";
+    answerPlaceholder.textContent = "Click to reveal";
+
+    //populo el term
+    // if(termsArray[termIndex].extra !== ""){
+    //     promptText.textContent = termsArray[termIndex].term + "（" + termsArray[termIndex].extra+ "）";
+    // }else{
+    //     promptText.textContent = termsArray[termIndex].term;
+    // }
+
+    promptText.classList.add("align-self-center");
+    promptText.setAttribute("id", "prompt-text");
+    promptText.setAttribute("data-termid", currentTermList[index].id);
+
+    let placeholder = document.querySelector(".answer-placeholder");
+    placeholder.classList.remove("hide");
+
+    let answer = document.querySelector(".answer");
+    answer.classList.add("hide");
+
+    //aqui escribo el contenido a la tarjeta basado en la opcion
+    PopulateBigCardParameters(promptText, answer);
+
+    //temp actualizar counter
+    UpdateCounter(currentTermList.length);
+
+    let currentTermId = currentTermList[termIndex].id;
+
+    CheckLearnStatus(lectureObj, currentTermId);
+
+}
+
 //Helpers
+
+function FindNextRed(startingIndex, array, local){
+    console.log("entre a find next red");
+    console.log(startingIndex, array, local);
+        //buscar en un for el array
+    for (let i = startingIndex + 1; i < array.length; i++) {
+        if(local[array[i].id] == "learning"){
+            console.log(`encontre un red con el id ${i}`);
+            return i;
+        }
+    }
+
+    for (let i = 0; i < startingIndex; i++) {
+        if(local[array[i].id] == "learning"){
+            console.log(`encontre un red con el id ${i}`);
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+function FindInArray(value, array, startIndex){
+    let counter = 0;
+
+    for (let i = startIndex; counter < array.length; i++) {
+        if(i >= array.length){
+            i = 0;
+        }
+        console.log(`el index es : ${i} y el valor de counter es : ${counter} y el valor actual del array es : ${array[i]}`);
+
+        if(value == array[i]){
+            console.log("encontrado");
+            return i;
+        }
+        
+        counter++;
+    }
+
+    return -1;
+}
 
 /**Return el objeto de local storage, si no existe lo crea, incluyendo la key 'lastCheckout
  * Si existe, lo revisa por actualizaciones y lo returna.
