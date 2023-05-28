@@ -1,0 +1,47 @@
+これ kore	Este, Esta, Esto
+それ sore	Ese, Esa, Eso
+あれ are	Aquel, Aquella, Aquello
+この～ kono~	Este~, Esta~
+その～ sono~	Ese~, Esa~
+あの～ ano~	Aquel~, Aquella~
+ほん hon	Libro
+じしょ jisho	Diccionario
+ざっし zasshi	Revisata
+しんぶん shinbun	Periodico
+ノート no-to	Cuaderno
+てちょう techou	Agenda
+めいし meishi	Tarjeta de negocio
+カード ka-do	Tarjeta
+テレホンカード terehonka-do	Tarjeta de telefono
+えんぴつ enpitsu	Lapiz
+ボールペン bo-rupen	Boligrafo
+シャープペンシル sha-pupenshiru	Portaminas
+かぎ kagi	Llave, Clave
+とけい tokei	Reloj
+かさ kasa	Paraguas, Sombrilla
+かばん kaban	Valija, Bolso
+カセットテープ kasettote-pu	Cinta cassette
+テープレコーダー te-pureko-da-	Grabadora
+テレビ terebi	Television, Televisor
+ラジオ rajio	Radio
+カメラ kamera	Camera
+コンピューター konpyu-ta-	Computadora
+じどうしゃ jidousha	Automovil
+つくえ tsukue	Escritorio
+いす isu	Silla
+チョコレート chokore-to	Chocolate
+コーヒー ko-hi-	Cafe
+えいご eigo	El idioma ingles
+にほんご nihongo	El idioma japones
+～ご ~go	Idioma~
+なん nan	Que
+そう sou	Asi
+ちがいます。	chigaimasu No es asi, Equivocado
+そうですか。 soudesuka	Ah si ?
+あのう anou	Esto...(se usa para demostrar vacilacion)
+ほんのきもちです hon no kimochi desu	Es un obsequio modesto
+どうぞ douzo	Por favor, Aqui tiene
+どうも doumo	Gracias
+どうもありがとうございます。 doumo arigatougo zaimasu	Muchas gracias
+これからおせわになります。 korekara osewaninarimasu	Le agradezco de antemano su gentil apoyo.
+こちらこそよろしく。 kochirakoso yoroshiku	Yo tambien estoy encantado de conocerle.

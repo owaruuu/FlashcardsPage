@@ -1,0 +1,43 @@
+ここ koko	Aqui, Aca, Este lugar
+そこ soko	Ahi, Ese lugar
+あそこ asoko	Aquel lugar
+どこ doko	Donde, Que lugar
+こちら kochira	Por aqui, Este lugar (forma cortes de koko)
+そちら sochira	Por ahi, Ese lugar (forma cortes de soko)
+あちら achira	Por alli, Aquel lugar (forma cortes de asoko)
+どちら dochira	Por donde, Donde (forma cortes de doko)
+きゅうしつ kyuushitsu	Aula, Sala de clases
+しょくどう shokudou	Comeder
+じむしょ jimusho	Oficina
+かいぎしつ kaigishitsu	Sala de reuniones
+うけつけ uketsuke	Recepcion
+ロビー robi-	Lobi, Vestibulo
+へや heya	Habitacion, Cuarto
+トイレ toire、おてあらい otearai	Baño
+かいだん kaidan	Escaleras
+エレベーター erebe-ta-	Ascensor, Elevador
+エスカレーター esukare-ta-	Escalera mecanica
+[お]くに okuni	[su]Pais, Patria　
+かいしゃ kaisha	Empresa, Compañia
+うち uchi	Casa
+でんわ denwa	Telefono, Llamada telefonica
+くつ kutsu	Zapatos
+ネクタイ nekutai	Corbata
+ワイン wain	Vino
+たばこ tabako	Tabaco, Cigarrillos
+うりば uriba	Seccion
+ちか chika	Sotano
+～かい ~kai	~Piso
+なんがい nangai	Que piso
+～えん ~en	~yen
+いくら ikura	Cuanto (cantidad de dinero)
+ひゃく hyaku	Cien
+せん sen	Mil
+まん man	Diez mil
+すみません。 sumimasen.	Disculpe (empleado para atrar la atencion)
+～でございます。 ~de gozaimasu.	(forma cortes de desu)
+[～を]みせてください。 ~o(wo)misete kudasai.	Por favor muestreme~
+じゃ ja	Bueno, Entonces (se emplea al decidir comprar o pedir algo)
+[～を]ください ~o(wo) kudasai	Deme [~] por favor.
+イタリア itaria	Italia
+スイス suisu	Suiza

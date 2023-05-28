@@ -1,0 +1,58 @@
+おきます、おきる	okimasu, okiru	Levantarse
+ねます、ねる nemasu, neru	Acostarse, Ir a la cama
+はたらきます、はたらく hatarakimasu, hataraku	Trabajar
+やすみます、やすむ yasumimasu, yasumu	Descansar, Estar de vacaciones
+べんきょうします、べんきょうする benkyoushimasu, benkyousuru	Estudiar
+おわります、おわる owarimasu, owaru	Terminar
+デパート depa-to	Tienda departamento
+ぎんこう ginkou	Banco(institucion financiera)
+ゆうびんきょうく yuubinkyouku	Oficina de correos
+としょかん toshokan	Biblioteca
+びじゅつかん bijutsukan	Museo de arte
+いま ima	Ahora
+～じ ~ji	Las ~ horas
+～ふん、～ぷん ~fun, ~pun	~minutos
+はん han	~ y media
+なんじ nanji	Que hora?
+なんぷん nanpun	Que minuto?
+ごぜん gozen	de la manaña
+ごご gogo	de la tarde
+あさ asa	La mañana
+ひる hiru	Dia, Mediodia
+ばん、よる ban, yoru	Noche
+おととい ototoi	Anteayer
+きのう kinou	Ayer
+きょう kyou	Hoy
+あした ashita	Mañana
+あさって asatte	Pasado mañana
+けさ kesa	Esta mañana
+こんばん konban	Esta noche
+やすみ yasumi	Descanso, Dia libre, Feriado
+ひるやすみ hiruyasumi	Descanso de mediodia
+まいあさ maiasa	Todas las mañanas, Cada mañana
+まいばん maiban	Todas las noches, Cada noche
+まいにち mainichi	Todos los dias, Cada dia
+げつようび getsuyoubi	Lunes
+かようび kayoubi	Martes
+すいようび suiyoubi	Miercoles
+もくようび mokuyoubi	Jueves
+きんようび kinyoubi	Viernes
+どようび doyoubi	Sabado
+にちようび nichiyoubi	Domingo
+なんようび nanyoubi	Que dia de la semana
+ばんごう bangou	Numero
+なんばん nanban	Que numero
+～から ~kara	Desde~
+～まで ~made	Hasta~
+～と～ ~to~	Y (se emplea para conectar sustantivos)
+そちら sochira	Su lugar (el interlocutor o la entidad a la que pertenece este)
+たいへんですね。 taihendesune	lit. Le esta costando mucho! (se emplea para manifestar simpatia por la dificultad de otros)
+えーと e-to	Esto..., Bueno...
+おねがいします onegaishimasu	Por favor (se usa al pedir/rogar algo a alguien)
+かしこまりました。 kashikomarimashita	Muy bien(expresion cortes utilizida al atender a clientes o huespedes)
+おといおわせのばんごう otoi owase no bangou	El numero que usted busca.
+ニューヨーク nyu-yo-ku	Nueva York
+ぺきん pekin	Pekin, Beijin
+ロンドン rondon	Londres
+バンコク bankoku	Bangkok
+ロサンゼルス rosanzerusu	Los Angeles
