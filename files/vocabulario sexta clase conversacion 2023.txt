@@ -1,0 +1,51 @@
+がめん	画面	Pantalla
+きょうゆう	共有	Compartir
+くつばこ	靴箱	Caja para zapatos, Estante para zapatos
+げた	下駄	Sandalia de madera japonesa
+ランドセル	Mochila de cuero usada por niños de primaria
+ぼうし	帽子	Sombrero
+スリッパ	Pantufla(sleeper)
+うわぐつ	上靴	Pantufla de colegio
+こくご	国語	Lenguaje
+きょうかしょ	教科書	Libro de texto del colegio
+ふでばこ	筆箱	Estuche de lapizes
+たいいく	体育	Educacion fisica
+たいそう	体操	Gimnasia, Ejercicio fisico
+たいそうふく	体操服	Ropa para educación física
+きがえます、きがえる	着替える	Cambiarse de ropa
+ぬぎます、ぬぐ	脱ぐ	Quitarse la ropa
+きます、きる	着る	Ponerse ropa
+そうぞう	想像	Imaginacion
+そうぞうします、そうぞうする	想像する	Imaginar
+こわがる	Tiene miedo y lo demuestra con su actitud
+あきれる	Las cosas son sorprendentes (y demasiado horribles), Estar desconcertado, Aturdido
+がっかりする	Frustrado / estar decepcionado
+よっきゅうふまん	Frustracion
+フラストレーション	Frustracion
+きゅうしょく	給食	Almuerzo en el colegio, Servicio de almuerzo
+きゅうしょくぶくろ	給食袋	En general, bolsa para delantal, gorro y mascarilla para servir las comidas.
+べいはん	米飯	Arroz preparado
+はります、はる	張る	Pegar (algo a una muralla)
+みずうみ	湖	Lago
+かわ	川	Rio
+うみ	海	Mar
+まよなか	真夜中	Medianoche
+よなか	夜中	0-3 de madurugada
+ハイキング	Caminata
+キャンプ	Camping
+けむり	Humo
+かじ	火事	Incendio
+やまかじ	山火事	Incendio forestal
+はい	灰	Ceniza
+はいざら	灰皿	Cenicero
+やまのぼり	山登り	Escalada de montaña.
+のぼります、のぼる	登る	Escalar
+おります、おりる	下りる	Bajar
+あがります、あがる	上がる	Levantarse (algo sube hacia arriba)(intransitivo)
+あげます、あげる	上げる	Levantar　(subir algo hacia arriba)(transitivo)
+テント	Toldo, Carpa
+ちょうじょう	頂上	Cima (de la montaña)
+やまのふもと	山の麓	Pie de la montaña
+ほし	星	Estrella
+ながれぼし	流れ星	Estrella fugaz
+つき	月	Luna

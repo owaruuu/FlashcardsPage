@@ -1,0 +1,43 @@
+とうこう	登校	Camino de la casa a la escuela
+げこう	下校	Regreso de la escuela a la casa
+かお	顔	Cara
+むっとしたかお	むっとした顔	***********
+しゅるい	種類	Variedad, Categoria
+チラッ	Un vistazo de un segundo
+むね	胸	Pechos, Senos
+めつき	目つき	Mirada, Expresion (de los ojos), Ojos
+めだつ	目立つ	Ser llamativo
+きづく	気づく	Darse cuenta
+きをつけます、きをつける	気を付ける	Tener cuidado
+ちゅういします、ちゅういする	注意する	Tener cuidado, Decir a los demás que tengan cuidado
+むいしき	無意識	Inconsciente
+まるわかり	丸分かり	Capacidad para comprender todos los aspectos de la materia(cosas,situaciones etc)
+みえをはります、みえをはる	見栄を張る	Mentir para impresionar a otros
+もろ	諸	Todas las cosas, muchas cosas
+うごきます、うごく	動く	Mover
+かってに	勝手に	Por voluntad propia
+りそう	理想	Ideal, Algo soñado
+せんたくき	洗濯機	Lavadora (de la ropa)
+せんたくします、せんたくする	選択する	Lavar (la ropa,zapato, etc)
+グダグダ	Onomatopeya de desordenado (plan,opinion,situacion) / desastre(plan,opinion,situacion)
+キラキラ	Onomatopeya de brillante
+ギラギラ	Onomatopeya de brillante y tambien cazador de amor / algo sexual
+バタバタ	Onomatopeya de ocupado/corriendo para alla, para aca
+ドキドキ	Onomatopeya de saltando el corazon
+ワクワク	Onomatopeya de estado de inquietud y sensación de excitación en el corazón, debido a la expectación, la alegría, etc.
+カップ	Vaso plastico (papel, etc)
+コーヒーカップ、ティーカップ	Taza de cafe o te
+マグカップ	Taza de cafe, te, sopa (grande) 
+グラス	Vaso vidrio
+ジョッキ	Vaso gigante
+コップ	Vaso en general (cualquier tipo)
+こぼします、こぼす	零す	Botar liquido (transitivo)
+こぼれます、こぼれる	零れる	Caerse liquido (intransitivo)
+おとします、おとす	落とす	Botar, Dejar caer (transitivo) (desde altura)
+ぬらします、ぬらす	濡らす	Mojar (transitivo)
+ぬれます、ぬれる	濡れる	Mojarse (intransitivo)
+けします、けす	消す	Borrar (transitivo)
+きえます、きえる	消える	Borrarse (intransitivo)
+きょうはくかんねん	強迫観念	Obsesion, Idea compulsiva (ideas acompañadas de sentimientos de ansiedad y malestar que no se pueden reprimir aunque uno lo intente)
+きょうはくかんねんがつよい	強迫観念が強い	Obsesivo-compulsivo
+よだれ、ヨダレ	涎	Baba
