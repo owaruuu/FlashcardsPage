@@ -1,0 +1,39 @@
+あそびます、あそぶ	遊ぶ	Jugar, Divertirse
+およぎます、およぐ	泳ぐ	Nadar
+むかえます、むかえる	迎える	Acoger, Recibir
+つかれます、つかれる	疲れる	Cansarse
+だします、だす	出す	Enviar
+はいります、はいる	入る	Entrar
+でます、でる	出る	Salir
+けっこんします、けっこんする	結婚する	Casarse
+かいものします、かいものする	買い物する	Hacer compras
+しょくじします、しょくじする	食事する	Comer
+さんぽします、さんぽする	散歩する	Pasear
+たいへんな	大変な	Dura (situacion), Atroz
+ほしい	欲しい	Querer
+さびしい	寂しい	Solo
+ひろい	広い	Amplio, Espacioso
+せまい	狭い	Pequeño, Angosto
+しやくしょ	市役所	Ayuntamiento
+プール	Piscina
+かわ	川	Rio
+けいざい	経済	Economia
+びじゅつ	美術	Bellas artes
+つり	釣り	Pesca
+スキー	Esqui
+かいぎ	会議	Reunion
+とうろく	登録	Registro
+しゅうまつ	週末	Fin de semana
+ごろ	Mas o menos
+なにか	何か	Algo
+どこか	Algun lugar
+おなかがすきました	お腹が空きました	Tener hambre
+おなかがいっぱいです	お腹が一杯です	Estar lleno
+のどがかわきました	喉が渇きました	Tener sed
+そうですね	Estoy de acuerdo
+そうしましょう	Vamos a hacer eso
+ごちゅうもんは？	ご注文は？	Que desea pedir ?
+ていしょく	定食	Menu fijo
+ぎゅうどん	牛丼	Plato de arroz con carne de vaca
+しょうしょうおまちください	少々お待ちください	Por favor espere
+べつべつに	別々に	Por separado

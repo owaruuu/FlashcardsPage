@@ -125,7 +125,7 @@ function RandomizeTerms(event) {
         let progressBar = document.querySelector('.progress-bar-josue');
         progressBar.innerHTML = "";
 
-        PopulateProgressBar(progressBar, currentLectureObject.id);
+        PopulateProgressBar(progressBar, currentLectureObject.lectureId);
 
         PopulateBigCard();
 
@@ -140,7 +140,7 @@ function RandomizeTerms(event) {
         let progressBar = document.querySelector('.progress-bar-josue');
         progressBar.innerHTML = "";
 
-        PopulateProgressBar(progressBar, currentLectureObject.id);
+        PopulateProgressBar(progressBar, currentLectureObject.lectureId);
 
         PopulateBigCard();
 
@@ -218,13 +218,13 @@ function CreateHomepageApp(container) {
 
         //veo si existe un local storage con la leccion actual
         const percentDiv = CreateElement("div", numberContainer);
-        const learnedAmountStringObj = localStorage.getItem(lecture.id);
+        const learnedAmountStringObj = localStorage.getItem(lecture.lectureId);
         let currentLocalObj = {};
 
         //si no existe simplemente pongo 0
         //si existe
         if (learnedAmountStringObj == null) {
-            console.log("no se encontro local storage para esta id: " + lecture.id);
+            console.log("no se encontro local storage para esta id: " + lecture.lectureId);
             percent = "0";
         } else {
             currentLocalObj = JSON.parse(learnedAmountStringObj);
@@ -305,7 +305,7 @@ function CheckUpdates(lectureObj, currentLocalObj) {
     }
 
     console.log("updated localstorage acording to text file");
-    localStorage.setItem(lectureObj.id, JSON.stringify(newObject));
+    localStorage.setItem(lectureObj.lectureId, JSON.stringify(newObject));
 
     return newObject;
 }
@@ -348,7 +348,7 @@ function FlashSetButton(lectureObj, ammount) {
     let percentageText = CreateElement("p", termsAmmountDiv);
 
     ammountText.textContent = ammount + " Terms /";
-    let percentage = CalculatePercentageLearned(lectureObj.id);
+    let percentage = CalculatePercentageLearned(lectureObj.lectureId);
     percentageText.textContent = percentage + "% Learned";
 
     termsAmmountDiv.classList.add(
@@ -371,13 +371,13 @@ function FlashSetButton(lectureObj, ammount) {
     let learnButton = CreateElement("button", buttonsContainer);
     learnButton.classList.add("learn-button");
     learnButton.textContent = "Learn";
-    learnButton.setAttribute("data-id", lectureObj.id);
+    learnButton.setAttribute("data-id", lectureObj.lectureId);
     learnButton.addEventListener("click", () => OnLearnLecture(lectureObj));
 
     let checkoutButton = CreateElement("button", buttonsContainer);
     checkoutButton.classList.add("checkout-button");
     checkoutButton.textContent = "Checkout";
-    checkoutButton.setAttribute("data-id", lectureObj.id);
+    checkoutButton.setAttribute("data-id", lectureObj.lectureId);
     checkoutButton.addEventListener("click", (event) =>
         CheckoutLecture(event, lectureObj)
     );
@@ -419,7 +419,7 @@ function CalculatePercentageLearned(id) {
 
     //el total de terminos
     let total = 0;
-    let tempObj = lectures.find((lecture) => lecture.id == id);
+    let tempObj = lectures.find((lecture) => lecture.lectureId == id);
     if (tempObj == null) {
         console.log(
             "hubo un error y no encontre el id de la clase en el objeto lectures"
@@ -491,7 +491,7 @@ function LearnLecture(lectureObj) {
         "flex-lg-row"
     );
 
-    PopulateProgressBar(progressBar, lectureObj.id);
+    PopulateProgressBar(progressBar, lectureObj.lectureId);
 
     let middleDiv = CreateElement("div", app);
     middleDiv.classList.add("middle-div");
@@ -698,14 +698,14 @@ function CheckoutLecture(event, lectureObj) {
     let lectureId = event.target.dataset.id;
     const date = new Date().toLocaleDateString();
 
-    let lectureObjString = localStorage.getItem(lectureObj.id);
+    let lectureObjString = localStorage.getItem(lectureObj.lectureId);
     if (lectureObjString !== null) {
         console.log(lectureObjString);
         let lectureObject = JSON.parse(lectureObjString);
         console.log(lectureObject);
         lectureObject.lastCheckout = date;
         lectureObjString = JSON.stringify(lectureObject);
-        localStorage.setItem(lectureObj.id, lectureObjString);
+        localStorage.setItem(lectureObj.lectureId, lectureObjString);
     } else {
         //crear el objeto desde 0 y luego agregar fecha
 
@@ -715,7 +715,7 @@ function CheckoutLecture(event, lectureObj) {
         console.log(lectureObject);
         lectureObject.lastCheckout = date;
         lectureObjString = JSON.stringify(lectureObject);
-        localStorage.setItem(lectureObj.id, lectureObjString);
+        localStorage.setItem(lectureObj.lectureId, lectureObjString);
     }
 
     const lastCheckoutText = document.getElementById("last-check-text-term-page");
@@ -733,7 +733,7 @@ function CheckLearnStatus(lectureObj, termId) {
     let currentString;
     let currentObject;
 
-    currentString = localStorage.getItem(lectureObj.id);
+    currentString = localStorage.getItem(lectureObj.lectureId);
     currentObject = JSON.parse(currentString);
 
     let prompt = document.querySelector(".prompt").firstChild;
@@ -770,9 +770,9 @@ function CreateLocalStorageObject(currentLectureObj) {
     });
 
     let objectString = JSON.stringify(storageObject);
-    localStorage.setItem(currentLectureObj.id, objectString);
+    localStorage.setItem(currentLectureObj.lectureId, objectString);
 
-    return localStorage.getItem(currentLectureObj.id);
+    return localStorage.getItem(currentLectureObj.lectureId);
 }
 
 function ChangeKnowledgeButtonString(btnclass) {
@@ -883,7 +883,7 @@ function ClickKnowledgeButton(event, lectureObj, tag) {
     let progressItem = document.querySelector(".progress-item-current");
     UpdateProgressBar(progressItem, tag);
 
-    ChangeKnowledgeButtonElem(event, lectureObj.id, tag, currentTermId);
+    ChangeKnowledgeButtonElem(event, lectureObj.lectureId, tag, currentTermId);
 
     DisableKnowledgeButtons();
 
@@ -1432,7 +1432,7 @@ function FindInArray(value, array, startIndex){
  */
 function GetLocalStorageObject(lectureObj) {
     //intento obtener una referencia al objeto local basado en el id
-    let localStorageString = localStorage.getItem(lectureObj.id);
+    let localStorageString = localStorage.getItem(lectureObj.lectureId);
     let localStorageObject = {};
     //si no existe
     if (localStorageString == null) {
@@ -1440,7 +1440,7 @@ function GetLocalStorageObject(lectureObj) {
         let lectureObject = JSON.parse(localStorageString);
         lectureObject.lastCheckout = "No Checkout";
         localStorageString = JSON.stringify(lectureObject);
-        localStorage.setItem(lectureObj.id, localStorageString);
+        localStorage.setItem(lectureObj.lectureId, localStorageString);
         localStorageObject = JSON.parse(localStorageString);
     } else {
         //si existe aprovechar de checkear por updates;

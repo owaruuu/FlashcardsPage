@@ -1,0 +1,45 @@
+みょうじ	苗字 / 名字	Apellido
+せい	姓	Apellido
+めい	名	Nombre
+なまえ	名前	Nombre completo, Nombre
+みせ	店	Tienda
+かえす	返す	Retornar (algo)
+いそぎます、いそぐ	急ぐ	Apurarse
+わりぃ	Informal de わるい
+しせん	視線	Mirada
+かんじょう	感情	Emocion, Sentimiento
+わらいます、わらう	笑う	Reirse
+いっしゅん	一瞬	Instante, Momento muy corto
+まばたき	瞬き	Parpadeo
+いやしい	卑しい	Vulgar, Grosero, 
+にんげん	人間	Humano
+みっともない	見っとも無い	Vergonzoso, Indecente
+くも	雲	Nube
+そら	空	Cielo
+から	空	Vacio
+からっぽ	空っぽ	Informal de 空
+ぬぎます、ぬぐ	脱ぐ	Quitarse (ropa, zapatos, etc)
+わたします、わたす	渡す	Dar, Entregar
+けいじばん	掲示板	Tablero de anuncios
+こくばん	黒板	Pizarra verde / negra
+ホワイトボード	Pizarra blanca
+スピーカー	Parlante
+あくび	欠伸	Bostezo
+ゆか	床	Piso, Suelo
+やね	屋根	Techo (exterior)
+てんじょう	天井	Techo (interior)
+ろうか	廊下	Pasillo, Corredor
+ろうか	老化	Envejecimiento
+おさめます、おさめる	収める	Guardar (en un lugar)
+かたづけます、かたづける	片付ける	Guardar, Ordenar
+たな	棚	Estante
+おはなばたけ	お花畑	Jardin de flores, Campo de flores
+ちょう,ちょうちょう 	蝶, 蝶々	Mariposa
+はんのう	反応	Reaccion, Respuesta
+さそいます、さそう	誘う	Invitar para hacer algo junto
+ことわります、ことわる	断る	Rechazar invitacion / solicitud
+よっぱらい	酔っ払い	Borracho
+わるよう	悪酔い	Embriaguez provocada por el alcohol con arrebatos violentos o involucrarse con otras personas.
+よいます、よう	酔う	Emborrachar
+ちょっと！	Espera un momento (informal), Oye!, etc...
+げひん	下品	Carácter o aspecto desagradable de una persona, Mal carácter

@@ -1,0 +1,61 @@
+こどもがいます	子どもがいます	Tener hijos
+にほんにいます	日本にいます	Permanecer en Japón
+かかります、かかる	掛かる	Tardar (tiempo), Costar (dinero)
+かいしゃをやすみます	かいしゃを休みます	Ausentarse de la oficina
+ひとつ	Una cosa
+ふたつ	Dos cosas
+みっつ	Tres cosas
+よっつ	Cuatro cosas
+いつつ	Cinco cosas
+むっつ	Seis cosas
+ななつ	Siete cosas
+やっつ	Ocho cosas
+ここのつ	Nueve cosas
+とお	Diez cosas
+いくつ	Cuantos
+ひとり	Una persona
+ふたり	Dos personas
+～にん	～人	~Personas
+だい	台	Contador maquinas, Vehiculos, etc.
+まい	枚	Contador cosas planas
+かい	回	Contador veces
+りんご	林檎	Manzana
+みかん	蜜柑	Mandarina
+サンドイッチ	Sándwich
+カレー	curri
+アイスクリーム	Helado
+きって	切手	Sello (postal), estampilla, timbre
+はがき	葉書	Tarjeta postal
+ふうとう	封筒	Sobres
+そくたつ	速達	Correo urgente
+かきとめ	書留	Correo certificado
+エアメール、こうくうびん	航空便	Mail Aereo, Via aerea
+ふなびん	船便	Via maritima
+りょうしん	両親	Padres
+きょうだい	兄弟	Hermanos y hermanas
+あに 	兄	Mi hermano mayor
+おにいさん	お兄さん	Su hermano mayor
+あね	姉	Mi hermana mayor
+おねえさん	お姉さん	Su hermana mayor
+おとうと	弟	Mi hermano menor
+おとうとさん	弟さん	Su hermano menor
+いもうと	妹	Mi hermana menor
+いもうとさん	妹さん	Su hermana menor
+がいこく	外国	Pais extranjero
+じかん	時間	Horas
+しゅうかん	週間	Semanas
+かげつ	か月	Meses
+ねん	年	Años
+ぐらい	Más o menos
+どのくらい	Cuánto tiempo
+ぜんぶで	全部で	En total
+みんな	Todos, Todo
+だけ	Solo
+いらっしゃいませ	Bienvenido (expresión con que se acoge a invitados o clientes a su llegada)
+いいおてんきですね	いいお天気ですね	Hace buen tiempo no ?
+おでかけですか	お出かけですか	Va a salir?
+ちょっと～まで	Estoy saliendo solo a ~
+いっていらっしゃい	行っていらっしゃい	Que le vaya bien (lit. vaya y vuelva)
+いってまいります	行ってまいります	Hasta luego (lit. salgo y vuelvo)
+それから	Y ademas
+オーストラリア	Australia

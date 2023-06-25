@@ -1,0 +1,27 @@
+たちます、たつ	立つ	Pararse, Ponerse de pie
+すわります、すわる	座る	Sentarse
+つかいます、使う	使う		Usar
+おきます、おく	置く	Poner, Colocar
+つくります、つくる	作る	Hacer, Producir
+うります、うる	売る	Vender
+しります、しる	知る	Enterarse
+すみます、すむ	住む	Vivir, Residir
+しらべます、しらべる	調べる	Investigar
+しっています、しっている	知っている	Saber, Conocer
+すんでいます、すんでいる	住んでいる	Estar viviendo (en un lugar)
+しりょう	資料	Materiales, Datos
+カタログ	Catalogo, Folleto
+じこくひょう	時刻表	Horario
+ふく	Ropa
+せいひん	製品	Productos
+ソフト	Software
+せんもん	専門	Campo de especialidad
+はいしゃ	歯医者	Dentista
+とこや	床屋	Barberia
+プレイガイド	Agencia de entradas (de teatros y cines)
+どくしん	独身	Soltero
+とくに	特に	En particular
+おもいだします	思い出します	Acordarse de, Recordar
+ごかぞく	ご家族	Su familia
+いらっしゃいます	Estar (forma honorífica de います)
+こうこう	高校	Bachiller, escundaria superior

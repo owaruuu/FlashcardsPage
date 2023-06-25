@@ -1,0 +1,46 @@
+かんたん	簡単	Facil, Sencillo
+ちかい	近い	Cercano
+とおい	遠い	Lejos, Distante
+はやい	速い	Rapido
+はやい	早い	Temprano
+おそい	遅い	Tarde, Lento, Despacio
+おおい	多い	Mucha (gente), Muchos, Mucho
+すくない	少ない	Poca (gente), Un poco
+あたたかい	暖かい	Tibio, Calido, Templado
+すずしい	涼しい	Fresco (relativo a la temperatura)
+あまい	甘い	Dulce
+からい	辛い	Picante, Picoso
+おもい	重い	Pesado
+かるい	軽い	Ligero, Liviano
+いい	Preferir (cafe) (al seleccionar uno de entre dos cosas)
+きせつ	季節	Estacion (del año)
+はる	春	Primavera
+なつ	夏	Verano
+あき	秋	Otoño
+ふゆ	冬	Invierno
+てんき	天気	Tiempo (clima)
+あめ	雨	Lluvia
+ゆき	雪	Nieve, Nevada
+くもり	曇り	Nublado
+ホテル	Hotel
+くうこう	空港	Aeropuerto
+うみ	海	Mar, Oceano
+せかい	世界	Mundo
+パーティー	Fiesta, Tertulia
+まつり	祭り	Festival
+しけん	試験	Examen
+すきやき	すき焼き	Sukiyaki (plato consistente en cazuela de carne vacuna y verduras)
+さしみ	刺身	Sashimi(plato japones consistente en pescado crudo)
+すし	Sushi
+てんぷら	Tenpura
+いけばな	生け花	Arreglo floral
+もみじ	紅葉	Arce
+どちら	Cuál (entre dos cosas)
+どちらも	Ambos
+ずっと	Mucho mas
+はじめて	初めて	Por primera vez
+ただいま	He llegado
+おかえりなさい	お帰りなさい	Bienvenido de vuelta
+すごいですね	Es admirable
+でも	Pero
+つかれました	疲れました	Estoy cansado

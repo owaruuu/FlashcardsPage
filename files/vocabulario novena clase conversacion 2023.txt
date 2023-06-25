@@ -1,0 +1,32 @@
+おきます、おきる	起きる	Levantarse, Despertar
+ねます、ねる	寝る	Acostarse, Ir a la cama, Dormir
+さわります、さわる	触る	Tocar
+あらいます、あらう	洗う	Lavar
+つくります、つくる	作る	Hacer, Crear, Preparar(comida)
+たべます、たべる	食べる	Comer
+かたづけます、かたづける	片付ける	Ordenar
+します、する	Hacer
+きます、くる	来る	Venir
+いきます、いく	行く	Ir
+うけます、うける	受ける	Recibir, Obtener
+おくります、おくる	送る	Mandar, Enviar
+うたいます、うたう	歌う	Cantar
+よみます、よむ	読む	Leer
+かきます、かく	書く	Escribir
+しにます、しぬ	死ぬ	Morir
+あげます、あげる	上げる	Dar
+くれます、くれる	呉れる	Dar
+もらいます、もらう	貰う	Recibir
+きがえます、きがえる	着替える	Cambiarse de ropa
+おこります、おこる	怒る	Enojarse
+なきます、なく	泣く	Llorar
+みます、みる	見る	Mirar
+はたらきます、はたらく	働く	Trabajar
+
+
+
+la clase novena fue sobre conjugacion - mail llego sab 10 jun
+
+la clase 10 - mail llego dom 18 jun
+
+clase 11 - se hizo el lun 19 jun
