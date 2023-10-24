@@ -142,7 +142,12 @@ const lectures = [
                 answer: "Parte de, Dirección de",
             },
             { id: 27, term: "～(の)ほうが", extra: "", answer: "Es mas" },
-            { id: 28, term: "はやる", extra: "Estar de moda", answer: "" },
+            {
+                id: 28,
+                term: "はやる",
+                extra: "流行る",
+                answer: "Estar de moda",
+            },
             { id: 29, term: "りゅうこう", extra: "流行", answer: "Moda" },
             {
                 id: 30,
