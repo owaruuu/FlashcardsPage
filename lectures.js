@@ -34,7 +34,7 @@ const lectures = [
                 extra: "匂い",
                 answer: "Olor (en general bueno)",
             },
-            { id: 5, term: "におい", extra: "臭い", answer: "Olor mal" },
+            { id: 5, term: "におい", extra: "臭い", answer: "Olor malo" },
             {
                 id: 6,
                 term: "においけし",
