@@ -127,7 +127,7 @@ const lectures = [
                 id: 24,
                 term: "ふくらむ",
                 extra: "膨らむ",
-                answer: "Ser Inflamado, Ser expandido (transitivo)",
+                answer: "Ser Inflamado, Ser expandido (intransitivo)",
             },
             {
                 id: 25,
