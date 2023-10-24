@@ -22,6 +22,34 @@
 なきます、なく	泣く	Llorar
 みます、みる	見る	Mirar
 はたらきます、はたらく	働く	Trabajar
+のります、のる	乗る	Subirse (a un tren, un auto, etc)
+はれ	晴れ	Despejado
+あめ	雨	Lluvia
+くもり	曇り	Nublado
+たいふう	台風	Tifón
+おかし	お菓子	Dulces
+きれい	綺麗	Bonito
+みじかい	短い	Corto
+ながい	長い	Largo
+おおきい	大きい	Grande
+ちいさい	小さい	Pequeño
+かっこい	格好いい	Atractivo
+かわいい	可愛い	Adorable
+しずかな	静かな	Silencioso
+にぎやかな	賑やかな	Ruidoso
+ひまな	暇な	Libre, Tiempo libre
+たいくつ	退屈	Aburrido, Monotono
+やすい	安い	Barato
+たかい	高い	Caro
+おもしろい	面白い	Interesante, Divertido
+うれしい	嬉しい	Feliz
+かなしい	悲しい	Triste
+めんどくさい	面倒くさい	Tedioso
+ふしぎな	不思議な	Extraño, Maravilloso
+すてきな	素敵な	Maravilloso
+むりな	無理な	Imposible
+じょうきょう	状況	Situacion
+
 
 
 
@@ -29,4 +57,10 @@ la clase novena fue sobre conjugacion - mail llego sab 10 jun
 
 la clase 10 - mail llego dom 18 jun
 
-clase 11 - se hizo el lun 19 jun
+clase 11 - se hizo el lun 19 jun - tengo el archivo
+
+clase 12 - se hizo el 03 de julio - llego archivo 9 de julio
+
+clase 13 - se hizo el 10 de julio- llego el 15
+
+clase 14 - se hizo el 17 de julio
