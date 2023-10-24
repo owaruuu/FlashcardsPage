@@ -11,7 +11,7 @@ const lectures = [
         termList: [
             {
                 id: 0,
-                term: "せんていせい",
+                term: "せんてんせい",
                 extra: "先天性",
                 answer: "Hereditario, Desde que se nace",
             },
